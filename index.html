@@ -1499,42 +1499,7 @@
                 { name: 'Prestasi', icon: 'fa-solid fa-trophy' },
                 { name: 'Karya Siswa', icon: 'fa-solid fa-palette' }
             ],
-            articles: [
-                {
-                    id: 'art-1',
-                    title: 'Tips Belajar Efektif Menjelang Ujian Semester',
-                    category: 'Edukasi',
-                    date: '20 Okt 2025',
-                    createdAt: 1729400000000,
-                    likes: 245,
-                    likedByUsers: [],
-                    image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80',
-                    images: [
-                        'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80'
-                    ],
-                    body: 'Menjelang ujian semester, persiapan yang matang sangat diperlukan agar hasil belajar maksimal.\n\n1. Buat jadwal belajar teratur menggunakan teknik Pomodoro (25 menit fokus, 5 menit istirahat).\n2. Rangkum poin penting setiap mata pelajaran dengan peta konsep.\n3. Diskusikan materi sulit bersama teman atau guru di MTsN 14.\n4. Jaga kesehatan dan istirahat yang cukup.',
-                    commentsList: []
-                },
-                {
-                    id: 'art-2',
-                    title: 'Keseruan Lomba Classmeet MTsN 14',
-                    category: 'Dokumentasi',
-                    date: '18 Okt 2025',
-                    createdAt: 1729300000000,
-                    likes: 312,
-                    likedByUsers: [],
-                    image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
-                    images: [
-                        'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80'
-                    ],
-                    body: 'Suasana halaman MTsN 14 penuh semangat dan sorak gembira selama pekan Classmeet semester ini! Berbagai perlombaan antarkelas mulai dari futsal, cerdas cermat, hingga lomba fotografi kreatif diikuti dengan antusias oleh seluruh siswa.',
-                    commentsList: []
-                }
-            ],
+            articles: [],
             inbox: []
         };
 
@@ -1621,16 +1586,6 @@
 
             // 2. Postingan Artikel Real-Time
             db.collection('sanvalas_articles').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-                if (snapshot.empty) {
-                    const batch = db.batch();
-                    defaultState.articles.forEach((art) => {
-                        const ref = db.collection('sanvalas_articles').doc(art.id);
-                        batch.set(ref, art);
-                    });
-                    batch.commit().catch(err => console.warn('Seed articles err:', err));
-                    return;
-                }
-
                 appState.articles = snapshot.docs.map(doc => {
                     const a = doc.data();
                     const imgs = Array.isArray(a.images) && a.images.length > 0
