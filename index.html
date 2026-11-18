@@ -43,6 +43,10 @@
     </script>
 
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: #f5f6f2;
             color: #1c2924;
@@ -68,16 +72,29 @@
             display: none !important;
         }
 
+        /* Sleek, refined scrollbar for smooth desktop & modal scrolling */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f3ee;
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #285444;
+            background: rgba(40, 84, 68, 0.38);
             border-radius: 9999px;
+            transition: background-color 0.2s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(22, 70, 54, 0.72);
+        }
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(40, 84, 68, 0.42) transparent;
+        }
+        .smooth-scroll-box {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .content-card {
@@ -798,9 +815,9 @@
     <!-- ========================================== -->
     <!-- MODAL 1: PEMBACA ARTIKEL + SLIDER MULTI-FOTO + KOMENTAR -->
     <!-- ========================================== -->
-    <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-5">
-        <div class="modal-card-pop bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col no-scrollbar">
-            <div class="relative bg-slate-950 h-72 sm:h-[450px] shrink-0 overflow-hidden select-none group">
+    <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-2.5 sm:p-5">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col">
+            <div class="relative bg-slate-950 h-64 sm:h-[430px] shrink-0 overflow-hidden select-none group">
                 <img id="readerAmbientBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-45 scale-110 pointer-events-none">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35 pointer-events-none z-10"></div>
 
@@ -812,10 +829,10 @@
                     onerror="this.src='https://placehold.co/900x600/164636/ffffff?text=Sanvalas+Story'"
                 >
 
-                <div class="absolute top-4 inset-x-4 z-30 flex items-center justify-between pointer-events-none">
-                    <span id="readerPhotoCounter" class="hidden pointer-events-auto bg-black/65 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
-                    <button type="button" onclick="closeModal('articleReaderModal')" class="pointer-events-auto ml-auto w-10 h-10 rounded-full bg-black/65 hover:bg-black/85 text-white flex items-center justify-center border border-white/15 shadow-lg transition">
-                        <i class="fa-solid fa-xmark text-base"></i>
+                <div class="absolute top-3.5 inset-x-3.5 sm:top-4 sm:inset-x-4 z-30 flex items-center justify-between pointer-events-none">
+                    <span id="readerPhotoCounter" class="hidden pointer-events-auto bg-black/65 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
+                    <button type="button" onclick="closeModal('articleReaderModal')" class="pointer-events-auto ml-auto w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white flex items-center justify-center border border-white/15 shadow-lg transition">
+                        <i class="fa-solid fa-xmark text-sm sm:text-base"></i>
                     </button>
                 </div>
 
@@ -823,53 +840,54 @@
                     id="readerPrevBtn"
                     type="button"
                     onclick="stepReaderGallery(-1, event)"
-                    class="hidden absolute left-3.5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
+                    class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
                     title="Foto Sebelumnya"
                 >
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                    <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
                 </button>
                 <button
                     id="readerNextBtn"
                     type="button"
                     onclick="stepReaderGallery(1, event)"
-                    class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
+                    class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
                     title="Foto Berikutnya"
                 >
-                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                    <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
                 </button>
 
-                <div class="absolute bottom-4 inset-x-5 z-30 flex items-center justify-between gap-2 pointer-events-none">
-                    <span id="readerCategory" class="pointer-events-auto bg-[#eaede6] text-slate-900 text-xs font-extrabold px-4 py-1.5 rounded-full shadow-md"></span>
-                    <div id="readerDotsContainer" class="pointer-events-auto flex items-center gap-2 bg-black/55 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/15"></div>
+                <div class="absolute bottom-3.5 inset-x-4 sm:bottom-4 sm:inset-x-5 z-30 flex items-center justify-between gap-2 pointer-events-none">
+                    <span id="readerCategory" class="pointer-events-auto bg-[#eaede6] text-slate-900 text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-md"></span>
+                    <div id="readerDotsContainer" class="pointer-events-auto flex items-center gap-1.5 sm:gap-2 bg-black/55 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border border-white/15"></div>
                 </div>
             </div>
 
-            <div id="readerThumbStrip" class="hidden shrink-0 bg-slate-900 border-b border-slate-800 px-5 py-3.5 flex items-center justify-start sm:justify-center gap-3 overflow-x-auto no-scrollbar"></div>
+            <div id="readerThumbStrip" class="hidden shrink-0 bg-slate-900 border-b border-slate-800 px-4 sm:px-5 py-3 flex items-center justify-start sm:justify-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar"></div>
 
-            <div class="p-5 sm:p-7 space-y-5">
+            <div class="p-4 sm:p-7 space-y-4 sm:space-y-5">
                 <div class="space-y-2">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
                         <span id="readerDate"></span>
                         <div class="flex items-center gap-2">
-                            <button id="readerLikeBtn" type="button" onclick="likeCurrentArticle(event)" class="flex items-center gap-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-4 py-2 rounded-full transition">
+                            <button id="readerLikeBtn" type="button" onclick="likeCurrentArticle(event)" class="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition">
                                 <i class="fa-solid fa-heart"></i> <span id="readerLikesCount">0</span> Suka
                             </button>
-                            <button type="button" onclick="shareCurrentReadingArticle(event)" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs px-3.5 py-2 rounded-full transition">
+                            <button type="button" onclick="shareCurrentReadingArticle(event)" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full transition">
                                 <i class="fa-solid fa-share-nodes"></i> Bagikan
                             </button>
                         </div>
                     </div>
-                    <h2 id="readerTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug"></h2>
+                    <h2 id="readerTitle" class="text-lg sm:text-2xl font-extrabold text-slate-900 leading-snug"></h2>
+                </div>
+
+                <!-- Ringkasan Liked By Ala Instagram (Avatar Stacked + Selengkapnya) -->
+                <div id="readerLikedByBox" class="hidden py-1.5 px-2.5 rounded-xl bg-slate-50/90 border border-slate-200/70 flex items-center justify-between gap-2">
+                    <div id="readerLikedByAvatars" class="flex items-center gap-2 min-w-0"></div>
+                    <button type="button" onclick="openLikedUsersModal()" class="text-[11px] font-extrabold text-emerald-800 hover:text-emerald-950 shrink-0 px-2 py-0.5 rounded-lg hover:bg-emerald-50 transition">
+                        Selengkapnya
+                    </button>
                 </div>
 
                 <p id="readerBody" class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line"></p>
-
-                <div id="readerLikedByBox" class="hidden p-3 rounded-xl bg-rose-50/60 border border-rose-100 space-y-1.5">
-                    <div class="text-[11px] font-bold text-rose-800 flex items-center gap-1.5">
-                        <i class="fa-solid fa-heart text-rose-500"></i> Disukai oleh Akun Google:
-                    </div>
-                    <div id="readerLikedByAvatars" class="flex flex-wrap gap-1.5"></div>
-                </div>
 
                 <div class="pt-4 border-t border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
@@ -879,10 +897,28 @@
                         </h3>
                     </div>
 
-                    <div id="commentGoogleBanner" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80"></div>
-                    <div id="readerCommentsList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></div>
+                    <div id="commentGoogleBanner" class="p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200/80"></div>
+                    <div id="readerCommentsList" class="smooth-scroll-box space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1B: DAFTAR LENGKAP PENYUKA POSTINGAN (ALA INSTAGRAM) -->
+    <!-- ========================================== -->
+    <div id="likedUsersModal" onclick="if(event.target === this) closeModal('likedUsersModal')" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-[60] hidden items-center justify-center p-4">
+        <div class="modal-card-pop bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-slate-200">
+            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-rose-500 text-sm"></i>
+                    <h3 class="text-sm font-extrabold text-slate-900">Disukai oleh (<span id="likedUsersModalCount">0</span>)</h3>
+                </div>
+                <button type="button" onclick="closeModal('likedUsersModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            <div id="likedUsersModalList" class="smooth-scroll-box p-4 space-y-2.5 max-h-80 overflow-y-auto"></div>
         </div>
     </div>
 
@@ -1321,13 +1357,13 @@
     <!-- ========================================== -->
     <!-- MODAL 12: SEMUA MEDIA SOSIAL RESMI (MTsN 14 JAKARTA vs OSIS MTsN 14) -->
     <!-- ========================================== -->
-    <div id="allSocialMediaModal" onclick="if(event.target === this) closeModal('allSocialMediaModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+    <div id="allSocialMediaModal" onclick="if(event.target === this) closeModal('allSocialMediaModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
             <!-- Header -->
-            <div class="bg-gradient-to-r from-sanvalas-950 via-sanvalas-800 to-emerald-700 text-white p-6 flex items-start justify-between gap-4">
+            <div class="bg-gradient-to-r from-sanvalas-950 via-sanvalas-800 to-emerald-700 text-white p-5 sm:p-6 flex items-start justify-between gap-4">
                 <div>
                     <span class="inline-block text-[10px] font-extrabold uppercase tracking-widest bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full mb-1.5">Kanal Resmi Sekolah &amp; Siswa</span>
-                    <h3 class="text-lg sm:text-xl font-extrabold tracking-tight">Media Sosial MTsN 14 Jakarta &amp; OSIS</h3>
+                    <h3 class="text-base sm:text-xl font-extrabold tracking-tight">Media Sosial MTsN 14 Jakarta &amp; OSIS</h3>
                     <p class="text-xs text-emerald-100/85 mt-0.5">Ikuti kedua akun resmi berikut agar tidak ketinggalan informasi madrasah maupun konten kreatif OSIS.</p>
                 </div>
                 <button type="button" onclick="closeModal('allSocialMediaModal')" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center shrink-0 transition">
@@ -1336,12 +1372,25 @@
             </div>
 
             <!-- 2-Column Comparison Grid: MTsN 14 Jakarta vs OSIS MTsN 14 -->
-            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Kolom 1: Media Sosial Resmi MTsN 14 Jakarta -->
                 <div class="rounded-2xl border-2 border-emerald-800/20 bg-emerald-50/40 p-4 space-y-3">
-                    <div class="flex items-center gap-2.5 pb-2 border-b border-emerald-900/10">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-900 text-white flex items-center justify-center shrink-0 shadow-xs">
-                            <i class="fa-solid fa-school text-sm"></i>
+                    <div class="flex items-center gap-2.5 pb-2.5 border-b border-emerald-900/10">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-950/90 border border-emerald-700/40 p-1 flex items-center justify-center shrink-0 shadow-xs">
+                            <img id="modalSocialLogoMtsImg" src="" alt="Logo MTsN 14" class="hidden w-full h-full object-contain">
+                            <svg id="modalSocialLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full">
+                                <path d="M60 6 C82 17, 102 21, 108 23 C109 68, 92 96, 60 110 C28 96, 11 68, 12 23 C18 21, 38 17, 60 6 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                                <text x="60" y="34" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="16.5">MTs N 14</text>
+                                <path d="M48 92 C29 83, 22 61, 33 41" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round"/>
+                                <path d="M72 92 C91 83, 98 61, 87 41" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+                                <polygon points="58,44 62,44 64,79 56,79" fill="#f1f5f9"/>
+                                <polygon points="48,79 72,79 68,84 52,84" fill="#d97706"/>
+                                <path d="M60 35 C62 38, 62 41, 60 42 C58 41, 58 38, 60 35 Z" fill="#f59e0b"/>
+                                <rect x="48" y="85" width="24" height="10" rx="2" fill="#fde047" stroke="#0f172a" stroke-width="1.2"/>
+                                <text x="60" y="92" text-anchor="middle" fill="#14532d" font-family="sans-serif" font-weight="900" font-size="6">SMART</text>
+                                <path d="M21 101 Q60 120 99 101 L95 113 Q60 130 25 113 Z" fill="#1e40af" stroke="#fde047" stroke-width="1.5"/>
+                                <text x="60" y="116" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="7.3">JAKARTA TIMUR</text>
+                            </svg>
                         </div>
                         <div>
                             <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Akun Resmi Madrasah</span>
@@ -1394,12 +1443,30 @@
 
                 <!-- Kolom 2: Media Sosial OSIS / MPK MTsN 14 -->
                 <div class="rounded-2xl border-2 border-amber-400/50 bg-amber-50/40 p-4 space-y-3">
-                    <div class="flex items-center gap-2.5 pb-2 border-b border-amber-900/10">
-                        <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
-                            <i class="fa-solid fa-users-rays text-sm"></i>
+                    <div class="flex items-center gap-2.5 pb-2.5 border-b border-amber-900/10">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-950/90 border border-amber-400/40 p-1 flex items-center justify-center shrink-0 shadow-xs">
+                            <img id="modalSocialLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain">
+                            <svg id="modalSocialLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full">
+                                <defs>
+                                    <clipPath id="osisShieldClipModalSocial">
+                                        <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z"/>
+                                    </clipPath>
+                                </defs>
+                                <g clip-path="url(#osisShieldClipModalSocial)">
+                                    <rect x="0" y="0" width="120" height="132" fill="#ffffff"/>
+                                    <polygon points="0,0 120,0 0,124" fill="#b91c1c"/>
+                                </g>
+                                <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#ffffff" stroke-width="5.5"/>
+                                <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#0f172a" stroke-width="1.8"/>
+                                <path d="M24 41 Q41 53 60 56 Q79 53 96 41 Q90 66 60 76 Q30 66 24 41 Z" fill="#0284c7"/>
+                                <polygon points="60,40 78,53 71,74 49,74 42,53" fill="#15803d" stroke="#fde047" stroke-width="1.5"/>
+                                <circle cx="60" cy="47" r="2.5" fill="#fde047"/>
+                                <rect x="53" y="53" width="14" height="10" rx="1" fill="#ffffff"/>
+                                <text x="60" y="109" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="9.5">SMART</text>
+                            </svg>
                         </div>
                         <div>
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded-full">Tim Kreatif Siswa</span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded-full">Akun Resmi OSIS</span>
                             <h4 class="text-sm font-extrabold text-slate-900 mt-0.5">OSIS &amp; MPK MTsN 14</h4>
                         </div>
                     </div>
@@ -2080,7 +2147,9 @@
                 { imgId: 'footerLogoMtsImg', svgId: 'footerLogoMtsSvg', url: mtsUrl },
                 { imgId: 'footerLogoOsisImg', svgId: 'footerLogoOsisSvg', url: osisUrl },
                 { imgId: 'aboutLogoMtsImg', svgId: 'aboutLogoMtsSvg', url: mtsUrl },
-                { imgId: 'aboutLogoOsisImg', svgId: 'aboutLogoOsisSvg', url: osisUrl }
+                { imgId: 'aboutLogoOsisImg', svgId: 'aboutLogoOsisSvg', url: osisUrl },
+                { imgId: 'modalSocialLogoMtsImg', svgId: 'modalSocialLogoMtsSvg', url: mtsUrl },
+                { imgId: 'modalSocialLogoOsisImg', svgId: 'modalSocialLogoOsisSvg', url: osisUrl }
             ];
 
             pairs.forEach(item => {
@@ -3086,28 +3155,61 @@
 
             const likedByMe = isArticleLikedByCurrentGoogleUser(art);
             btn.className = likedByMe
-                ? 'flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2 rounded-full transition shadow-xs'
-                : 'flex items-center gap-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-4 py-2 rounded-full transition';
+                ? 'flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition shadow-xs'
+                : 'flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition';
             btn.innerHTML = `
                 <i class="fa-solid fa-heart ${likedByMe ? 'heart-pop-anim' : ''}"></i>
-                <span id="readerLikesCount">${art.likes || 0}</span> ${likedByMe ? 'Disukai (Batal)' : 'Suka'}
+                <span id="readerLikesCount">${art.likes || 0}</span> ${likedByMe ? 'Disukai' : 'Suka'}
             `;
 
             if (likedByBox && likedByAvatars) {
                 const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
                 if (likedUsers.length > 0) {
                     likedByBox.classList.remove('hidden');
-                    likedByAvatars.innerHTML = likedUsers.map(u => `
-                        <span class="inline-flex items-center gap-1.5 bg-white border border-rose-200/80 rounded-full pl-1 pr-2.5 py-0.5 text-[11px] shadow-2xs">
-                            <img src="${u.avatar}" class="w-4 h-4 rounded-full object-cover" alt="">
-                            <span class="font-bold text-slate-800">${u.name}</span>
-                            <span class="text-slate-400 text-[10px]">(${u.email})</span>
-                        </span>
+                    const previewAvatars = likedUsers.slice(0, 3).map(u => `
+                        <img src="${u.avatar}" class="w-5 h-5 rounded-full object-cover ring-2 ring-white shrink-0" alt="${u.name}">
                     `).join('');
+                    const firstPersonName = likedUsers[0].name;
+                    const summaryLabel = likedUsers.length === 1
+                        ? `Disukai oleh <strong class="text-slate-900">${firstPersonName}</strong>`
+                        : `Disukai oleh <strong class="text-slate-900">${firstPersonName}</strong> dan <strong class="text-slate-900">${likedUsers.length - 1} lainnya</strong>`;
+
+                    likedByAvatars.innerHTML = `
+                        <div class="flex -space-x-1.5 shrink-0">${previewAvatars}</div>
+                        <span class="text-[11px] text-slate-600 truncate">${summaryLabel}</span>
+                    `;
                 } else {
                     likedByBox.classList.add('hidden');
                 }
             }
+        }
+
+        function openLikedUsersModal() {
+            if (!activeReadingArticleId) return;
+            const art = appState.articles.find(a => a.id === activeReadingArticleId);
+            if (!art) return;
+
+            const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
+            const countEl = document.getElementById('likedUsersModalCount');
+            const listEl = document.getElementById('likedUsersModalList');
+            if (countEl) countEl.textContent = likedUsers.length;
+            if (listEl) {
+                if (likedUsers.length === 0) {
+                    listEl.innerHTML = `<div class="text-center py-6 text-xs text-slate-400">Belum ada yang menyukai postingan ini.</div>`;
+                } else {
+                    listEl.innerHTML = likedUsers.map(u => `
+                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+                            <img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0" alt="${u.name}">
+                            <div class="min-w-0 flex-1">
+                                <div class="text-xs font-extrabold text-slate-900 truncate">${u.name}</div>
+                                <div class="text-[11px] text-slate-400 truncate">${u.email || 'Akun Google Terverifikasi'}</div>
+                            </div>
+                            <i class="fa-solid fa-heart text-rose-500 text-xs shrink-0"></i>
+                        </div>
+                    `).join('');
+                }
+            }
+            openModal('likedUsersModal');
         }
 
         function renderCommentGoogleBanner() {
