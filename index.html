@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SANVALAS STORY - Tim Kreatif OSIS MTsN 14</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,6 +16,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
     <script>
         tailwind.config = {
@@ -43,14 +44,15 @@
     </script>
 
     <style>
-        html {
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
         body {
             background-color: #f5f6f2;
             color: #1c2924;
-            overflow-x: hidden;
         }
 
         .polaroid-card {
@@ -72,7 +74,6 @@
             display: none !important;
         }
 
-        /* Sleek, refined scrollbar for smooth desktop & modal scrolling */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -188,68 +189,65 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-emerald-800 selection:text-white">
+<body class="min-h-screen w-full overflow-x-hidden flex flex-col selection:bg-emerald-800 selection:text-white">
 
     <!-- ========================================== -->
     <!-- TOP CREATOR STUDIO BANNER (Only visible for Tim Kreatif) -->
     <!-- ========================================== -->
-    <div id="editTopBanner" class="edit-only bg-emerald-950 text-white px-4 py-2.5 text-xs sm:text-sm font-medium border-b border-emerald-700/60 shadow-md z-50 sticky top-0">
+    <div id="editTopBanner" class="edit-only bg-emerald-950 text-white px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium border-b border-emerald-700/60 shadow-md z-50 sticky top-0">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-            <div class="flex items-center gap-2.5">
-                <span class="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+            <div class="flex items-center gap-2">
+                <span class="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider flex items-center gap-1.5">
                     <i class="fa-solid fa-user-astronaut"></i> Mode Tim Kreatif
                 </span>
-                <span class="text-emerald-100 text-xs hidden md:inline">Tersambung Cloud Firestore: Semua perubahan langsung tersimpan online untuk semua pengunjung.</span>
+                <span class="text-emerald-100 text-xs hidden md:inline">Tersambung Cloud Firestore: Semua perubahan langsung tersimpan online.</span>
             </div>
-            <div class="flex flex-wrap items-center gap-2">
-                <button onclick="openAddArticleModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-plus"></i> Posting Konten Baru
+            <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <button onclick="openAddArticleModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-plus"></i> Posting Konten
                 </button>
-                <button onclick="openCategoryManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
+                <button onclick="openCategoryManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50">
                     <i class="fa-solid fa-tags"></i> + Kategori
                 </button>
-                <button onclick="openLogoManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
-                    <i class="fa-solid fa-shield-halved text-amber-300"></i> Upload Logo Asli
+                <button onclick="openLogoManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50">
+                    <i class="fa-solid fa-shield-halved text-amber-300"></i> Upload Logo
                 </button>
-                <button onclick="openPolaroidManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
-                    <i class="fa-solid fa-images"></i> Foto Atas & Background
+                <button onclick="openPolaroidManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50">
+                    <i class="fa-solid fa-images"></i> Foto Atas &amp; BG
                 </button>
-                <button onclick="openAboutEditorModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
-                    <i class="fa-solid fa-circle-info"></i> Edit Tentang Kami
+                <button onclick="openAboutEditorModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50">
+                    <i class="fa-solid fa-circle-info"></i> Tentang Kami
                 </button>
-                <button onclick="openInboxModal()" class="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-inbox"></i> Kiriman Siswa (<span id="inboxCountBadge">0</span>)
+                <button onclick="openInboxModal()" class="bg-white/15 hover:bg-white/25 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                    <i class="fa-solid fa-inbox"></i> Kiriman (<span id="inboxCountBadge">0</span>)
                 </button>
-                <button onclick="openAccessGuideModal()" class="bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50" title="Lihat Link Khusus Tim vs Link Pengunjung">
-                    <i class="fa-solid fa-link"></i> Link Akses
+                <button onclick="openAccessGuideModal()" class="bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50" title="Lihat Link Khusus Tim vs Link Pengunjung">
+                    <i class="fa-solid fa-link"></i> Link
                 </button>
-                <button onclick="resetToDefaultData()" class="bg-white/10 hover:bg-rose-700 text-white/80 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition" title="Reset Tampilan Awal">
+                <button onclick="resetToDefaultData()" class="bg-white/10 hover:bg-rose-700 text-white/80 hover:text-white px-2 py-1.5 rounded-lg text-xs font-bold transition" title="Reset Tampilan Awal">
                     <i class="fa-solid fa-rotate-left"></i>
                 </button>
-                <button onclick="logoutCreatorMode()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-1">
-                    <i class="fa-solid fa-right-from-bracket"></i> Keluar ke Mode Pengunjung
+                <button onclick="logoutCreatorMode()" class="bg-rose-600 hover:bg-rose-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                    <i class="fa-solid fa-right-from-bracket"></i> Keluar
                 </button>
             </div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- NAVBAR -->
+    <!-- NAVBAR (RESPONSIVE MOBILE & DESKTOP) -->
     <!-- ========================================== -->
-    <header class="bg-sanvalas-900 text-white border-b border-white/10 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <header class="bg-sanvalas-900 text-white border-b border-white/10 sticky top-0 z-40 shadow-sm w-full">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
             <!-- Brand Logo (MTsN 14 Paling Kiri + OSIS MTsN 14 di Kanannya) -->
-            <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda'))" class="flex items-center gap-2.5 group shrink-0">
-                <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-xl border border-white/15 shadow-xs">
+            <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda'))" class="flex items-center gap-2 group shrink-0">
+                <div class="flex items-center gap-1 bg-white/10 px-1.5 py-1 rounded-xl border border-white/15 shadow-xs">
                     <!-- Logo 1 (Paling Kiri): MTsN 14 Jakarta Timur -->
-                    <div class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
                         <img id="navLogoMtsImg" src="" alt="Logo MTsN 14 Jakarta Timur" class="hidden w-full h-full object-contain rounded-sm">
                         <svg id="navLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo MTsN 14 Jakarta Timur">
-                            <!-- Perisai Biru Terang dengan Outline Kuning -->
                             <path d="M60 6 C82 17, 102 21, 108 23 C109 68, 92 96, 60 110 C28 96, 11 68, 12 23 C18 21, 38 17, 60 6 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
-                            <!-- Teks MTs N 14 -->
                             <text x="60" y="34" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="16.5" letter-spacing="0.5">MTs N 14</text>
-                            <!-- Tangkai Padi (Kiri) -->
                             <path d="M48 92 C29 83, 22 61, 33 41" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
                             <g fill="#eab308" stroke="#1e293b" stroke-width="0.9">
                                 <ellipse cx="30" cy="46" rx="2.6" ry="5" transform="rotate(-25 30 46)"/>
@@ -259,7 +257,6 @@
                                 <ellipse cx="33" cy="80" rx="2.6" ry="5" transform="rotate(30 33 80)"/>
                                 <ellipse cx="41" cy="86" rx="2.6" ry="5" transform="rotate(45 41 86)"/>
                             </g>
-                            <!-- Tangkai Kapas (Kanan) -->
                             <path d="M72 92 C91 83, 98 61, 87 41" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
                             <g fill="#ffffff" stroke="#1e293b" stroke-width="1.1">
                                 <circle cx="88" cy="45" r="3.8"/>
@@ -269,15 +266,12 @@
                                 <circle cx="84" cy="80" r="3.8"/>
                                 <circle cx="76" cy="86" r="3.6"/>
                             </g>
-                            <!-- Tugu Monas di Tengah -->
                             <polygon points="58,44 62,44 64,79 56,79" fill="#f1f5f9" stroke="#94a3b8" stroke-width="0.7"/>
                             <polygon points="48,79 72,79 68,84 52,84" fill="#d97706" stroke="#92400e" stroke-width="0.7"/>
                             <rect x="57" y="42" width="6" height="3" fill="#cbd5e1"/>
                             <path d="M60 35 C62 38, 62 41, 60 42 C58 41, 58 38, 60 35 Z" fill="#f59e0b"/>
-                            <!-- Kotak SMART di Tengah Bawah -->
                             <rect x="48" y="85" width="24" height="10" rx="2" fill="#fde047" stroke="#0f172a" stroke-width="1.4"/>
                             <text x="60" y="92" text-anchor="middle" fill="#14532d" font-family="sans-serif" font-weight="900" font-size="6">SMART</text>
-                            <!-- Pita Biru Tua JAKARTA TIMUR -->
                             <path d="M18 96 L12 106 L24 108 L22 100 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1"/>
                             <path d="M102 96 L108 106 L96 108 L98 100 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1"/>
                             <path d="M21 101 Q60 120 99 101 L95 113 Q60 130 25 113 Z" fill="#1e40af" stroke="#fde047" stroke-width="1.5"/>
@@ -286,7 +280,7 @@
                     </div>
 
                     <!-- Logo 2 (Kanannya): OSIS MTsN 14 Jakarta Timur -->
-                    <div class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                    <div class="w-6 h-6 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
                         <img id="navLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
                         <svg id="navLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo OSIS MTsN 14">
                             <defs>
@@ -295,32 +289,25 @@
                                 </clipPath>
                                 <path id="osisTopArcNav" d="M 21,37 Q 60,21 99,37" fill="none"/>
                             </defs>
-                            <!-- Isi Perisai Diagonal Merah-Putih -->
                             <g clip-path="url(#osisShieldClipNav)">
                                 <rect x="0" y="0" width="120" height="132" fill="#ffffff"/>
                                 <polygon points="0,0 120,0 0,124" fill="#b91c1c"/>
                             </g>
-                            <!-- Bingkai Perisai Putih & Garis Hitam -->
                             <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#ffffff" stroke-width="5.5"/>
                             <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#0f172a" stroke-width="1.8"/>
-                            <!-- Teks Melengkung OSIS MTsN 14 & JAKARTA TIMUR -->
                             <text fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="11.2" letter-spacing="0.4">
                                 <textPath href="#osisTopArcNav" startOffset="50%" text-anchor="middle">OSIS MTsN 14</textPath>
                             </text>
                             <text x="60" y="39" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-weight="800" font-size="5.6" letter-spacing="0.4">JAKARTA TIMUR</text>
-                            <!-- Sayap Biru -->
                             <path d="M24 41 Q41 53 60 56 Q79 53 96 41 Q90 66 60 76 Q30 66 24 41 Z" fill="#0284c7"/>
                             <path d="M51 74 L60 83 L69 74 Z" fill="#0284c7"/>
-                            <!-- Segilima Hijau Kemenag -->
                             <polygon points="60,40 78,53 71,74 49,74 42,53" fill="#15803d" stroke="#fde047" stroke-width="1.5"/>
                             <circle cx="60" cy="47" r="2.5" fill="#fde047"/>
                             <rect x="53" y="53" width="14" height="10" rx="1" fill="#ffffff"/>
                             <line x1="60" y1="53" x2="60" y2="63" stroke="#15803d" stroke-width="1"/>
                             <rect x="52" y="66" width="16" height="4" rx="1" fill="#ffffff"/>
-                            <!-- Padi Kuning (Kanan) & Rangkaian Daun Hijau (Kiri) -->
                             <path d="M26 60 C23 76, 33 88, 46 92" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 2"/>
                             <path d="M94 60 C97 76, 87 88, 74 92" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="3 2"/>
-                            <!-- 5 Cincin Rantai Emas -->
                             <g fill="none" stroke="#eab308" stroke-width="2.4">
                                 <circle cx="48" cy="95" r="4"/>
                                 <circle cx="54" cy="95" r="4"/>
@@ -328,18 +315,17 @@
                                 <circle cx="66" cy="95" r="4"/>
                                 <circle cx="72" cy="95" r="4"/>
                             </g>
-                            <!-- Teks SMART Biru -->
                             <text x="60" y="109" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="9.5" letter-spacing="0.4">SMART</text>
                         </svg>
                     </div>
                 </div>
                 <div class="leading-none">
-                    <div class="font-display font-extrabold text-sm sm:text-base tracking-wider uppercase">SANVALAS</div>
-                    <div class="font-display font-extrabold text-sm sm:text-base tracking-wider uppercase text-emerald-100">STORY</div>
+                    <div class="font-display font-extrabold text-xs sm:text-base tracking-wider uppercase">SANVALAS</div>
+                    <div class="font-display font-extrabold text-xs sm:text-base tracking-wider uppercase text-emerald-100">STORY</div>
                 </div>
             </a>
 
-            <!-- Navigation Links (Desktop - Tanpa Kontak & Garis Putih Dinamis Mengikuti Pilihan) -->
+            <!-- Navigation Links (Desktop) -->
             <nav id="desktopMainNav" class="hidden lg:flex items-center gap-6 xl:gap-7 text-[13.5px] font-medium text-white/85">
                 <a id="navLinkBeranda" href="#beranda" onclick="filterByNav('Semua', this)" class="nav-link nav-active text-white font-semibold relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2.5px] after:bg-white after:rounded-full">Beranda</a>
                 <a id="navLinkTentang" href="#tentang" onclick="setActiveNavIndicator(this); scrollToSection('tentang')" class="nav-link hover:text-white transition py-1">Tentang Kami</a>
@@ -349,26 +335,31 @@
                 <a id="navLinkKarya" href="#konten" onclick="filterByNav('Karya Siswa', this)" class="nav-link hover:text-white transition py-1">Karya Siswa</a>
             </nav>
 
-            <!-- Search Bar, Google Auth Profile & Mobile Menu Button -->
-            <div class="flex items-center gap-2">
-                <div class="relative">
+            <!-- Search Bar (Desktop Only - Mobile inside Dropdown), Google Auth & Hamburger -->
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <div class="relative hidden sm:block">
                     <input
                         id="searchInput"
                         type="text"
                         placeholder="Cari konten..."
                         oninput="handleSearch(this.value)"
                         onkeydown="handleSearchKeydown(event)"
-                        class="w-32 sm:w-44 bg-white/10 hover:bg-white/15 focus:bg-white/20 text-white placeholder-white/60 text-xs sm:text-sm rounded-full pl-3.5 pr-8 py-1.5 border border-white/25 focus:border-white/60 focus:outline-none transition"
+                        class="w-36 md:w-44 bg-white/10 hover:bg-white/15 focus:bg-white/20 text-white placeholder-white/60 text-xs sm:text-sm rounded-full pl-3.5 pr-8 py-1.5 border border-white/25 focus:border-white/60 focus:outline-none transition"
                     >
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs pointer-events-none"></i>
                 </div>
+
+                <!-- Mobile Search Toggle Button -->
+                <button type="button" onclick="toggleMobileSearchBar()" class="sm:hidden w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white" title="Cari Konten">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </button>
 
                 <!-- Google Login Button (When Not Logged In) -->
                 <button
                     id="navGoogleLoginBtn"
                     type="button"
                     onclick="triggerGoogleSignInFlow()"
-                    class="bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-2 shrink-0 transition"
+                    class="bg-white hover:bg-slate-100 text-slate-800 text-xs font-bold px-2.5 sm:px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 shrink-0 transition"
                     title="Sign in with Google"
                 >
                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
@@ -381,16 +372,16 @@
                 </button>
 
                 <!-- Logged-In Google User Pill -->
-                <div id="navGoogleUserPill" class="hidden items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 rounded-full pl-1.5 pr-2.5 py-1 text-xs">
+                <div id="navGoogleUserPill" class="hidden items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/20 rounded-full pl-1 pr-2 py-0.5 sm:py-1 text-xs shrink-0">
                     <img id="navUserAvatar" src="" alt="Avatar" class="w-6 h-6 rounded-full object-cover border border-white/40">
-                    <span id="navUserName" class="font-bold text-white max-w-[95px] truncate hidden sm:inline"></span>
+                    <span id="navUserName" class="font-bold text-white max-w-[85px] truncate hidden sm:inline"></span>
                     <button
                         type="button"
                         onclick="logoutGoogleUser()"
                         class="text-white/70 hover:text-rose-300 ml-0.5 transition"
                         title="Keluar dari Akun Google"
                     >
-                        <i class="fa-solid fa-power-off text-[11px]"></i>
+                        <i class="fa-solid fa-power-off text-[10px]"></i>
                     </button>
                 </div>
 
@@ -398,58 +389,72 @@
                 <button
                     type="button"
                     onclick="openAddArticleModal()"
-                    class="edit-only bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 shrink-0 shadow"
+                    class="edit-only bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-2.5 sm:px-3.5 py-1.5 rounded-full transition flex items-center gap-1 shrink-0 shadow"
                 >
                     <i class="fa-solid fa-plus"></i>
                     <span class="hidden sm:inline">Posting</span>
                 </button>
 
-                <button type="button" onclick="toggleMobileMenu()" class="lg:hidden w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-bars"></i>
+                <button type="button" onclick="toggleMobileMenu()" class="lg:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-white shrink-0">
+                    <i class="fa-solid fa-bars text-sm"></i>
                 </button>
             </div>
         </div>
 
+        <!-- Mobile Search Bar Dropdown -->
+        <div id="mobileSearchBar" class="hidden sm:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-2.5">
+            <div class="relative">
+                <input
+                    id="mobileSearchInput"
+                    type="text"
+                    placeholder="Cari konten, prestasi, karya..."
+                    oninput="handleSearch(this.value)"
+                    onkeydown="handleSearchKeydown(event)"
+                    class="w-full bg-white/10 focus:bg-white/20 text-white placeholder-white/60 text-xs rounded-full pl-4 pr-9 py-2 border border-white/25 focus:outline-none"
+                >
+                <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-white/70 text-xs"></i>
+            </div>
+        </div>
+
         <!-- Mobile Menu Dropdown -->
-        <div id="mobileMenu" class="hidden lg:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-3 space-y-2 text-sm">
-            <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda')); toggleMobileMenu()" class="block py-1.5 text-white font-semibold">Beranda</a>
-            <a href="#tentang" onclick="setActiveNavIndicator(document.getElementById('navLinkTentang')); scrollToSection('tentang'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Tentang Kami</a>
-            <a href="#konten" onclick="filterByNav('Semua', document.getElementById('navLinkKonten')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Semua Konten</a>
-            <a href="#konten" onclick="filterByNav('Dokumentasi', document.getElementById('navLinkDokumentasi')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Dokumentasi</a>
-            <a href="#konten" onclick="filterByNav('Prestasi', document.getElementById('navLinkPrestasi')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Prestasi</a>
-            <a href="#konten" onclick="filterByNav('Karya Siswa', document.getElementById('navLinkKarya')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Karya Siswa</a>
+        <div id="mobileMenu" class="hidden lg:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-3 space-y-1.5 text-sm">
+            <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda')); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white font-semibold">Beranda</a>
+            <a href="#tentang" onclick="setActiveNavIndicator(document.getElementById('navLinkTentang')); scrollToSection('tentang'); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white/85 hover:text-white">Tentang Kami</a>
+            <a href="#konten" onclick="filterByNav('Semua', document.getElementById('navLinkKonten')); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white/85 hover:text-white">Semua Konten</a>
+            <a href="#konten" onclick="filterByNav('Dokumentasi', document.getElementById('navLinkDokumentasi')); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white/85 hover:text-white">Dokumentasi</a>
+            <a href="#konten" onclick="filterByNav('Prestasi', document.getElementById('navLinkPrestasi')); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white/85 hover:text-white">Prestasi</a>
+            <a href="#konten" onclick="filterByNav('Karya Siswa', document.getElementById('navLinkKarya')); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white/85 hover:text-white">Karya Siswa</a>
         </div>
     </header>
 
     <!-- ========================================== -->
-    <!-- HERO SECTION -->
+    <!-- HERO SECTION (NO FLASH OF OLD DEFAULT PHOTOS ON REFRESH) -->
     <!-- ========================================== -->
-    <section id="beranda" class="relative bg-sanvalas-900 text-white overflow-hidden">
-        <div class="absolute inset-0 z-0">
+    <section id="beranda" class="relative bg-sanvalas-900 text-white overflow-hidden w-full">
+        <div class="absolute inset-0 z-0 bg-sanvalas-950">
             <img
                 id="heroBgImg"
-                src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=80"
+                src=""
                 alt="MTsN 14 Background"
-                class="w-full h-full object-cover object-center opacity-40 scale-105"
-                onerror="this.src='https://placehold.co/1600x600/0f3529/ffffff?text=MTsN+14'"
+                class="w-full h-full object-cover object-center opacity-0 scale-105 transition-opacity duration-500"
             >
             <div class="absolute inset-0 bg-gradient-to-r from-[#0c2e24]/95 via-[#184d3c]/75 to-[#0b2920]/90"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#0b281f]/80 via-transparent to-[#0b281f]/50"></div>
         </div>
 
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-11">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-11">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-8 items-center">
 
                 <!-- Left Hero Text (6 Cols) -->
-                <div class="lg:col-span-6 space-y-3">
-                    <div class="inline-flex items-center gap-2 text-xs sm:text-sm tracking-[0.22em] uppercase text-emerald-100/90 font-medium">
+                <div class="lg:col-span-6 space-y-2.5 sm:space-y-3">
+                    <div class="inline-flex items-center gap-2 text-[11px] sm:text-sm tracking-[0.22em] uppercase text-emerald-100/90 font-medium">
                         <span>TIM KREATIF</span>
                         <span class="font-bold text-white">OSIS</span>
                         <span class="text-white/40">|</span>
                         <span>MTsN 14</span>
                     </div>
 
-                    <h1 class="font-display font-black text-4xl sm:text-5xl xl:text-[54px] leading-[0.96] tracking-tight text-white drop-shadow-sm uppercase">
+                    <h1 class="font-display font-black text-3xl sm:text-5xl xl:text-[54px] leading-[0.98] tracking-tight text-white drop-shadow-sm uppercase">
                         <span class="block">SANVALAS</span>
                         <span class="block">STORY</span>
                     </h1>
@@ -458,11 +463,11 @@
                         Tim kreatif OSIS yang membuat dan mengelola konten edukatif, informatif, dan hiburan positif untuk media sosial sekolah, sekaligus mendokumentasikan kegiatan, mempublikasikan prestasi siswa, serta menampilkan karya dan kreativitas siswa MTsN 14.
                     </p>
 
-                    <div class="pt-2 inline-block relative">
+                    <div class="pt-1.5 inline-block relative">
                         <p class="font-hand text-2xl sm:text-[28px] text-white tracking-wide">
                             Kreatif &nbsp;•&nbsp; Informatif &nbsp;•&nbsp; Positif
                         </p>
-                        <svg viewBox="0 0 280 18" class="w-60 sm:w-64 h-4 -mt-1 text-white/85 stroke-current fill-none" stroke-width="2.2" stroke-linecap="round">
+                        <svg viewBox="0 0 280 18" class="w-56 sm:w-64 h-4 -mt-1 text-white/85 stroke-current fill-none" stroke-width="2.2" stroke-linecap="round">
                             <path d="M4 13 Q 140 2, 274 9" />
                             <path d="M55 15 Q 170 7, 245 12" stroke-width="1.2" opacity="0.7" />
                         </svg>
@@ -470,7 +475,7 @@
                 </div>
 
                 <!-- Right Hero Polaroid Collage & Doodles (6 Cols) -->
-                <div class="lg:col-span-6 relative min-h-[260px] sm:min-h-[300px] flex items-center justify-center lg:justify-start">
+                <div class="lg:col-span-6 relative min-h-[245px] sm:min-h-[300px] flex items-center justify-center lg:justify-start">
                     <div class="absolute -top-3 left-16 sm:left-24 z-10 text-[#09221a]/80 -rotate-12 pointer-events-none hidden sm:block">
                         <i class="fa-solid fa-camera text-4xl drop-shadow"></i>
                     </div>
@@ -479,16 +484,16 @@
                         <path d="M8 18 L38 8 M12 26 L42 16" stroke-dasharray="6 5" stroke-linecap="round"/>
                     </svg>
 
-                    <svg class="absolute -top-2 right-28 sm:right-40 w-12 h-12 text-white z-20 pointer-events-none" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="absolute -top-2 right-12 sm:right-40 w-10 h-10 sm:w-12 sm:h-12 text-white z-20 pointer-events-none" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 28 L58 10 L40 54 L28 36 L6 28 Z"/>
                         <path d="M58 10 L28 36 L28 50 L35 42"/>
                     </svg>
 
-                    <div class="relative w-full max-w-[440px] h-[250px] sm:h-[275px] mx-auto lg:mx-0 flex items-center justify-center">
+                    <div class="relative w-full max-w-[340px] sm:max-w-[440px] h-[235px] sm:h-[275px] mx-auto lg:mx-0 flex items-center justify-center">
                         <!-- Left Polaroid -->
-                        <div id="polaroidCardLeft" onclick="rotatePolaroidCarousel(-1)" class="polaroid-card w-32 sm:w-36 absolute left-1 sm:left-3 top-12 -rotate-[11deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
-                            <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-slate-200">
-                                <img id="polaroidImg1" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80" alt="Dokumentasi" class="w-full h-full object-cover transition-all duration-500">
+                        <div id="polaroidCardLeft" onclick="rotatePolaroidCarousel(-1)" class="polaroid-card w-28 sm:w-36 absolute left-2 sm:left-3 top-12 -rotate-[11deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
+                            <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-emerald-950/30">
+                                <img id="polaroidImg1" src="" alt="Dokumentasi" class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
                                 <button type="button" onclick="event.stopPropagation(); openPolaroidManagerModal(0)" class="edit-only absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center text-white text-[11px] font-bold gap-1 cursor-pointer">
                                     <i class="fa-solid fa-camera-rotate text-base text-amber-300"></i>
                                     <span>Ganti Foto 1</span>
@@ -497,16 +502,16 @@
                         </div>
 
                         <!-- Center Main Polaroid -->
-                        <div id="polaroidCardCenter" class="polaroid-card w-44 sm:w-52 relative -top-2 -rotate-[4deg] z-20 group">
-                            <div class="relative aspect-[4/3.7] overflow-hidden rounded-sm bg-slate-200">
-                                <img id="polaroidImg2" src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80" alt="MTsN 14" class="w-full h-full object-cover transition-all duration-500">
+                        <div id="polaroidCardCenter" class="polaroid-card w-40 sm:w-52 relative -top-2 -rotate-[4deg] z-20 group">
+                            <div class="relative aspect-[4/3.7] overflow-hidden rounded-sm bg-emerald-950/30">
+                                <img id="polaroidImg2" src="" alt="MTsN 14" class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
                                 <button type="button" onclick="event.stopPropagation(); openPolaroidManagerModal(1)" class="edit-only absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center text-white text-xs font-bold gap-1 cursor-pointer">
                                     <i class="fa-solid fa-camera-rotate text-lg text-amber-300"></i>
                                     <span>Ganti Foto Tengah</span>
                                 </button>
                             </div>
                             <div class="pt-2 px-1 flex items-center justify-between text-slate-800 -mb-4">
-                                <span id="polaroidCaptionText" class="font-hand font-bold text-xl sm:text-2xl leading-none tracking-wide">MTsN 14</span>
+                                <span id="polaroidCaptionText" class="font-hand font-bold text-lg sm:text-2xl leading-none tracking-wide">MTsN 14</span>
                                 <button onclick="this.classList.toggle('text-rose-500')" class="text-slate-700 hover:text-rose-500 transition text-sm">
                                     <i class="fa-regular fa-heart"></i>
                                 </button>
@@ -514,9 +519,9 @@
                         </div>
 
                         <!-- Right Polaroid -->
-                        <div id="polaroidCardRight" onclick="rotatePolaroidCarousel(1)" class="polaroid-card w-32 sm:w-36 absolute right-3 sm:right-6 top-10 rotate-[9deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
-                            <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-slate-200">
-                                <img id="polaroidImg3" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=500&q=80" alt="Siswa MTsN 14" class="w-full h-full object-cover transition-all duration-500">
+                        <div id="polaroidCardRight" onclick="rotatePolaroidCarousel(1)" class="polaroid-card w-28 sm:w-36 absolute right-2 sm:right-6 top-10 rotate-[9deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
+                            <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-emerald-950/30">
+                                <img id="polaroidImg3" src="" alt="Siswa MTsN 14" class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
                                 <button type="button" onclick="event.stopPropagation(); openPolaroidManagerModal(2)" class="edit-only absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center text-white text-[11px] font-bold gap-1 cursor-pointer">
                                     <i class="fa-solid fa-camera-rotate text-base text-amber-300"></i>
                                     <span>Ganti Foto 3</span>
@@ -524,12 +529,12 @@
                             </div>
                         </div>
 
-                        <button type="button" onclick="openPolaroidManagerModal()" class="edit-only absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white whitespace-nowrap">
-                            <i class="fa-solid fa-camera"></i> Ganti Background & 3 Foto
+                        <button type="button" onclick="openPolaroidManagerModal()" class="edit-only absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white whitespace-nowrap">
+                            <i class="fa-solid fa-camera"></i> Ganti Background &amp; 3 Foto
                         </button>
 
-                        <button id="polaroidPlayBtn" type="button" onclick="togglePolaroidSlideshow()" class="absolute bottom-2 right-6 sm:right-10 z-30 w-11 h-11 rounded-full bg-emerald-800/90 hover:bg-emerald-700 text-white flex items-center justify-center shadow-lg ring-4 ring-white/20 transition hover:scale-110 cursor-pointer" title="Putar / Geser Otomatis Foto Profil">
-                            <i id="polaroidPlayIcon" class="fa-solid fa-play text-sm ml-0.5"></i>
+                        <button id="polaroidPlayBtn" type="button" onclick="togglePolaroidSlideshow()" class="absolute bottom-2 right-3 sm:right-10 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-emerald-800/90 hover:bg-emerald-700 text-white flex items-center justify-center shadow-lg ring-4 ring-white/20 transition hover:scale-110 cursor-pointer" title="Putar / Geser Otomatis Foto Profil">
+                            <i id="polaroidPlayIcon" class="fa-solid fa-play text-xs sm:text-sm ml-0.5"></i>
                         </button>
                     </div>
 
@@ -550,11 +555,11 @@
     <!-- ========================================== -->
     <!-- KATEGORI KONTEN BAR -->
     <!-- ========================================== -->
-    <section id="konten" class="bg-[#fbfcf9] border-b border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3.5">
+    <section id="konten" class="bg-[#fbfcf9] border-b border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                 <div class="flex items-center gap-3 shrink-0">
-                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight" data-edit-key="categoryHeading">Kategori Konten</h2>
+                    <h2 class="text-sm sm:text-lg font-extrabold text-slate-900 tracking-tight" data-edit-key="categoryHeading">Kategori Konten</h2>
                     <button
                         id="resetCategoryBtn"
                         type="button"
@@ -566,11 +571,11 @@
                 </div>
 
                 <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 no-scrollbar">
-                    <div id="categoryPillsContainer" class="flex items-center gap-2.5 sm:gap-3"></div>
+                    <div id="categoryPillsContainer" class="flex items-center gap-2 sm:gap-3"></div>
                     <button
                         type="button"
                         onclick="openCategoryManagerModal()"
-                        class="edit-only shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs sm:text-sm font-extrabold bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-sm transition"
+                        class="edit-only shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-extrabold bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-sm transition"
                         title="Tambah atau Kelola Kategori"
                     >
                         <i class="fa-solid fa-plus"></i>
@@ -584,24 +589,24 @@
     <!-- ========================================== -->
     <!-- MAIN CONTENT & RIGHT SIDEBAR -->
     <!-- ========================================== -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-7">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-7">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
             <!-- LEFT MAIN AREA (9 Columns on Desktop) -->
             <div class="lg:col-span-9 space-y-6">
 
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-3">
-                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Konten Terbaru</h2>
+                    <div class="flex items-center gap-2.5">
+                        <h2 class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight">Konten Terbaru</h2>
                         <span id="activeFilterBadge" class="hidden text-xs font-semibold bg-emerald-900/10 text-emerald-900 px-2.5 py-0.5 rounded-full"></span>
                     </div>
-                    <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="flex flex-wrap items-center gap-2">
                         <div class="bg-[#eaede6] p-1 rounded-full flex items-center text-[11px] font-bold">
-                            <button type="button" id="viewSizeLargeBtn" onclick="setCardSizeMode('large')" class="px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1.5" title="Tampilan Besar">
+                            <button type="button" id="viewSizeLargeBtn" onclick="setCardSizeMode('large')" class="px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1" title="Tampilan Besar">
                                 <i class="fa-solid fa-table-cells-large"></i>
                                 <span>Besar</span>
                             </button>
-                            <button type="button" id="viewSizeCompactBtn" onclick="setCardSizeMode('compact')" class="px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1.5" title="Tampilan 4 Kolom Ringkas">
+                            <button type="button" id="viewSizeCompactBtn" onclick="setCardSizeMode('compact')" class="px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1" title="Tampilan 4 Kolom Ringkas">
                                 <i class="fa-solid fa-grip"></i>
                                 <span>Ringkas</span>
                             </button>
@@ -610,7 +615,7 @@
                         <button type="button" onclick="openAddArticleModal()" class="edit-only bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 shadow-sm">
                             <i class="fa-solid fa-plus"></i> Posting Konten Baru
                         </button>
-                        <button type="button" onclick="setActiveCategory('Semua')" class="text-xs sm:text-sm font-bold text-slate-700 hover:text-emerald-900 flex items-center gap-1.5 transition">
+                        <button type="button" onclick="setActiveCategory('Semua')" class="text-xs sm:text-sm font-bold text-slate-700 hover:text-emerald-900 flex items-center gap-1 transition">
                             <span>Lihat Semua</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
@@ -666,7 +671,7 @@
                                         <span class="text-[10px] font-extrabold uppercase bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">Prestasi</span>
                                     </div>
                                     <p class="text-xs text-emerald-50/85 leading-relaxed">
-                                        Baru meraih juara lomba akademik maupun non-akademik? Laporkan prestasimu untuk dipublikasikan di MTsN 14!
+                                        Baru meraih juara lomba akademik maupun non-akademik? Laporkan prestasimu (foto/video) untuk dipublikasikan di MTsN 14!
                                     </p>
                                 </div>
                             </div>
@@ -711,7 +716,6 @@
                         </p>
                     </div>
 
-                    <!-- Tab Switcher: OSIS MTsN 14 vs MTsN 14 Jakarta -->
                     <div class="grid grid-cols-2 gap-1 bg-white/80 p-1 rounded-xl border border-slate-200/80 text-[11px] font-extrabold">
                         <button type="button" id="tabSidebarOsisBtn" onclick="switchSidebarSocialTab('osis')" class="py-1.5 px-2 rounded-lg bg-emerald-900 text-white shadow-2xs transition">
                             OSIS MTsN 14
@@ -721,7 +725,6 @@
                         </button>
                     </div>
 
-                    <!-- Daftar Akun OSIS MTsN 14 -->
                     <div id="sidebarSocialListOsis" class="space-y-2.5">
                         <a href="https://www.instagram.com/osismtsn14jkt/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
                             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
@@ -754,7 +757,6 @@
                         </a>
                     </div>
 
-                    <!-- Daftar Akun Resmi MTsN 14 Jakarta -->
                     <div id="sidebarSocialListMts" class="hidden space-y-2.5">
                         <a href="https://www.instagram.com/mtsnegeri14jakarta/?hl=en" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
                             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
@@ -813,14 +815,15 @@
     </main>
 
     <!-- ========================================== -->
-    <!-- MODAL 1: PEMBACA ARTIKEL + SLIDER MULTI-FOTO + KOMENTAR -->
+    <!-- MODAL 1: PEMBACA ARTIKEL + SLIDER MULTI-FOTO & VIDEO + KOMENTAR -->
     <!-- ========================================== -->
     <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-2.5 sm:p-5">
         <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col">
             <div class="relative bg-slate-950 h-64 sm:h-[430px] shrink-0 overflow-hidden select-none group">
                 <img id="readerAmbientBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-45 scale-110 pointer-events-none">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35 pointer-events-none z-10"></div>
+                <div id="readerGradientMask" class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35 pointer-events-none z-10"></div>
 
+                <!-- Media Stage: Image / Native Video / YouTube Embed -->
                 <img
                     id="readerImg"
                     src=""
@@ -828,6 +831,19 @@
                     class="relative z-10 w-full h-full object-contain sm:object-cover transition-all duration-300"
                     onerror="this.src='https://placehold.co/900x600/164636/ffffff?text=Sanvalas+Story'"
                 >
+                <video
+                    id="readerVideo"
+                    controls
+                    playsinline
+                    class="hidden relative z-20 w-full h-full object-contain bg-black"
+                ></video>
+                <iframe
+                    id="readerIframe"
+                    src=""
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="hidden relative z-20 w-full h-full border-0 bg-black"
+                ></iframe>
 
                 <div class="absolute top-3.5 inset-x-3.5 sm:top-4 sm:inset-x-4 z-30 flex items-center justify-between pointer-events-none">
                     <span id="readerPhotoCounter" class="hidden pointer-events-auto bg-black/65 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
@@ -841,7 +857,7 @@
                     type="button"
                     onclick="stepReaderGallery(-1, event)"
                     class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
-                    title="Foto Sebelumnya"
+                    title="Slide Sebelumnya"
                 >
                     <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
                 </button>
@@ -850,12 +866,12 @@
                     type="button"
                     onclick="stepReaderGallery(1, event)"
                     class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
-                    title="Foto Berikutnya"
+                    title="Slide Berikutnya"
                 >
                     <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
                 </button>
 
-                <div class="absolute bottom-3.5 inset-x-4 sm:bottom-4 sm:inset-x-5 z-30 flex items-center justify-between gap-2 pointer-events-none">
+                <div id="readerBottomOverlay" class="absolute bottom-3.5 inset-x-4 sm:bottom-4 sm:inset-x-5 z-30 flex items-center justify-between gap-2 pointer-events-none">
                     <span id="readerCategory" class="pointer-events-auto bg-[#eaede6] text-slate-900 text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-md"></span>
                     <div id="readerDotsContainer" class="pointer-events-auto flex items-center gap-1.5 sm:gap-2 bg-black/55 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border border-white/15"></div>
                 </div>
@@ -932,7 +948,6 @@
                 <div class="flex items-start justify-between gap-4 relative z-10">
                     <div class="flex items-center gap-3.5">
                         <div class="flex items-center gap-1.5 px-2.5 py-2 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 shadow-lg">
-                            <!-- Logo MTsN 14 Paling Kiri -->
                             <div class="w-8 h-8 shrink-0 flex items-center justify-center">
                                 <img id="aboutLogoMtsImg" src="" alt="Logo MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
                                 <svg id="aboutLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full">
@@ -949,7 +964,6 @@
                                     <text x="60" y="116" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="7.3">JAKARTA TIMUR</text>
                                 </svg>
                             </div>
-                            <!-- Logo OSIS MTsN 14 di Kanannya -->
                             <div class="w-8 h-8 shrink-0 flex items-center justify-center">
                                 <img id="aboutLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
                                 <svg id="aboutLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full">
@@ -995,7 +1009,7 @@
                             <i class="fa-solid fa-camera-retro"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-extrabold text-slate-900">Jurnalistik & Foto</div>
+                            <div class="text-xs font-extrabold text-slate-900">Jurnalistik &amp; Video</div>
                             <div class="text-[11px] text-slate-500">Dokumentasi setiap momen madrasah</div>
                         </div>
                     </div>
@@ -1005,7 +1019,7 @@
                         </div>
                         <div>
                             <div class="text-xs font-extrabold text-slate-900">Edukasi Kreatif</div>
-                            <div class="text-[11px] text-slate-500">Konten belajar seru & informatif</div>
+                            <div class="text-[11px] text-slate-500">Konten belajar seru &amp; informatif</div>
                         </div>
                     </div>
                     <div class="p-3.5 rounded-2xl bg-sky-50/70 border border-sky-200/70 flex sm:flex-col items-center sm:items-start gap-3 sm:gap-1.5">
@@ -1014,7 +1028,7 @@
                         </div>
                         <div>
                             <div class="text-xs font-extrabold text-slate-900">Apresiasi Siswa</div>
-                            <div class="text-[11px] text-slate-500">Publikasi karya & prestasi terbaik</div>
+                            <div class="text-[11px] text-slate-500">Publikasi karya &amp; prestasi terbaik</div>
                         </div>
                     </div>
                 </div>
@@ -1074,7 +1088,7 @@
                     <textarea id="editAboutParagraph1" rows="3" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:border-emerald-700"></textarea>
                 </div>
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Paragraf Kedua / Visi & Semangat (Pop-up)</label>
+                    <label class="block font-bold text-slate-700 mb-1">Paragraf Kedua / Visi &amp; Semangat (Pop-up)</label>
                     <textarea id="editAboutParagraph2" rows="3" required class="w-full rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:border-emerald-700"></textarea>
                 </div>
 
@@ -1097,7 +1111,7 @@
                         <i class="fa-solid fa-images"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-extrabold text-slate-900">Ganti Background Belakang & 3 Foto Atas</h3>
+                        <h3 class="text-base font-extrabold text-slate-900">Ganti Background Belakang &amp; 3 Foto Atas</h3>
                         <p class="text-[11px] text-slate-500">Perubahan langsung tersimpan online untuk semua pengunjung</p>
                     </div>
                 </div>
@@ -1200,7 +1214,6 @@
             </div>
 
             <form onsubmit="saveCustomBrandLogos(event)" class="space-y-4 text-xs">
-                <!-- Logo 1: MTsN 14 (Paling Kiri) -->
                 <div class="p-3.5 rounded-xl bg-sky-50/70 border border-sky-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-slate-900">1. Logo MTsN 14 Jakarta Timur (Paling Kiri)</span>
@@ -1217,7 +1230,6 @@
                     </div>
                 </div>
 
-                <!-- Logo 2: OSIS MTsN 14 (Di Kanannya) -->
                 <div class="p-3.5 rounded-xl bg-rose-50/60 border border-rose-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-slate-900">2. Logo OSIS MTsN 14 (Di Sebelah Kanannya)</span>
@@ -1259,8 +1271,8 @@
                         <i class="fa-solid fa-tags"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-extrabold text-slate-900">Kelola & Tambah Kategori</h3>
-                        <p class="text-[11px] text-slate-500">Kategori baru otomatis tampil di halaman & form posting</p>
+                        <h3 class="text-base font-extrabold text-slate-900">Kelola &amp; Tambah Kategori</h3>
+                        <p class="text-[11px] text-slate-500">Kategori baru otomatis tampil di halaman &amp; form posting</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModal('categoryManagerModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
@@ -1359,7 +1371,6 @@
     <!-- ========================================== -->
     <div id="allSocialMediaModal" onclick="if(event.target === this) closeModal('allSocialMediaModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-4">
         <div class="modal-card-pop smooth-scroll-box bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
-            <!-- Header -->
             <div class="bg-gradient-to-r from-sanvalas-950 via-sanvalas-800 to-emerald-700 text-white p-5 sm:p-6 flex items-start justify-between gap-4">
                 <div>
                     <span class="inline-block text-[10px] font-extrabold uppercase tracking-widest bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full mb-1.5">Kanal Resmi Sekolah &amp; Siswa</span>
@@ -1371,7 +1382,6 @@
                 </button>
             </div>
 
-            <!-- 2-Column Comparison Grid: MTsN 14 Jakarta vs OSIS MTsN 14 -->
             <div class="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Kolom 1: Media Sosial Resmi MTsN 14 Jakarta -->
                 <div class="rounded-2xl border-2 border-emerald-800/20 bg-emerald-50/40 p-4 space-y-3">
@@ -1522,7 +1532,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL LOGIN GOOGLE (HANYA 1 TOMBOL LOGIN DENGAN GOOGLE -> POP-UP ASLI FIREBASE GOOGLE AUTH) -->
+    <!-- MODAL LOGIN GOOGLE -->
     <!-- ========================================== -->
     <div id="googleLoginModal" onclick="if(event.target === this) closeModal('googleLoginModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-200">
@@ -1582,9 +1592,9 @@
         </div>
     </div>
 
-    <!-- MODAL EDITOR POSTINGAN (TIM KREATIF) -->
+    <!-- MODAL EDITOR POSTINGAN (TIM KREATIF - SUPPORT FOTO & VIDEO) -->
     <div id="articleEditorModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 id="editorModalTitle" class="text-base font-extrabold text-slate-900">Posting Konten Baru</h3>
                 <button type="button" onclick="closeModal('articleEditorModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
@@ -1607,19 +1617,20 @@
                         <input id="editArticleDate" type="text" required class="w-full rounded-xl border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
                     </div>
                 </div>
-                <div class="space-y-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <div class="flex items-center justify-between">
-                        <label class="font-extrabold text-slate-800">Galeri Foto Postingan (Bisa Banyak Foto)</label>
-                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
-                            <i class="fa-solid fa-upload"></i> Upload Banyak Foto
-                            <input type="file" accept="image/*" multiple class="hidden" onchange="handleMultiFileUploadToEditor(event)">
+                <div class="space-y-2.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <label class="font-extrabold text-slate-800">Galeri Foto &amp; Video Postingan</label>
+                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                            <i class="fa-solid fa-photo-film"></i> Upload Foto / Video
+                            <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handleMultiFileUploadToEditor(event)">
                         </label>
                     </div>
                     <div class="flex gap-2">
-                        <input id="editArticleImage" type="text" placeholder="Atau tempel link URL foto di sini..." class="flex-1 rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                        <input id="editArticleImage" type="text" placeholder="Tempel link URL Foto / Video MP4 / YouTube..." class="flex-1 rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
                         <button type="button" onclick="addPhotoUrlToEditorList()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-3 py-2 rounded-xl shrink-0">+ Tambah URL</button>
                     </div>
-                    <div id="editorPhotosPreviewList" class="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1"></div>
+                    <p class="text-[10px] text-slate-500">Mendukung upload file foto &amp; video langsung dari HP/Laptop (MP4/WebM) maupun link YouTube.</p>
+                    <div id="editorPhotosPreviewList" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1"></div>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Isi Artikel / Cerita Lengkap</label>
@@ -1627,19 +1638,19 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('articleEditorModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
-                    <button type="submit" id="saveArticleSubmitBtn" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Simpan & Terbitkan</button>
+                    <button type="submit" id="saveArticleSubmitBtn" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Simpan &amp; Terbitkan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL KIRIM KARYA SISWA -->
+    <!-- MODAL KIRIM KARYA SISWA (SUPPORT FOTO & VIDEO) -->
     <div id="submitWorkModal" onclick="if(event.target === this) closeModal('submitWorkModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-900">Kirim Karyamu ke SANVALAS STORY</h3>
-                    <p class="text-[11px] text-slate-500">Karya terbaik akan diterbitkan di halaman utama MTsN 14</p>
+                    <p class="text-[11px] text-slate-500">Karya foto/video terbaik akan diterbitkan di halaman utama MTsN 14</p>
                 </div>
                 <button type="button" onclick="closeModal('submitWorkModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
@@ -1648,7 +1659,7 @@
             <form onsubmit="submitStudentWork(event)" class="space-y-3 text-xs">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">Nama & Kelas</label>
+                        <label class="block font-bold text-slate-700 mb-1">Nama &amp; Kelas</label>
                         <input id="subName" type="text" required placeholder="Contoh: Nabila - 8A" class="w-full rounded-xl border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
                     </div>
                     <div>
@@ -1661,15 +1672,15 @@
                     <input id="subTitle" type="text" required placeholder="Judul karya atau dokumentasi..." class="w-full rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:border-emerald-700">
                 </div>
                 <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-700">Foto Karya (Bisa Lebih dari 1)</span>
-                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1 rounded-lg cursor-pointer flex items-center gap-1.5">
-                            <i class="fa-solid fa-upload"></i> Pilih Foto
-                            <input type="file" accept="image/*" multiple class="hidden" onchange="handleStudentMultiFileUpload(event)">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-bold text-slate-700">Foto / Video Karya</span>
+                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-photo-film"></i> Pilih Foto / Video
+                            <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handleStudentMultiFileUpload(event)">
                         </label>
                     </div>
-                    <input id="subImage" type="text" placeholder="Atau tempel link foto (opsional)..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
-                    <div id="subPhotosPreview" class="hidden grid grid-cols-4 gap-2 pt-1"></div>
+                    <input id="subImage" type="text" placeholder="Atau tempel link foto / video YouTube / MP4..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                    <div id="subPhotosPreview" class="hidden grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1"></div>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Deskripsi / Cerita Karya</label>
@@ -1677,15 +1688,15 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('submitWorkModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
-                    <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Kirim Sekarang</button>
+                    <button type="submit" id="submitWorkBtn" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Kirim Sekarang</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL KIRIM PRESTASI SISWA (KATEGORI LANGSUNG PRESTASI) -->
+    <!-- MODAL KIRIM PRESTASI SISWA (SUPPORT FOTO & VIDEO, KATEGORI LANGSUNG PRESTASI) -->
     <div id="submitPrestasiModal" onclick="if(event.target === this) closeModal('submitPrestasiModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs">
@@ -1719,15 +1730,15 @@
                     <input id="presTitle" type="text" required placeholder="Contoh: Juara 1 Olimpiade Matematika Tingkat Provinsi" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:border-emerald-700">
                 </div>
                 <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-slate-700">Foto Piala / Sertifikat / Dokumentasi</span>
-                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1 rounded-lg cursor-pointer flex items-center gap-1.5">
-                            <i class="fa-solid fa-upload"></i> Pilih Foto
-                            <input type="file" accept="image/*" multiple class="hidden" onchange="handlePrestasiMultiFileUpload(event)">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-bold text-slate-700">Foto / Video Dokumentasi Prestasi</span>
+                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-photo-film"></i> Pilih Foto / Video
+                            <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handlePrestasiMultiFileUpload(event)">
                         </label>
                     </div>
-                    <input id="presImage" type="text" placeholder="Atau tempel link foto dokumentasi (opsional)..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
-                    <div id="presPhotosPreview" class="hidden grid grid-cols-4 gap-2 pt-1"></div>
+                    <input id="presImage" type="text" placeholder="Atau tempel link foto / video dokumentasi..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                    <div id="presPhotosPreview" class="hidden grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1"></div>
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Detail Penyelenggara &amp; Cerita Singkat</label>
@@ -1735,7 +1746,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('submitPrestasiModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
-                    <button type="submit" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-5 py-2 rounded-xl shadow flex items-center gap-1.5">
+                    <button type="submit" id="submitPrestasiBtn" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-5 py-2 rounded-xl shadow flex items-center gap-1.5">
                         <i class="fa-solid fa-trophy"></i>
                         <span>Kirim Prestasi</span>
                     </button>
@@ -1746,7 +1757,7 @@
 
     <!-- MODAL KOTAK MASUK KIRIMAN SISWA & PANDUAN LINK -->
     <div id="inboxModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h3 class="text-base font-extrabold text-slate-900">Kotak Masuk Kiriman Siswa</h3>
                 <button type="button" onclick="closeModal('inboxModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
@@ -1785,11 +1796,10 @@
     <!-- ========================================== -->
     <!-- FOOTER -->
     <!-- ========================================== -->
-    <footer class="bg-sanvalas-900 text-white border-t border-white/10 mt-auto">
+    <footer class="bg-sanvalas-900 text-white border-t border-white/10 mt-auto w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2.5">
                 <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-xl border border-white/15">
-                    <!-- Logo MTsN 14 Paling Kiri -->
                     <div class="w-6 h-6 shrink-0 flex items-center justify-center">
                         <img id="footerLogoMtsImg" src="" alt="Logo MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
                         <svg id="footerLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo MTsN 14 Jakarta Timur">
@@ -1806,7 +1816,6 @@
                             <text x="60" y="116" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="7.3">JAKARTA TIMUR</text>
                         </svg>
                     </div>
-                    <!-- Logo OSIS MTsN 14 di Kanannya -->
                     <div class="w-6 h-6 shrink-0 flex items-center justify-center">
                         <img id="footerLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
                         <svg id="footerLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo OSIS MTsN 14">
@@ -1852,13 +1861,13 @@
     <!-- ========================================== -->
     <!-- TOAST NOTIFICATION -->
     <!-- ========================================== -->
-    <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl border border-white/15 flex items-center gap-2.5">
-        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-xl border border-white/15 flex items-center gap-2.5 max-w-[90vw]">
+        <i class="fa-solid fa-circle-check text-emerald-400 shrink-0"></i>
         <span id="toastMessage">Berhasil disimpan</span>
     </div>
 
     <!-- ========================================== -->
-    <!-- APPLICATION LOGIC (FIREBASE CLOUD FIRESTORE + GOOGLE AUTH) -->
+    <!-- APPLICATION LOGIC (FIREBASE CLOUD FIRESTORE + STORAGE + VIDEO SUPPORT) -->
     <!-- ========================================== -->
     <script>
         // 1. KONFIGURASI FIREBASE MILIKMU (SANVALAS STORY)
@@ -1875,10 +1884,13 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+        const storage = firebase.storage();
 
         const CREATOR_PIN = 'mtsn14';
+        const SETTINGS_CACHE_KEY = 'sanvalas_story_settings_cache_v1';
         let pendingAfterLoginAction = null;
         let currentGoogleUser = null;
+        let isSettingsLoadedFromCloud = false;
 
         document.addEventListener('click', (e) => {
             const targetBtn = e.target.closest('button, .cat-pill, a.nav-link');
@@ -1920,7 +1932,63 @@
         }
 
         // ==========================================
-        // FIREBASE GOOGLE AUTHENTICATION (ROBUST & SANDBOX SAFE)
+        // MEDIA TYPE DETECTION (IMAGE vs VIDEO vs YOUTUBE)
+        // ==========================================
+        function getYouTubeEmbedUrl(url) {
+            if (!url || typeof url !== 'string') return null;
+            const regExp = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regExp);
+            return match ? `https://www.youtube.com/embed/${match[1]}?rel=0` : null;
+        }
+
+        function getYouTubeThumbnailUrl(url) {
+            if (!url || typeof url !== 'string') return null;
+            const regExp = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regExp);
+            return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+        }
+
+        function isDirectVideoUrl(url) {
+            if (!url || typeof url !== 'string') return false;
+            if (url.startsWith('data:video/')) return true;
+            const clean = url.split('?')[0].split('#')[0].toLowerCase();
+            return /\.(mp4|webm|mov|ogg|m4v)$/.test(clean) || url.includes('%2Fvideos%2F');
+        }
+
+        function isAnyVideoMedia(url) {
+            return isDirectVideoUrl(url) || Boolean(getYouTubeEmbedUrl(url));
+        }
+
+        // Upload Video File directly to Firebase Storage (or small fallback)
+        async function uploadMediaFileToCloud(file, folder = 'uploads') {
+            if (file.type.startsWith('video/')) {
+                const maxMb = 45;
+                if (file.size > maxMb * 1024 * 1024) {
+                    throw new Error(`Ukuran video maksimal ${maxMb}MB.`);
+                }
+                try {
+                    const safeName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+                    const storageRef = storage.ref().child(`sanvalas_${folder}/${safeName}`);
+                    const snap = await storageRef.put(file);
+                    return await snap.ref.getDownloadURL();
+                } catch (storageErr) {
+                    // Fallback jika Storage Rules belum dibuka & file kecil (< 700KB)
+                    if (file.size <= 700 * 1024) {
+                        return await new Promise((resolve) => {
+                            const r = new FileReader();
+                            r.onload = ev => resolve(ev.target.result);
+                            r.readAsDataURL(file);
+                        });
+                    }
+                    throw new Error('Aktifkan Firebase Storage di console.firebase.google.com atau tempel link YouTube/MP4.');
+                }
+            } else {
+                return await compressImageFileToDataURL(file, 1000, 0.78);
+            }
+        }
+
+        // ==========================================
+        // FIREBASE GOOGLE AUTHENTICATION
         // ==========================================
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -1981,11 +2049,9 @@
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
 
-            // Cek apakah berjalan di lingkungan blob/iframe sandbox
             const isSandbox = window.location.protocol === 'blob:' || window.location.protocol === 'about:';
 
             if (isSandbox) {
-                // Berikan akun demo profesional untuk pratinjau sandbox / uji coba tanpa error
                 const demoUser = {
                     uid: 'sandbox-user-' + Date.now(),
                     name: 'Nabila Azzahra (Siswa)',
@@ -2003,7 +2069,7 @@
                     }
                 }
                 renderArticles();
-                showToast(`Berhasil masuk sebagai ${demoUser.name} (Mode Preview Sandbox)`);
+                showToast(`Berhasil masuk sebagai ${demoUser.name} (Mode Preview)`);
                 if (typeof pendingAfterLoginAction === 'function') {
                     const fn = pendingAfterLoginAction;
                     pendingAfterLoginAction = null;
@@ -2012,7 +2078,6 @@
                 return;
             }
 
-            // Saat di-publish di Vercel/GitHub Pages, gunakan Popup resmi Google Auth
             auth.signInWithPopup(provider)
                 .then((result) => {
                     closeModal('googleLoginModal');
@@ -2029,7 +2094,6 @@
                     if (error.code === 'auth/unauthorized-domain') {
                         showToast('Domain web ini belum didaftarkan di Firebase Authentication > Settings > Authorized domains!');
                     } else {
-                        // Fallback ke signInWithRedirect jika popup diblokir browser
                         auth.signInWithRedirect(provider).catch(err => {
                             showToast('Gagal login Google: ' + err.message);
                         });
@@ -2058,7 +2122,7 @@
         }
 
         // ==========================================
-        // DEFAULT DATA & CLOUD FIRESTORE REAL-TIME SYNC
+        // DEFAULT DATA & ZERO-FLASH CACHE + CLOUD FIRESTORE SYNC
         // ==========================================
         const defaultState = {
             heroBg: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=80',
@@ -2090,7 +2154,39 @@
             inbox: []
         };
 
-        let appState = JSON.parse(JSON.stringify(defaultState));
+        function loadCachedSettingsSync() {
+            try {
+                const raw = localStorage.getItem(SETTINGS_CACHE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    return {
+                        ...JSON.parse(JSON.stringify(defaultState)),
+                        ...parsed,
+                        hasCachedSettings: true
+                    };
+                }
+            } catch (e) {}
+            return {
+                ...JSON.parse(JSON.stringify(defaultState)),
+                hasCachedSettings: false
+            };
+        }
+
+        function persistSettingsCache() {
+            try {
+                localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify({
+                    heroBg: appState.heroBg,
+                    logoMtsUrl: appState.logoMtsUrl || '',
+                    logoOsisUrl: appState.logoOsisUrl || '',
+                    polaroids: appState.polaroids,
+                    polaroidCaption: appState.polaroidCaption,
+                    aboutData: appState.aboutData,
+                    categories: appState.categories
+                }));
+            } catch (e) {}
+        }
+
+        let appState = loadCachedSettingsSync();
         let currentMode = 'preview';
         let isCreatorAuthenticated = false;
         let activeCategory = 'Semua';
@@ -2136,7 +2232,6 @@
             });
         }
 
-        // Render Custom Brand Logos (MTsN 14 paling kiri + OSIS MTsN 14 di kanannya)
         function renderBrandLogosUI() {
             const mtsUrl = (appState.logoMtsUrl || '').trim();
             const osisUrl = (appState.logoOsisUrl || '').trim();
@@ -2195,7 +2290,6 @@
         function handleBrandLogoFileUpload(event, which) {
             const file = event.target.files && event.target.files[0];
             if (!file) return;
-            // Simpan file asli (atau kompres ke PNG transparan maks 240px agar pinggiran logo tetap bersih)
             const reader = new FileReader();
             reader.onload = (ev) => {
                 const img = new Image();
@@ -2254,9 +2348,9 @@
             showToast('Kembali menggunakan emblem vektor bawaan');
         }
 
-        // Sinkronisasi Real-Time dengan Firebase Cloud Firestore
         function initCloudFirestoreSync() {
             db.collection('sanvalas_meta').doc('settings').onSnapshot((docSnap) => {
+                isSettingsLoadedFromCloud = true;
                 if (docSnap.exists) {
                     const data = docSnap.data();
                     appState.heroBg = data.heroBg || defaultState.heroBg;
@@ -2266,7 +2360,9 @@
                     appState.polaroidCaption = data.polaroidCaption || defaultState.polaroidCaption;
                     appState.aboutData = data.aboutData ? { ...defaultState.aboutData, ...data.aboutData } : { ...defaultState.aboutData };
                     appState.categories = Array.isArray(data.categories) && data.categories.length > 0 ? data.categories : JSON.parse(JSON.stringify(defaultState.categories));
+                    persistSettingsCache();
                 } else {
+                    persistSettingsCache();
                     db.collection('sanvalas_meta').doc('settings').set({
                         heroBg: appState.heroBg,
                         logoMtsUrl: appState.logoMtsUrl,
@@ -2275,10 +2371,10 @@
                         polaroidCaption: appState.polaroidCaption,
                         aboutData: appState.aboutData,
                         categories: appState.categories
-                    }).catch(err => console.warn('Init settings err:', err));
+                    }, { merge: true }).catch(err => console.warn('Init settings err:', err));
                 }
                 renderBrandLogosUI();
-                renderHeroPolaroids();
+                renderHeroPolaroids(true);
                 renderAboutSectionUI();
                 renderCategoriesBar();
                 syncCategoryDropdowns();
@@ -2287,8 +2383,9 @@
                 }
             }, (error) => {
                 console.error('Firestore settings error:', error);
+                isSettingsLoadedFromCloud = true;
                 renderBrandLogosUI();
-                renderHeroPolaroids();
+                renderHeroPolaroids(true);
                 renderAboutSectionUI();
                 renderCategoriesBar();
                 syncCategoryDropdowns();
@@ -2322,7 +2419,6 @@
                 }
             }, (error) => {
                 console.error('Firestore articles error:', error);
-                showToast('Gagal memuat database cloud. Pastikan Firestore sudah aktif dalam Test Mode.');
                 renderArticles();
             });
 
@@ -2341,6 +2437,7 @@
         }
 
         function saveCloudSettings() {
+            persistSettingsCache();
             return db.collection('sanvalas_meta').doc('settings').set({
                 heroBg: appState.heroBg,
                 logoMtsUrl: appState.logoMtsUrl || '',
@@ -2379,7 +2476,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             updateGoogleNavbarUI();
             renderBrandLogosUI();
-            renderHeroPolaroids();
+            if (appState.hasCachedSettings) {
+                renderHeroPolaroids(true);
+            }
             renderAboutSectionUI();
             renderCategoriesBar();
             syncCategoryDropdowns();
@@ -2443,7 +2542,10 @@
         let polaroidOrder = [0, 1, 2];
         let polaroidSlideshowTimer = null;
 
-        function renderHeroPolaroids() {
+        function renderHeroPolaroids(forceShow = false) {
+            if (!forceShow && !isSettingsLoadedFromCloud && !appState.hasCachedSettings) {
+                return;
+            }
             const p = Array.isArray(appState.polaroids) && appState.polaroids.length === 3
                 ? appState.polaroids
                 : defaultState.polaroids;
@@ -2453,10 +2555,23 @@
             const img3 = document.getElementById('polaroidImg3');
             const cap = document.getElementById('polaroidCaptionText');
 
-            if (bgImg) bgImg.src = appState.heroBg || defaultState.heroBg;
-            if (img1) img1.src = p[polaroidOrder[0]];
-            if (img2) img2.src = p[polaroidOrder[1]];
-            if (img3) img3.src = p[polaroidOrder[2]];
+            if (bgImg) {
+                bgImg.src = appState.heroBg || defaultState.heroBg;
+                bgImg.classList.remove('opacity-0');
+                bgImg.classList.add('opacity-40');
+            }
+            if (img1) {
+                img1.src = p[polaroidOrder[0]];
+                img1.classList.remove('opacity-0');
+            }
+            if (img2) {
+                img2.src = p[polaroidOrder[1]];
+                img2.classList.remove('opacity-0');
+            }
+            if (img3) {
+                img3.src = p[polaroidOrder[2]];
+                img3.classList.remove('opacity-0');
+            }
             if (cap) cap.textContent = appState.polaroidCaption || 'MTsN 14';
         }
 
@@ -2476,7 +2591,7 @@
                     el.classList.add('slide-fade-anim');
                 }
             });
-            renderHeroPolaroids();
+            renderHeroPolaroids(true);
         }
 
         function togglePolaroidSlideshow() {
@@ -2485,7 +2600,7 @@
             if (polaroidSlideshowTimer) {
                 clearInterval(polaroidSlideshowTimer);
                 polaroidSlideshowTimer = null;
-                if (icon) icon.className = 'fa-solid fa-play text-sm ml-0.5';
+                if (icon) icon.className = 'fa-solid fa-play text-xs sm:text-sm ml-0.5';
                 if (btn) btn.classList.remove('ring-amber-400', 'bg-amber-500');
                 showToast('Pemutar foto profil dihentikan');
             } else {
@@ -2493,7 +2608,7 @@
                 polaroidSlideshowTimer = setInterval(() => {
                     rotatePolaroidCarousel(1);
                 }, 2200);
-                if (icon) icon.className = 'fa-solid fa-pause text-sm';
+                if (icon) icon.className = 'fa-solid fa-pause text-xs sm:text-sm';
                 if (btn) btn.classList.add('ring-amber-400');
                 showToast('Memutar & menggeser foto profil secara otomatis...');
             }
@@ -2571,6 +2686,7 @@
 
             try {
                 await saveCloudSettings();
+                renderHeroPolaroids(true);
                 closeModal('polaroidManagerModal');
                 showToast('Background & 3 Foto atas tersimpan online!');
             } catch (err) {
@@ -2640,12 +2756,12 @@
             container.innerHTML = cats.map(c => {
                 const isActive = activeCategory !== 'Semua' && activeCategory.toLowerCase() === c.name.toLowerCase();
                 const btnClass = isActive
-                    ? 'cat-pill active-pill shrink-0 flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition shadow-sm bg-[#285444] text-white'
-                    : 'cat-pill shrink-0 flex items-center gap-2.5 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition bg-[#eaede6] hover:bg-[#dfe4d9] text-slate-800';
+                    ? 'cat-pill active-pill shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition shadow-sm bg-[#285444] text-white'
+                    : 'cat-pill shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition bg-[#eaede6] hover:bg-[#dfe4d9] text-slate-800';
                 const safeName = c.name.replace(/'/g, "\\'");
                 return `
                     <button type="button" onclick="setActiveCategory('${safeName}')" data-cat="${c.name}" class="${btnClass}">
-                        <i class="${c.icon || 'fa-solid fa-tag'} text-sm"></i>
+                        <i class="${c.icon || 'fa-solid fa-tag'} text-xs sm:text-sm"></i>
                         <span>${c.name}</span>
                     </button>
                 `;
@@ -2838,12 +2954,12 @@
             const grid = document.getElementById('articlesGrid');
 
             if (sizeMode === 'large') {
-                largeBtn.className = 'px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1.5';
-                compactBtn.className = 'px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1.5';
+                largeBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1';
+                compactBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1';
                 grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-5';
             } else {
-                compactBtn.className = 'px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1.5';
-                largeBtn.className = 'px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1.5';
+                compactBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1';
+                largeBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1';
                 grid.className = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4';
             }
             renderArticles();
@@ -2877,15 +2993,12 @@
             const safeIdx = ((targetIdx % photos.length) + photos.length) % photos.length;
             cardSlideIndices[articleId] = safeIdx;
 
-            const imgEl = document.getElementById(`cardSlideImg-${articleId}`);
+            const mediaWrap = document.getElementById(`cardSlideMediaWrap-${articleId}`);
             const counterEl = document.getElementById(`cardSlideCounter-${articleId}`);
             const dotsEl = document.getElementById(`cardSlideDots-${articleId}`);
 
-            if (imgEl) {
-                imgEl.classList.remove('slide-fade-anim');
-                void imgEl.offsetWidth;
-                imgEl.src = photos[safeIdx];
-                imgEl.classList.add('slide-fade-anim');
+            if (mediaWrap) {
+                mediaWrap.innerHTML = renderCardMediaHtml(art, photos[safeIdx], safeIdx);
             }
             if (counterEl) {
                 counterEl.innerHTML = `<i class="fa-regular fa-images"></i> ${safeIdx + 1}/${photos.length}`;
@@ -2896,10 +3009,47 @@
                         type="button"
                         onclick="setCardSlide(event, '${articleId}', ${idx})"
                         class="h-1.5 rounded-full transition-all ${idx === safeIdx ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/55 hover:bg-white/90'}"
-                        title="Foto ${idx + 1}"
+                        title="Slide ${idx + 1}"
                     ></button>
                 `).join('');
             }
+        }
+
+        function renderCardMediaHtml(art, mediaUrl, slideIdx) {
+            const ytThumb = getYouTubeThumbnailUrl(mediaUrl);
+            if (ytThumb) {
+                return `
+                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer slide-fade-anim">
+                        <img src="${ytThumb}" alt="${art.title}" class="w-full h-full object-cover object-center group-hover:scale-[1.03] transition duration-500">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/25">
+                            <span class="w-12 h-12 rounded-full bg-red-600/95 text-white flex items-center justify-center shadow-lg ring-4 ring-white/25">
+                                <i class="fa-solid fa-play text-base ml-0.5"></i>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+            if (isDirectVideoUrl(mediaUrl)) {
+                return `
+                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer bg-black slide-fade-anim">
+                        <video src="${mediaUrl}#t=0.5" muted preload="metadata" playsinline class="w-full h-full object-cover object-center"></video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/25">
+                            <span class="w-12 h-12 rounded-full bg-emerald-800/95 text-white flex items-center justify-center shadow-lg ring-4 ring-white/25">
+                                <i class="fa-solid fa-play text-base ml-0.5"></i>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+            return `
+                <img
+                    onclick="openArticleReader('${art.id}', ${slideIdx})"
+                    src="${mediaUrl}"
+                    alt="${art.title}"
+                    class="w-full h-full object-cover object-center cursor-pointer group-hover:scale-[1.03] transition duration-500 slide-fade-anim"
+                    onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
+                >
+            `;
         }
 
         function renderArticles() {
@@ -2928,6 +3078,7 @@
                 const likedByMe = isArticleLikedByCurrentGoogleUser(art);
                 const photos = getArticlePhotos(art);
                 const photoCount = photos.length;
+                const hasAnyVideo = photos.some(u => isAnyVideoMedia(u));
                 const isLarge = cardSizeMode === 'large';
                 const currentSlideIdx = Math.min(cardSlideIndices[art.id] || 0, photoCount - 1);
 
@@ -2946,20 +3097,18 @@
 
                     <div>
                         <div class="relative aspect-[16/10] w-full bg-slate-900 overflow-hidden select-none">
-                            <img
-                                id="cardSlideImg-${art.id}"
-                                onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)"
-                                src="${photos[currentSlideIdx]}"
-                                alt="${art.title}"
-                                class="w-full h-full object-cover object-center cursor-pointer group-hover:scale-[1.03] transition duration-500"
-                                onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
-                            >
+                            <div id="cardSlideMediaWrap-${art.id}" class="w-full h-full">
+                                ${renderCardMediaHtml(art, photos[currentSlideIdx], currentSlideIdx)}
+                            </div>
 
                             <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/65 via-black/20 to-transparent pointer-events-none"></div>
 
-                            <span class="absolute bottom-3 left-3.5 z-10 bg-white/95 backdrop-blur-xs text-slate-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm">
-                                ${art.category}
-                            </span>
+                            <div class="absolute bottom-3 left-3.5 z-10 flex items-center gap-1.5">
+                                <span class="bg-white/95 backdrop-blur-xs text-slate-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm">
+                                    ${art.category}
+                                </span>
+                                ${hasAnyVideo ? `<span class="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1"><i class="fa-solid fa-video text-[9px]"></i> Video</span>` : ''}
+                            </div>
 
                             ${photoCount > 1 ? `
                                 <span id="cardSlideCounter-${art.id}" class="absolute top-3 left-3.5 z-20 bg-black/65 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-white/15 shadow">
@@ -2970,7 +3119,7 @@
                                     type="button"
                                     onclick="stepCardSlide(event, '${art.id}', -1)"
                                     class="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-md flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition cursor-pointer"
-                                    title="Foto Sebelumnya"
+                                    title="Slide Sebelumnya"
                                 >
                                     <i class="fa-solid fa-chevron-left text-xs"></i>
                                 </button>
@@ -2978,7 +3127,7 @@
                                     type="button"
                                     onclick="stepCardSlide(event, '${art.id}', 1)"
                                     class="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-md flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition cursor-pointer"
-                                    title="Foto Berikutnya"
+                                    title="Slide Berikutnya"
                                 >
                                     <i class="fa-solid fa-chevron-right text-xs"></i>
                                 </button>
@@ -2989,7 +3138,7 @@
                                             type="button"
                                             onclick="setCardSlide(event, '${art.id}', ${idx})"
                                             class="h-1.5 rounded-full transition-all ${idx === currentSlideIdx ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/55 hover:bg-white/90'}"
-                                            title="Foto ${idx + 1}"
+                                            title="Slide ${idx + 1}"
                                         ></button>
                                     `).join('')}
                                 </div>
@@ -2999,7 +3148,7 @@
                         <div onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)" class="${isLarge ? 'p-5 pb-3.5' : 'p-4 pb-2.5'} cursor-pointer space-y-2">
                             <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
                                 <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-emerald-800"></i> ${art.date}</span>
-                                ${photoCount > 1 ? `<span class="text-emerald-800 font-bold flex items-center gap-1"><i class="fa-solid fa-layer-group text-[10px]"></i> ${photoCount} Slide Foto</span>` : ''}
+                                ${photoCount > 1 ? `<span class="text-emerald-800 font-bold flex items-center gap-1"><i class="fa-solid fa-layer-group text-[10px]"></i> ${photoCount} Media</span>` : ''}
                             </div>
                             <h3 class="${isLarge ? 'text-base sm:text-[17px]' : 'text-sm'} font-extrabold text-slate-900 leading-snug line-clamp-2 group-hover:text-emerald-800 transition">
                                 ${art.title}
@@ -3057,16 +3206,48 @@
 
             const currentUrl = photos[activeReaderSlideIdx];
             const readerImg = document.getElementById('readerImg');
+            const readerVideo = document.getElementById('readerVideo');
+            const readerIframe = document.getElementById('readerIframe');
             const ambientBg = document.getElementById('readerAmbientBg');
+            const gradientMask = document.getElementById('readerGradientMask');
+            const bottomOverlay = document.getElementById('readerBottomOverlay');
 
+            // Reset semua media player terlebih dahulu
+            if (readerVideo) {
+                readerVideo.pause();
+                readerVideo.src = '';
+                readerVideo.classList.add('hidden');
+            }
+            if (readerIframe) {
+                readerIframe.src = '';
+                readerIframe.classList.add('hidden');
+            }
             if (readerImg) {
-                readerImg.classList.remove('slide-fade-anim');
+                readerImg.classList.add('hidden');
+            }
+
+            const ytEmbed = getYouTubeEmbedUrl(currentUrl);
+            const isDirectVid = isDirectVideoUrl(currentUrl);
+
+            if (ytEmbed && readerIframe) {
+                readerIframe.src = ytEmbed;
+                readerIframe.classList.remove('hidden');
+                if (ambientBg) ambientBg.src = getYouTubeThumbnailUrl(currentUrl) || '';
+                if (gradientMask) gradientMask.classList.add('hidden');
+                if (bottomOverlay) bottomOverlay.classList.add('hidden');
+            } else if (isDirectVid && readerVideo) {
+                readerVideo.src = currentUrl;
+                readerVideo.classList.remove('hidden');
+                if (gradientMask) gradientMask.classList.add('hidden');
+                if (bottomOverlay) bottomOverlay.classList.add('hidden');
+            } else if (readerImg) {
+                readerImg.classList.remove('hidden', 'slide-fade-anim');
                 void readerImg.offsetWidth;
                 readerImg.src = currentUrl;
                 readerImg.classList.add('slide-fade-anim');
-            }
-            if (ambientBg) {
-                ambientBg.src = currentUrl;
+                if (ambientBg) ambientBg.src = currentUrl;
+                if (gradientMask) gradientMask.classList.remove('hidden');
+                if (bottomOverlay) bottomOverlay.classList.remove('hidden');
             }
 
             const prevBtn = document.getElementById('readerPrevBtn');
@@ -3081,7 +3262,7 @@
                 nextBtn.classList.remove('hidden');
                 nextBtn.classList.add('flex');
                 counterEl.classList.remove('hidden');
-                counterEl.innerHTML = `<i class="fa-regular fa-images mr-1"></i> Foto ${activeReaderSlideIdx + 1} dari ${photos.length}`;
+                counterEl.innerHTML = `<i class="fa-regular fa-images mr-1"></i> Slide ${activeReaderSlideIdx + 1} dari ${photos.length}`;
 
                 if (dotsContainer) {
                     dotsContainer.classList.remove('hidden');
@@ -3090,22 +3271,32 @@
                             type="button"
                             onclick="selectReaderGalleryIndex(${idx}, event)"
                             class="h-2 rounded-full transition-all cursor-pointer ${idx === activeReaderSlideIdx ? 'w-6 bg-amber-400 shadow' : 'w-2 bg-white/60 hover:bg-white'}"
-                            title="Pilih Foto ${idx + 1}"
+                            title="Pilih Slide ${idx + 1}"
                         ></button>
                     `).join('');
                 }
 
                 thumbStrip.classList.remove('hidden');
-                thumbStrip.innerHTML = photos.map((url, idx) => `
-                    <button
-                        type="button"
-                        onclick="selectReaderGalleryIndex(${idx}, event)"
-                        class="relative w-28 sm:w-36 h-16 sm:h-20 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 cursor-pointer ${idx === activeReaderSlideIdx ? 'border-amber-400 ring-2 ring-amber-400/40 scale-[1.03] opacity-100 shadow-md' : 'border-white/15 opacity-60 hover:opacity-95'}"
-                    >
-                        <img src="${url}" class="w-full h-full object-cover" alt="Slide ${idx + 1}">
-                        <span class="absolute bottom-1 right-1.5 bg-black/75 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow">${idx + 1}</span>
-                    </button>
-                `).join('');
+                thumbStrip.innerHTML = photos.map((url, idx) => {
+                    const ytThumb = getYouTubeThumbnailUrl(url);
+                    const isVid = isDirectVideoUrl(url) || Boolean(ytThumb);
+                    const thumbHtml = ytThumb
+                        ? `<img src="${ytThumb}" class="w-full h-full object-cover" alt="Video ${idx + 1}">`
+                        : isDirectVideoUrl(url)
+                            ? `<div class="w-full h-full bg-slate-800 flex items-center justify-center text-amber-400"><i class="fa-solid fa-film text-xl"></i></div>`
+                            : `<img src="${url}" class="w-full h-full object-cover" alt="Slide ${idx + 1}">`;
+                    return `
+                        <button
+                            type="button"
+                            onclick="selectReaderGalleryIndex(${idx}, event)"
+                            class="relative w-24 sm:w-32 h-14 sm:h-18 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 cursor-pointer ${idx === activeReaderSlideIdx ? 'border-amber-400 ring-2 ring-amber-400/40 scale-[1.03] opacity-100 shadow-md' : 'border-white/15 opacity-60 hover:opacity-95'}"
+                        >
+                            ${thumbHtml}
+                            ${isVid ? `<span class="absolute top-1 left-1.5 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded">VIDEO</span>` : ''}
+                            <span class="absolute bottom-1 right-1.5 bg-black/75 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow">${idx + 1}</span>
+                        </button>
+                    `;
+                }).join('');
             } else {
                 prevBtn.classList.add('hidden');
                 prevBtn.classList.remove('flex');
@@ -3226,7 +3417,7 @@
                             </div>
                             <div>
                                 <div class="text-xs font-extrabold text-slate-900">Ingin ikut berkomentar atau memberi Like?</div>
-                                <p class="text-[11px] text-slate-500">Login dengan akun Google kamu agar nama & email tampil resmi di komentar.</p>
+                                <p class="text-[11px] text-slate-500">Login dengan akun Google kamu agar nama &amp; email tampil resmi di komentar.</p>
                             </div>
                         </div>
                         <button type="button" onclick="openGoogleLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs flex items-center gap-2 shrink-0">
@@ -3463,7 +3654,10 @@
         function handleSearch(val) {
             const trimmed = val.trim();
             if (trimmed.toLowerCase() === '/redaksi' || trimmed.toLowerCase() === '/admin') {
-                document.getElementById('searchInput').value = '';
+                const deskIn = document.getElementById('searchInput');
+                const mobIn = document.getElementById('mobileSearchInput');
+                if (deskIn) deskIn.value = '';
+                if (mobIn) mobIn.value = '';
                 currentSearchQuery = '';
                 renderArticles();
                 openCreatorLoginModal();
@@ -3509,6 +3703,9 @@
             showToast(msg);
         }
 
+        // ==========================================
+        // ADD / EDIT ARTICLE MODAL (MULTI PHOTO & VIDEO)
+        // ==========================================
         function openAddArticleModal() {
             syncCategoryDropdowns();
             document.getElementById('editorModalTitle').textContent = 'Posting Konten Baru';
@@ -3519,9 +3716,7 @@
             document.getElementById('editArticleDate').value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
             document.getElementById('editArticleImage').value = '';
             document.getElementById('editArticleBody').value = '';
-            editorPhotosDraft = [
-                'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80'
-            ];
+            editorPhotosDraft = [];
             renderEditorPhotosPreview();
             openModal('articleEditorModal');
         }
@@ -3542,37 +3737,55 @@
             openModal('articleEditorModal');
         }
 
+        function renderMediaPreviewItemHtml(url, idx, removeFnName) {
+            const ytThumb = getYouTubeThumbnailUrl(url);
+            const isDirectVid = isDirectVideoUrl(url);
+            const isVid = isDirectVid || Boolean(ytThumb);
+
+            let mediaEl = `<img src="${url}" class="w-full h-full object-cover" alt="Media ${idx + 1}">`;
+            if (ytThumb) {
+                mediaEl = `<img src="${ytThumb}" class="w-full h-full object-cover" alt="YouTube ${idx + 1}">`;
+            } else if (isDirectVid) {
+                mediaEl = `<video src="${url}#t=0.5" muted playsinline class="w-full h-full object-cover bg-black"></video>`;
+            }
+
+            return `
+                <div class="relative group rounded-xl overflow-hidden border border-slate-300 aspect-video bg-slate-900">
+                    ${mediaEl}
+                    <span class="absolute bottom-1 left-1 bg-black/75 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                        #${idx + 1}
+                    </span>
+                    ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded"><i class="fa-solid fa-video mr-0.5"></i>VIDEO</span>` : ''}
+                    ${removeFnName ? `
+                        <button type="button" onclick="${removeFnName}(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700" title="Hapus media ini">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        }
+
         function renderEditorPhotosPreview() {
             const box = document.getElementById('editorPhotosPreviewList');
             if (!box) return;
             if (editorPhotosDraft.length === 0) {
-                box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-slate-400">Belum ada foto dipilih. Tambahkan URL atau klik Upload Banyak Foto.</div>`;
+                box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-slate-400">Belum ada foto atau video dipilih. Klik Upload Foto / Video atau tempel link URL.</div>`;
                 return;
             }
-            box.innerHTML = editorPhotosDraft.map((url, idx) => `
-                <div class="relative group rounded-lg overflow-hidden border border-slate-300 aspect-video bg-slate-200">
-                    <img src="${url}" class="w-full h-full object-cover" alt="Foto ${idx + 1}">
-                    <span class="absolute bottom-1 left-1 bg-black/70 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-                        #${idx + 1}
-                    </span>
-                    <button type="button" onclick="removeEditorPhotoAt(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700" title="Hapus foto ini">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            `).join('');
+            box.innerHTML = editorPhotosDraft.map((url, idx) => renderMediaPreviewItemHtml(url, idx, 'removeEditorPhotoAt')).join('');
         }
 
         function addPhotoUrlToEditorList() {
             const input = document.getElementById('editArticleImage');
             const url = input.value.trim();
             if (!url) {
-                showToast('Tempel link URL foto terlebih dahulu');
+                showToast('Tempel link URL foto atau video terlebih dahulu');
                 return;
             }
             editorPhotosDraft.push(url);
             input.value = '';
             renderEditorPhotosPreview();
-            showToast(`Foto ke-${editorPhotosDraft.length} ditambahkan!`);
+            showToast(`Media ke-${editorPhotosDraft.length} ditambahkan!`);
         }
 
         function removeEditorPhotoAt(idx) {
@@ -3583,13 +3796,30 @@
         async function handleMultiFileUploadToEditor(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
-            for (const file of files) {
-                const compressed = await compressImageFileToDataURL(file, 1000, 0.78);
-                editorPhotosDraft.push(compressed);
-                renderEditorPhotosPreview();
+            const submitBtn = document.getElementById('saveArticleSubmitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Mengunggah Media...';
             }
-            showToast(`${files.length} foto berhasil ditambahkan ke galeri postingan!`);
-            event.target.value = '';
+            try {
+                for (const file of files) {
+                    if (file.type.startsWith('video/')) {
+                        showToast(`Mengunggah video ${file.name}...`);
+                    }
+                    const uploadedUrl = await uploadMediaFileToCloud(file, 'articles');
+                    editorPhotosDraft.push(uploadedUrl);
+                    renderEditorPhotosPreview();
+                }
+                showToast(`${files.length} file foto/video berhasil ditambahkan!`);
+            } catch (err) {
+                showToast(err.message || 'Gagal mengunggah file');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Simpan & Terbitkan';
+                }
+                event.target.value = '';
+            }
         }
 
         async function saveArticleFromModal(e) {
@@ -3629,9 +3859,9 @@
             try {
                 await db.collection('sanvalas_articles').doc(docId).set(payload);
                 closeModal('articleEditorModal');
-                showToast(id ? `Postingan (${payload.images.length} foto) diperbarui online!` : `Postingan baru (${payload.images.length} foto) diterbitkan online!`);
+                showToast(id ? `Postingan (${payload.images.length} media) diperbarui online!` : `Postingan baru (${payload.images.length} media) diterbitkan online!`);
             } catch (err) {
-                showToast('Gagal menyimpan postingan (coba kurangi jumlah/ukuran foto): ' + err.message);
+                showToast('Gagal menyimpan postingan: ' + err.message);
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -3640,6 +3870,9 @@
             }
         }
 
+        // ==========================================
+        // STUDENT WORK SUBMISSION (PHOTO & VIDEO)
+        // ==========================================
         function openSubmitWorkModal(e) {
             if (e) e.stopPropagation();
             const user = getCurrentGoogleUser();
@@ -3660,20 +3893,33 @@
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
             const previewEl = document.getElementById('subPhotosPreview');
-            for (const file of files) {
-                const compressed = await compressImageFileToDataURL(file, 900, 0.78);
-                studentSubPhotosDraft.push(compressed);
-                if (previewEl) {
-                    previewEl.classList.remove('hidden');
-                    previewEl.innerHTML = studentSubPhotosDraft.map((img, i) => `
-                        <div class="relative aspect-square rounded-lg overflow-hidden border border-slate-300">
-                            <img src="${img}" class="w-full h-full object-cover">
-                            <span class="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] px-1 rounded">#${i + 1}</span>
-                        </div>
-                    `).join('');
-                }
+            const submitBtn = document.getElementById('submitWorkBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Mengunggah...';
             }
-            showToast(`${files.length} foto karya siap dikirim!`);
+            try {
+                for (const file of files) {
+                    if (file.type.startsWith('video/')) {
+                        showToast(`Mengunggah video karya ${file.name}...`);
+                    }
+                    const uploadedUrl = await uploadMediaFileToCloud(file, 'submissions');
+                    studentSubPhotosDraft.push(uploadedUrl);
+                    if (previewEl) {
+                        previewEl.classList.remove('hidden');
+                        previewEl.innerHTML = studentSubPhotosDraft.map((itemUrl, i) => renderMediaPreviewItemHtml(itemUrl, i, null)).join('');
+                    }
+                }
+                showToast(`${files.length} file karya (foto/video) siap dikirim!`);
+            } catch (err) {
+                showToast(err.message || 'Gagal mengunggah file');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Kirim Sekarang';
+                }
+                event.target.value = '';
+            }
         }
 
         async function submitStudentWork(e) {
@@ -3706,6 +3952,9 @@
             }
         }
 
+        // ==========================================
+        // STUDENT PRESTASI SUBMISSION (PHOTO & VIDEO)
+        // ==========================================
         function openSubmitPrestasiModal(e) {
             if (e) e.stopPropagation();
             const user = getCurrentGoogleUser();
@@ -3726,20 +3975,33 @@
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
             const previewEl = document.getElementById('presPhotosPreview');
-            for (const file of files) {
-                const compressed = await compressImageFileToDataURL(file, 900, 0.78);
-                studentPrestasiPhotosDraft.push(compressed);
-                if (previewEl) {
-                    previewEl.classList.remove('hidden');
-                    previewEl.innerHTML = studentPrestasiPhotosDraft.map((img, i) => `
-                        <div class="relative aspect-square rounded-lg overflow-hidden border border-slate-300">
-                            <img src="${img}" class="w-full h-full object-cover">
-                            <span class="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] px-1 rounded">#${i + 1}</span>
-                        </div>
-                    `).join('');
-                }
+            const submitBtn = document.getElementById('submitPrestasiBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Mengunggah...';
             }
-            showToast(`${files.length} foto prestasi siap dikirim!`);
+            try {
+                for (const file of files) {
+                    if (file.type.startsWith('video/')) {
+                        showToast(`Mengunggah video prestasi ${file.name}...`);
+                    }
+                    const uploadedUrl = await uploadMediaFileToCloud(file, 'prestasi');
+                    studentPrestasiPhotosDraft.push(uploadedUrl);
+                    if (previewEl) {
+                        previewEl.classList.remove('hidden');
+                        previewEl.innerHTML = studentPrestasiPhotosDraft.map((itemUrl, i) => renderMediaPreviewItemHtml(itemUrl, i, null)).join('');
+                    }
+                }
+                showToast(`${files.length} file prestasi (foto/video) siap dikirim!`);
+            } catch (err) {
+                showToast(err.message || 'Gagal mengunggah file');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-trophy"></i><span>Kirim Prestasi</span>';
+                }
+                event.target.value = '';
+            }
         }
 
         async function submitStudentPrestasi(e) {
@@ -3781,23 +4043,28 @@
             const container = document.getElementById('inboxListContainer');
             if (!container) return;
             if (appState.inbox.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-slate-400">Belum ada kiriman karya siswa baru.</div>`;
+                container.innerHTML = `<div class="text-center py-6 text-slate-400">Belum ada kiriman karya/prestasi siswa baru.</div>`;
             } else {
-                container.innerHTML = appState.inbox.map(item => `
-                    <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-extrabold text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-full">${item.category}</span>
-                                <span class="text-xs font-bold text-slate-600">${item.author}</span>
+                container.innerHTML = appState.inbox.map(item => {
+                    const mediaList = Array.isArray(item.images) ? item.images : [item.image];
+                    const hasVid = mediaList.some(u => isAnyVideoMedia(u));
+                    return `
+                        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                            <div class="space-y-1">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="text-xs font-extrabold text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-full">${item.category}</span>
+                                    ${hasVid ? `<span class="text-[10px] font-extrabold text-amber-950 bg-amber-300 px-2 py-0.5 rounded-full"><i class="fa-solid fa-video mr-0.5"></i> Video</span>` : ''}
+                                    <span class="text-xs font-bold text-slate-600">${item.author}</span>
+                                </div>
+                                <div class="font-extrabold text-slate-900">${item.title}</div>
+                                <p class="text-xs text-slate-600">${item.desc}</p>
                             </div>
-                            <div class="font-extrabold text-slate-900">${item.title}</div>
-                            <p class="text-xs text-slate-600">${item.desc}</p>
+                            <button onclick="approveSubmission('${item.id}')" class="shrink-0 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs">
+                                Terbitkan
+                            </button>
                         </div>
-                        <button onclick="approveSubmission('${item.id}')" class="shrink-0 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs">
-                            Terbitkan
-                        </button>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
         }
 
@@ -3826,12 +4093,12 @@
                     commentsList: [],
                     image: imgs[0],
                     images: imgs,
-                    body: `Karya kiriman dari: ${item.author}\n\n${item.desc}`
+                    body: `Kiriman dari: ${item.author}\n\n${item.desc}`
                 });
                 await db.collection('sanvalas_inbox').doc(subId).delete();
-                showToast('Karya siswa berhasil diterbitkan secara online!');
+                showToast('Kiriman siswa berhasil diterbitkan secara online!');
             } catch (err) {
-                showToast('Gagal menerbitkan karya: ' + err.message);
+                showToast('Gagal menerbitkan kiriman: ' + err.message);
             }
         }
 
@@ -3846,6 +4113,7 @@
             appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
             await saveCloudSettings();
             renderBrandLogosUI();
+            renderHeroPolaroids(true);
             showToast('Pengaturan tampilan berhasil dikembalikan ke awal');
         }
 
@@ -3864,12 +4132,33 @@
         function closeModal(id) {
             const el = document.getElementById(id);
             if (!el) return;
+            if (id === 'articleReaderModal') {
+                const vid = document.getElementById('readerVideo');
+                const ifr = document.getElementById('readerIframe');
+                if (vid) {
+                    vid.pause();
+                    vid.src = '';
+                }
+                if (ifr) {
+                    ifr.src = '';
+                }
+            }
             el.classList.add('hidden');
             el.classList.remove('flex');
         }
 
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
+            document.getElementById('mobileSearchBar').classList.add('hidden');
+        }
+
+        function toggleMobileSearchBar() {
+            const bar = document.getElementById('mobileSearchBar');
+            bar.classList.toggle('hidden');
+            document.getElementById('mobileMenu').classList.add('hidden');
+            if (!bar.classList.contains('hidden')) {
+                setTimeout(() => document.getElementById('mobileSearchInput').focus(), 60);
+            }
         }
 
         function scrollToSection(id) {
