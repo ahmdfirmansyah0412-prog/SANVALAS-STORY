@@ -12,8 +12,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Official Google Identity Services (GIS) SDK -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Firebase SDK (Compat v10 untuk HTML Tunggal) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
     <script>
         tailwind.config = {
@@ -190,7 +192,7 @@
                 <span class="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5">
                     <i class="fa-solid fa-user-astronaut"></i> Mode Tim Kreatif
                 </span>
-                <span class="text-emerald-100 text-xs hidden md:inline">Anda masuk melalui jalur khusus Redaksi. Pengunjung biasa tidak dapat melihat panel ini.</span>
+                <span class="text-emerald-100 text-xs hidden md:inline">Tersambung Cloud Firestore: Semua perubahan langsung tersimpan online untuk semua pengunjung.</span>
             </div>
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="openAddArticleModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm">
@@ -206,15 +208,12 @@
                     <i class="fa-solid fa-circle-info"></i> Edit Tentang Kami
                 </button>
                 <button onclick="openInboxModal()" class="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-inbox"></i> Kiriman Siswa (<span id="inboxCountBadge">1</span>)
-                </button>
-                <button onclick="openGoogleClientConfigModal()" class="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5" title="Hubungkan Google OAuth Asli Saat Web Di-Publish">
-                    <i class="fa-brands fa-google text-amber-300"></i> Google OAuth
+                    <i class="fa-solid fa-inbox"></i> Kiriman Siswa (<span id="inboxCountBadge">0</span>)
                 </button>
                 <button onclick="openAccessGuideModal()" class="bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50" title="Lihat Link Khusus Tim vs Link Pengunjung">
                     <i class="fa-solid fa-link"></i> Link Akses
                 </button>
-                <button onclick="resetToDefaultData()" class="bg-white/10 hover:bg-rose-700 text-white/80 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition" title="Reset Data Awal">
+                <button onclick="resetToDefaultData()" class="bg-white/10 hover:bg-rose-700 text-white/80 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition" title="Reset Tampilan Awal">
                     <i class="fa-solid fa-rotate-left"></i>
                 </button>
                 <button onclick="logoutCreatorMode()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-1">
@@ -231,15 +230,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             <!-- Brand Logo -->
             <a href="#" class="flex items-center gap-3 group shrink-0">
-                <!-- Lotus / Leaf Creative Logo matching reference -->
                 <div class="w-9 h-9 flex items-center justify-center">
                     <svg viewBox="0 0 64 64" class="w-9 h-9 fill-white transition-transform duration-300 group-hover:scale-105">
-                        <!-- Top Diamond/Bud -->
                         <path d="M32 6 C36 13, 39 19, 32 28 C25 19, 28 13, 32 6 Z"/>
-                        <!-- Center Petals -->
                         <path d="M30 31 C20 23, 14 16, 16 11 C23 14, 28 21, 30 31 Z"/>
                         <path d="M34 31 C44 23, 50 16, 48 11 C41 14, 36 21, 34 31 Z"/>
-                        <!-- Bottom Open Book / Leaves -->
                         <path d="M30 36 L30 56 C18 52, 8 43, 6 29 C15 31, 23 33, 30 36 Z"/>
                         <path d="M34 36 L34 56 C46 52, 56 43, 58 29 C49 31, 41 33, 34 36 Z"/>
                     </svg>
@@ -325,7 +320,7 @@
         <!-- Mobile Menu Dropdown -->
         <div id="mobileMenu" class="hidden lg:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-3 space-y-2 text-sm">
             <a href="#beranda" onclick="filterByNav('Semua'); toggleMobileMenu()" class="block py-1.5 text-white font-semibold">Beranda</a>
-            <a href="#tentang" onclick=" toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Tentang Kami</a>
+            <a href="#tentang" onclick="scrollToSection('tentang'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Tentang Kami</a>
             <a href="#konten" onclick="filterByNav('Semua'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Semua Konten</a>
             <a href="#konten" onclick="filterByNav('Dokumentasi'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Dokumentasi</a>
             <a href="#konten" onclick="filterByNav('Prestasi'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Prestasi</a>
@@ -337,7 +332,6 @@
     <!-- HERO SECTION -->
     <!-- ========================================== -->
     <section id="beranda" class="relative bg-sanvalas-900 text-white overflow-hidden">
-        <!-- School Background Image + Multi-Stop Atmospheric Green Overlay -->
         <div class="absolute inset-0 z-0">
             <img
                 id="heroBgImg"
@@ -346,7 +340,6 @@
                 class="w-full h-full object-cover object-center opacity-40 scale-105"
                 onerror="this.src='https://placehold.co/1600x600/0f3529/ffffff?text=MTsN+14'"
             >
-            <!-- Gradient matching the exact moody emerald fog look in reference -->
             <div class="absolute inset-0 bg-gradient-to-r from-[#0c2e24]/95 via-[#184d3c]/75 to-[#0b2920]/90"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#0b281f]/80 via-transparent to-[#0b281f]/50"></div>
         </div>
@@ -372,7 +365,6 @@
                         Tim kreatif OSIS yang membuat dan mengelola konten edukatif, informatif, dan hiburan positif untuk media sosial sekolah, sekaligus mendokumentasikan kegiatan, mempublikasikan prestasi siswa, serta menampilkan karya dan kreativitas siswa MTsN 14.
                     </p>
 
-                    <!-- Handwritten Script Tagline + Curved Swoosh Underline -->
                     <div class="pt-2 inline-block relative">
                         <p class="font-hand text-2xl sm:text-[28px] text-white tracking-wide">
                             Kreatif &nbsp;•&nbsp; Informatif &nbsp;•&nbsp; Positif
@@ -386,27 +378,21 @@
 
                 <!-- Right Hero Polaroid Collage & Doodles (6 Cols) -->
                 <div class="lg:col-span-6 relative min-h-[260px] sm:min-h-[300px] flex items-center justify-center lg:justify-start">
-
-                    <!-- Decorative Camera Silhouette Top-Left -->
                     <div class="absolute -top-3 left-16 sm:left-24 z-10 text-[#09221a]/80 -rotate-12 pointer-events-none hidden sm:block">
                         <i class="fa-solid fa-camera text-4xl drop-shadow"></i>
                     </div>
 
-                    <!-- Decorative Clapperboard Stripes Left -->
                     <svg class="absolute top-12 left-4 sm:left-10 w-10 h-10 text-white/80 -rotate-12 pointer-events-none hidden sm:block" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3">
                         <path d="M8 18 L38 8 M12 26 L42 16" stroke-dasharray="6 5" stroke-linecap="round"/>
                     </svg>
 
-                    <!-- Paper Plane Doodle Top-Right of Polaroids -->
                     <svg class="absolute -top-2 right-28 sm:right-40 w-12 h-12 text-white z-20 pointer-events-none" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 28 L58 10 L40 54 L28 36 L6 28 Z"/>
                         <path d="M58 10 L28 36 L28 50 L35 42"/>
                     </svg>
 
-                    <!-- Polaroid Trio Container -->
                     <div class="relative w-full max-w-[440px] h-[250px] sm:h-[275px] mx-auto lg:mx-0 flex items-center justify-center">
-
-                        <!-- Left Polaroid (Kotak 1) -->
+                        <!-- Left Polaroid -->
                         <div id="polaroidCardLeft" onclick="rotatePolaroidCarousel(-1)" class="polaroid-card w-32 sm:w-36 absolute left-1 sm:left-3 top-12 -rotate-[11deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
                             <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-slate-200">
                                 <img id="polaroidImg1" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80" alt="Dokumentasi" class="w-full h-full object-cover transition-all duration-500">
@@ -417,7 +403,7 @@
                             </div>
                         </div>
 
-                        <!-- Center Main Polaroid (Kotak 2 - MTsN 14) -->
+                        <!-- Center Main Polaroid -->
                         <div id="polaroidCardCenter" class="polaroid-card w-44 sm:w-52 relative -top-2 -rotate-[4deg] z-20 group">
                             <div class="relative aspect-[4/3.7] overflow-hidden rounded-sm bg-slate-200">
                                 <img id="polaroidImg2" src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80" alt="MTsN 14" class="w-full h-full object-cover transition-all duration-500">
@@ -434,7 +420,7 @@
                             </div>
                         </div>
 
-                        <!-- Right Polaroid (Kotak 3) -->
+                        <!-- Right Polaroid -->
                         <div id="polaroidCardRight" onclick="rotatePolaroidCarousel(1)" class="polaroid-card w-32 sm:w-36 absolute right-3 sm:right-6 top-10 rotate-[9deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
                             <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-slate-200">
                                 <img id="polaroidImg3" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=500&q=80" alt="Siswa MTsN 14" class="w-full h-full object-cover transition-all duration-500">
@@ -445,18 +431,15 @@
                             </div>
                         </div>
 
-                        <!-- Quick Floating Edit Button on Polaroids & Background for Creator Mode -->
                         <button type="button" onclick="openPolaroidManagerModal()" class="edit-only absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white whitespace-nowrap">
                             <i class="fa-solid fa-camera"></i> Ganti Background & 3 Foto
                         </button>
 
-                        <!-- Green Play / Rotate Carousel Button Bottom-Right of Polaroids -->
                         <button id="polaroidPlayBtn" type="button" onclick="togglePolaroidSlideshow()" class="absolute bottom-2 right-6 sm:right-10 z-30 w-11 h-11 rounded-full bg-emerald-800/90 hover:bg-emerald-700 text-white flex items-center justify-center shadow-lg ring-4 ring-white/20 transition hover:scale-110 cursor-pointer" title="Putar / Geser Otomatis Foto Profil">
                             <i id="polaroidPlayIcon" class="fa-solid fa-play text-sm ml-0.5"></i>
                         </button>
                     </div>
 
-                    <!-- Right-Side Handwritten Quote ("Satu Konten Banyak Cerita Untuk MTsN 14") -->
                     <div class="hidden xl:block absolute -right-2 top-1/2 -translate-y-1/2 -rotate-6 z-20 text-left max-w-[165px]">
                         <div class="text-white/70 text-xs mb-0.5">✦</div>
                         <p class="font-hand text-[23px] leading-[1.12] text-white drop-shadow">
@@ -466,7 +449,6 @@
                             <path d="M4 10 Q 70 2, 132 8" />
                         </svg>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -490,11 +472,8 @@
                     </button>
                 </div>
 
-                <!-- Dynamic Category Pills + Creator Add Category Button -->
                 <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 no-scrollbar">
-                    <div id="categoryPillsContainer" class="flex items-center gap-2.5 sm:gap-3">
-                        <!-- Rendered dynamically by renderCategoriesBar() -->
-                    </div>
+                    <div id="categoryPillsContainer" class="flex items-center gap-2.5 sm:gap-3"></div>
                     <button
                         type="button"
                         onclick="openCategoryManagerModal()"
@@ -518,14 +497,12 @@
             <!-- LEFT MAIN AREA (9 Columns on Desktop) -->
             <div class="lg:col-span-9 space-y-6">
 
-                <!-- Section Header: Konten Terbaru -->
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-center gap-3">
                         <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Konten Terbaru</h2>
                         <span id="activeFilterBadge" class="hidden text-xs font-semibold bg-emerald-900/10 text-emerald-900 px-2.5 py-0.5 rounded-full"></span>
                     </div>
                     <div class="flex flex-wrap items-center gap-2.5">
-                        <!-- Card Size Switcher (Normal vs Tampilan Besar) -->
                         <div class="bg-[#eaede6] p-1 rounded-full flex items-center text-[11px] font-bold">
                             <button type="button" id="viewSizeLargeBtn" onclick="setCardSizeMode('large')" class="px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1.5" title="Tampilan Besar">
                                 <i class="fa-solid fa-table-cells-large"></i>
@@ -547,17 +524,18 @@
                     </div>
                 </div>
 
-                <!-- Dynamic Article Grid (Default Bigger 2-Column Feed or 4-Column Compact) -->
+                <!-- Dynamic Article Grid -->
                 <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <!-- Populated by JS -->
+                    <div class="col-span-full bg-white rounded-2xl p-10 text-center border border-slate-200/80 space-y-2">
+                        <i class="fa-solid fa-circle-notch fa-spin text-2xl text-emerald-800"></i>
+                        <div class="text-sm font-bold text-slate-700">Memuat konten online SANVALAS STORY...</div>
+                    </div>
                 </div>
 
-                <!-- Bottom Row inside Left Column: Kirim Karyamu! (7 cols) + Tentang Kami (5 cols) -->
+                <!-- Bottom Row inside Left Column: Kirim Karyamu! + Tentang Kami -->
                 <div id="tentang" class="grid grid-cols-1 md:grid-cols-12 gap-4 pt-1">
-
                     <!-- CTA Banner: Kirim Karyamu! -->
                     <div class="md:col-span-7 bg-[#143d30] text-white rounded-2xl p-5 sm:p-6 relative overflow-hidden shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <!-- Subtle decorative wave in background -->
                         <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/5 pointer-events-none"></div>
 
                         <div class="flex items-start sm:items-center gap-4 z-10">
@@ -572,9 +550,7 @@
                             </div>
                         </div>
 
-                        <!-- Button with little burst lines -->
                         <div class="relative shrink-0 z-10 self-end sm:self-center">
-                            <!-- Sparkle rays top-right -->
                             <svg class="absolute -top-3.5 -right-2.5 w-6 h-6 text-white/80 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                 <line x1="12" y1="2" x2="12" y2="6"/>
                                 <line x1="18" y1="5" x2="15" y2="8"/>
@@ -605,14 +581,11 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <!-- RIGHT SIDEBAR (3 Columns on Desktop) -->
             <aside id="medsos" class="lg:col-span-3 space-y-4">
-
-                <!-- Follow Us Card -->
                 <div class="bg-[#eff1ec] rounded-2xl p-5 border border-slate-200/70 shadow-sm space-y-4">
                     <div>
                         <h3 class="font-hand text-3xl font-bold text-slate-900 leading-none" data-edit-key="followHeading">Follow Us!</h3>
@@ -622,7 +595,6 @@
                     </div>
 
                     <div class="space-y-3">
-                        <!-- Instagram -->
                         <a href="#medsos" onclick="showToast('Membuka Instagram @sanvalasstory')" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/80 transition group">
                             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
                                 <i class="fa-brands fa-instagram text-lg"></i>
@@ -633,7 +605,6 @@
                             </div>
                         </a>
 
-                        <!-- TikTok -->
                         <a href="#medsos" onclick="showToast('Membuka TikTok @sanvalasstory')" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/80 transition group">
                             <div class="w-9 h-9 rounded-xl bg-slate-950 text-white flex items-center justify-center shrink-0 shadow-sm">
                                 <i class="fa-brands fa-tiktok text-base"></i>
@@ -644,7 +615,6 @@
                             </div>
                         </a>
 
-                        <!-- YouTube -->
                         <a href="#medsos" onclick="showToast('Membuka YouTube Sanvalas Story')" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/80 transition group">
                             <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-sm">
                                 <i class="fa-brands fa-youtube text-base"></i>
@@ -664,7 +634,6 @@
                     </div>
                 </div>
 
-                <!-- Quote Card Bottom Right -->
                 <div class="bg-[#eff1ec] rounded-2xl p-5 border border-slate-200/70 shadow-sm relative overflow-hidden">
                     <div class="flex items-start justify-between gap-2">
                         <p class="font-hand text-2xl leading-[1.15] text-slate-800 -rotate-2" data-edit-key="sidebarQuote">
@@ -673,13 +642,11 @@
                             Kita Wujudkan<br>
                             Sekolah yang Lebih Baik
                         </p>
-                        <!-- Crown Doodle SVG -->
                         <svg class="w-7 h-7 text-slate-600 shrink-0 mt-1" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M5 24 L27 24 L29 10 L21 16 L16 7 L11 16 L3 10 Z"/>
                         </svg>
                     </div>
                 </div>
-
             </aside>
         </div>
     </main>
@@ -689,13 +656,10 @@
     <!-- ========================================== -->
     <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-5">
         <div class="modal-card-pop bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col no-scrollbar">
-            <!-- Modal Image / Multi-Photo Interactive Slider -->
             <div class="relative bg-slate-950 h-72 sm:h-[450px] shrink-0 overflow-hidden select-none group">
-                <!-- Ambient blurred backdrop so any photo aspect ratio looks great -->
                 <img id="readerAmbientBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-45 scale-110 pointer-events-none">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35 pointer-events-none z-10"></div>
 
-                <!-- Main Crisp Slide Image -->
                 <img
                     id="readerImg"
                     src=""
@@ -704,7 +668,6 @@
                     onerror="this.src='https://placehold.co/900x600/164636/ffffff?text=Sanvalas+Story'"
                 >
 
-                <!-- Top Bar inside Image: Counter & Close Button -->
                 <div class="absolute top-4 inset-x-4 z-30 flex items-center justify-between pointer-events-none">
                     <span id="readerPhotoCounter" class="hidden pointer-events-auto bg-black/65 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
                     <button type="button" onclick="closeModal('articleReaderModal')" class="pointer-events-auto ml-auto w-10 h-10 rounded-full bg-black/65 hover:bg-black/85 text-white flex items-center justify-center border border-white/15 shadow-lg transition">
@@ -712,7 +675,6 @@
                     </button>
                 </div>
 
-                <!-- Prev / Next Gallery Arrows (High Z-Index & Always Clickable) -->
                 <button
                     id="readerPrevBtn"
                     type="button"
@@ -732,17 +694,14 @@
                     <i class="fa-solid fa-chevron-right text-sm"></i>
                 </button>
 
-                <!-- Bottom Category Badge & Slide Dots -->
                 <div class="absolute bottom-4 inset-x-5 z-30 flex items-center justify-between gap-2 pointer-events-none">
                     <span id="readerCategory" class="pointer-events-auto bg-[#eaede6] text-slate-900 text-xs font-extrabold px-4 py-1.5 rounded-full shadow-md"></span>
                     <div id="readerDotsContainer" class="pointer-events-auto flex items-center gap-2 bg-black/55 backdrop-blur-md px-3.5 py-2 rounded-full border border-white/15"></div>
                 </div>
             </div>
 
-            <!-- Multi-Photo Thumbnail Strip (Wider, Taller & Never Squished) -->
             <div id="readerThumbStrip" class="hidden shrink-0 bg-slate-900 border-b border-slate-800 px-5 py-3.5 flex items-center justify-start sm:justify-center gap-3 overflow-x-auto no-scrollbar"></div>
 
-            <!-- Article Content & Comments -->
             <div class="p-5 sm:p-7 space-y-5">
                 <div class="space-y-2">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
@@ -761,7 +720,6 @@
 
                 <p id="readerBody" class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line"></p>
 
-                <!-- Liked By Google Accounts Box -->
                 <div id="readerLikedByBox" class="hidden p-3 rounded-xl bg-rose-50/60 border border-rose-100 space-y-1.5">
                     <div class="text-[11px] font-bold text-rose-800 flex items-center gap-1.5">
                         <i class="fa-solid fa-heart text-rose-500"></i> Disukai oleh Akun Google:
@@ -769,7 +727,6 @@
                     <div id="readerLikedByAvatars" class="flex flex-wrap gap-1.5"></div>
                 </div>
 
-                <!-- Comments Section -->
                 <div class="pt-4 border-t border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
                         <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
@@ -786,11 +743,10 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 5: TENTANG KAMI (SELENGKAPNYA - MENARIK & EDITABLE OLEH TIM KREATIF) -->
+    <!-- MODAL 5: TENTANG KAMI (SELENGKAPNYA) -->
     <!-- ========================================== -->
     <div id="aboutModal" onclick="if(event.target === this) closeModal('aboutModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl border border-slate-200">
-            <!-- Header Gradient Banner -->
             <div class="relative bg-gradient-to-br from-sanvalas-950 via-sanvalas-800 to-emerald-700 text-white p-6 sm:p-7 overflow-hidden">
                 <div class="absolute -right-8 -bottom-10 w-40 h-40 rounded-full bg-white/10 pointer-events-none"></div>
                 <div class="flex items-start justify-between gap-4 relative z-10">
@@ -815,22 +771,20 @@
                 </div>
             </div>
 
-            <!-- Body Content -->
             <div class="p-6 sm:p-7 space-y-5">
                 <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
                     <p id="aboutModalParagraph1" class="font-medium text-slate-800"></p>
                     <p id="aboutModalParagraph2"></p>
                 </div>
 
-                <!-- 3 Pillars Highlight -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
                     <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 flex sm:flex-col items-center sm:items-start gap-3 sm:gap-1.5">
                         <div class="w-8 h-8 rounded-xl bg-emerald-900 text-white flex items-center justify-center text-xs shrink-0">
                             <i class="fa-solid fa-camera-retro"></i>
                         </div>
                         <div>
-                            <div id="aboutPillar1Title" class="text-xs font-extrabold text-slate-900">Jurnalistik & Foto</div>
-                            <div id="aboutPillar1Desc" class="text-[11px] text-slate-500">Dokumentasi setiap momen madrasah</div>
+                            <div class="text-xs font-extrabold text-slate-900">Jurnalistik & Foto</div>
+                            <div class="text-[11px] text-slate-500">Dokumentasi setiap momen madrasah</div>
                         </div>
                     </div>
                     <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/70 flex sm:flex-col items-center sm:items-start gap-3 sm:gap-1.5">
@@ -838,8 +792,8 @@
                             <i class="fa-solid fa-lightbulb"></i>
                         </div>
                         <div>
-                            <div id="aboutPillar2Title" class="text-xs font-extrabold text-slate-900">Edukasi Kreatif</div>
-                            <div id="aboutPillar2Desc" class="text-[11px] text-slate-500">Konten belajar seru & informatif</div>
+                            <div class="text-xs font-extrabold text-slate-900">Edukasi Kreatif</div>
+                            <div class="text-[11px] text-slate-500">Konten belajar seru & informatif</div>
                         </div>
                     </div>
                     <div class="p-3.5 rounded-2xl bg-sky-50/70 border border-sky-200/70 flex sm:flex-col items-center sm:items-start gap-3 sm:gap-1.5">
@@ -847,8 +801,8 @@
                             <i class="fa-solid fa-trophy"></i>
                         </div>
                         <div>
-                            <div id="aboutPillar3Title" class="text-xs font-extrabold text-slate-900">Apresiasi Siswa</div>
-                            <div id="aboutPillar3Desc" class="text-[11px] text-slate-500">Publikasi karya & prestasi terbaik</div>
+                            <div class="text-xs font-extrabold text-slate-900">Apresiasi Siswa</div>
+                            <div class="text-[11px] text-slate-500">Publikasi karya & prestasi terbaik</div>
                         </div>
                     </div>
                 </div>
@@ -876,7 +830,7 @@
                     </div>
                     <div>
                         <h3 class="text-base font-extrabold text-slate-900">Edit Kata-Kata "Tentang Kami"</h3>
-                        <p class="text-[11px] text-slate-500">Ubah deskripsi kartu beranda & isi pop-up Selengkapnya</p>
+                        <p class="text-[11px] text-slate-500">Tersimpan online untuk seluruh pengunjung</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModal('aboutEditorModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
@@ -921,7 +875,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 9: GANTI BACKGROUND BELAKANG & 3 FOTO POLAROID ATAS (TIM KREATIF) -->
+    <!-- MODAL 9: GANTI BACKGROUND BELAKANG & 3 FOTO POLAROID ATAS -->
     <!-- ========================================== -->
     <div id="polaroidManagerModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
@@ -932,7 +886,7 @@
                     </div>
                     <div>
                         <h3 class="text-base font-extrabold text-slate-900">Ganti Background Belakang & 3 Foto Atas</h3>
-                        <p class="text-[11px] text-slate-500">Ubah gambar latar belakang banner utama dan 3 foto polaroid</p>
+                        <p class="text-[11px] text-slate-500">Perubahan langsung tersimpan online untuk semua pengunjung</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModal('polaroidManagerModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
@@ -941,7 +895,6 @@
             </div>
 
             <form onsubmit="savePolaroidImages(event)" class="space-y-4 text-xs sm:text-sm">
-                <!-- Background Bagian Belakang Hero -->
                 <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-slate-900 flex items-center gap-1.5">
@@ -958,7 +911,6 @@
                     </div>
                 </div>
 
-                <!-- Kotak 1 (Kiri) -->
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-slate-800">1. Foto Kotak Kiri</span>
@@ -973,7 +925,6 @@
                     </div>
                 </div>
 
-                <!-- Kotak 2 (Tengah Utama) -->
                 <div class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-emerald-950">2. Foto Kotak Tengah (Utama)</span>
@@ -991,7 +942,6 @@
                     </div>
                 </div>
 
-                <!-- Kotak 3 (Kanan) -->
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-slate-800">3. Foto Kotak Kanan</span>
@@ -1018,7 +968,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 10: TAMBAH & KELOLA KATEGORI (TIM KREATIF) -->
+    <!-- MODAL 10: TAMBAH & KELOLA KATEGORI -->
     <!-- ========================================== -->
     <div id="categoryManagerModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-2xl max-w-md w-full max-h-[88vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
@@ -1037,7 +987,6 @@
                 </button>
             </div>
 
-            <!-- Form Tambah Kategori Baru -->
             <form onsubmit="addNewCategoryFromCreator(event)" class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-3 text-xs">
                 <div class="font-extrabold text-emerald-950">Tambah Kategori Baru</div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -1065,12 +1014,9 @@
                 </button>
             </form>
 
-            <!-- Daftar Kategori Saat Ini -->
             <div class="space-y-2">
                 <div class="text-xs font-extrabold text-slate-700">Daftar Kategori Aktif:</div>
-                <div id="categoryManagerList" class="space-y-1.5 max-h-56 overflow-y-auto pr-1">
-                    <!-- Populated by JS -->
-                </div>
+                <div id="categoryManagerList" class="space-y-1.5 max-h-56 overflow-y-auto pr-1"></div>
             </div>
 
             <div class="flex justify-end pt-1">
@@ -1099,7 +1045,6 @@
                 </button>
             </div>
 
-            <!-- Social Share Buttons -->
             <div class="grid grid-cols-3 gap-2.5 text-xs font-bold">
                 <a id="shareWhatsappLink" href="#" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 transition">
                     <i class="fa-brands fa-whatsapp text-xl text-emerald-600"></i>
@@ -1115,7 +1060,6 @@
                 </a>
             </div>
 
-            <!-- Copy Link Box -->
             <div class="space-y-1.5 text-xs">
                 <label class="block font-bold text-slate-700">Tautan Postingan:</label>
                 <div class="flex items-center gap-2">
@@ -1130,9 +1074,8 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL PENDUKUNG: LOGIN GOOGLE, REDAKSI, EDITOR, KIRIM KARYA, INBOX -->
+    <!-- MODAL LOGIN GOOGLE (HANYA 1 TOMBOL LOGIN DENGAN GOOGLE -> POP-UP ASLI FIREBASE GOOGLE AUTH) -->
     <!-- ========================================== -->
-    <!-- MODAL LOGIN GOOGLE (HANYA 1 TOMBOL LOGIN DENGAN GOOGLE) -->
     <div id="googleLoginModal" onclick="if(event.target === this) closeModal('googleLoginModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-200">
             <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200 mx-auto flex items-center justify-center shadow-xs">
@@ -1236,7 +1179,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('articleEditorModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
-                    <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Simpan & Terbitkan</button>
+                    <button type="submit" id="saveArticleSubmitBtn" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Simpan & Terbitkan</button>
                 </div>
             </form>
         </div>
@@ -1330,53 +1273,11 @@
         </div>
     </div>
 
-    <!-- MODAL PENGATURAN GOOGLE CLIENT ID (UNTUK SAAT DI-PUBLISH) -->
-    <div id="googleClientConfigModal" onclick="if(event.target === this) closeModal('googleClientConfigModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-xs">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-900 text-white flex items-center justify-center">
-                        <i class="fa-brands fa-google"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-extrabold text-slate-900">Hubungkan Login Google Asli (Saat Publish)</h3>
-                        <p class="text-[11px] text-slate-500">Agar membaca akun Gmail asli di HP/Laptop pengunjung</p>
-                    </div>
-                </div>
-                <button type="button" onclick="closeModal('googleClientConfigModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200 text-slate-700 space-y-1.5 leading-relaxed">
-                <div class="font-extrabold text-emerald-950">Cara Aktifkan Saat Sudah Di-Publish (Gratis):</div>
-                <ol class="list-decimal list-inside space-y-1 text-[11px]">
-                    <li>Buka <strong>console.cloud.google.com</strong> &rarr; menu <strong>APIs &amp; Services &rarr; Credentials</strong>.</li>
-                    <li>Klik <strong>Create Credentials &rarr; OAuth client ID</strong> (pilih <em>Web application</em>).</li>
-                    <li>Masukkan alamat domain web sekolah Anda di <strong>Authorized JavaScript origins</strong>.</li>
-                    <li>Salin kode <strong>Client ID</strong> lalu tempel di bawah ini:</li>
-                </ol>
-            </div>
-
-            <form onsubmit="saveGoogleClientIdConfig(event)" class="space-y-3">
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Google OAuth Client ID</label>
-                    <input id="googleClientIdInput" type="text" placeholder="Contoh: 1234567890-abcde.apps.googleusercontent.com" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 font-mono text-xs focus:outline-none focus:border-emerald-700">
-                </div>
-                <div class="flex justify-end gap-2 pt-1">
-                    <button type="button" onclick="closeModal('googleClientConfigModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
-                    <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow">Simpan Client ID</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- ========================================== -->
     <!-- FOOTER -->
     <!-- ========================================== -->
     <footer class="bg-sanvalas-900 text-white border-t border-white/10 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-            <!-- Left Footer Brand -->
             <div class="flex items-center gap-2.5">
                 <svg viewBox="0 0 64 64" class="w-6 h-6 fill-white shrink-0">
                     <path d="M32 6 C36 13, 39 19, 32 28 C25 19, 28 13, 32 6 Z"/>
@@ -1391,12 +1292,10 @@
                 </div>
             </div>
 
-            <!-- Center Tagline -->
             <div class="text-white/85 font-medium tracking-wide">
                 Kreatif &nbsp;&bull;&nbsp; Informatif &nbsp;&bull;&nbsp; Positif
             </div>
 
-            <!-- Right Copyright (Secret Triple-Click Trigger for Tim Kreatif) -->
             <div
                 onclick="handleSecretFooterClick()"
                 class="text-white/60 text-[11px] select-none cursor-default"
@@ -1416,22 +1315,27 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- APPLICATION LOGIC (VISITOR VIEW vs CREATOR POSTING + COMMENTS) -->
+    <!-- APPLICATION LOGIC (FIREBASE CLOUD FIRESTORE + GOOGLE AUTH) -->
     <!-- ========================================== -->
     <script>
-        const STORAGE_KEY = 'sanvalas_story_cms_state_v4';
-        const GOOGLE_USER_KEY = 'sanvalas_story_google_user_v1';
-        const GOOGLE_CLIENT_ID_KEY = 'sanvalas_story_google_client_id_v1';
-        // Anda bisa langsung mengganti DEFAULT_GOOGLE_CLIENT_ID di bawah ini dengan Client ID dari Google Cloud Console
-        const DEFAULT_GOOGLE_CLIENT_ID = '';
+        // 1. KONFIGURASI FIREBASE MILIKMU (SANVALAS STORY)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzPm0VDOOgRq-T6U5R9KwTvisB1nlhnQE",
+            authDomain: "sanvalas-story.firebaseapp.com",
+            projectId: "sanvalas-story",
+            storageBucket: "sanvalas-story.firebasestorage.app",
+            messagingSenderId: "178761721052",
+            appId: "1:178761721052:web:9e0e8ae870af3434468019",
+            measurementId: "G-EYQJE3L8PZ"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
         const CREATOR_PIN = 'mtsn14';
-
         let pendingAfterLoginAction = null;
-        let googleTokenClient = null;
-
-        function getConfiguredGoogleClientId() {
-            return (localStorage.getItem(GOOGLE_CLIENT_ID_KEY) || DEFAULT_GOOGLE_CLIENT_ID || '').trim();
-        }
+        let currentGoogleUser = null;
 
         // Global Click Ripple & Animation Initializer
         document.addEventListener('click', (e) => {
@@ -1473,24 +1377,20 @@
             }
         }
 
-        // Google User Session Management
-        function getCurrentGoogleUser() {
-            try {
-                const raw = localStorage.getItem(GOOGLE_USER_KEY);
-                return raw ? JSON.parse(raw) : null;
-            } catch (e) {
-                return null;
+        // ==========================================
+        // FIREBASE GOOGLE AUTHENTICATION (POP-UP GOOGLE ASLI)
+        // ==========================================
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentGoogleUser = {
+                    uid: user.uid,
+                    name: user.displayName || 'Siswa MTsN 14',
+                    email: user.email || '',
+                    avatar: user.photoURL || `https://placehold.co/100x100/164636/ffffff?text=${encodeURIComponent((user.displayName || 'G').charAt(0))}`
+                };
+            } else {
+                currentGoogleUser = null;
             }
-        }
-
-        function setCurrentGoogleUser(userObj) {
-            try {
-                if (userObj) {
-                    localStorage.setItem(GOOGLE_USER_KEY, JSON.stringify(userObj));
-                } else {
-                    localStorage.removeItem(GOOGLE_USER_KEY);
-                }
-            } catch (e) {}
             updateGoogleNavbarUI();
             if (activeReadingArticleId) {
                 const art = appState.articles.find(a => a.id === activeReadingArticleId);
@@ -1500,6 +1400,10 @@
                 }
             }
             renderArticles();
+        });
+
+        function getCurrentGoogleUser() {
+            return currentGoogleUser;
         }
 
         function updateGoogleNavbarUI() {
@@ -1521,94 +1425,6 @@
             }
         }
 
-        // Decode JWT credential returned by real Google Identity Services (GIS)
-        function decodeGoogleJwtResponse(token) {
-            try {
-                const base64Url = token.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(
-                    atob(base64)
-                        .split('')
-                        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                        .join('')
-                );
-                return JSON.parse(jsonPayload);
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function handleRealGoogleCredentialResponse(response) {
-            const payload = decodeGoogleJwtResponse(response.credential);
-            if (!payload) return;
-            const user = {
-                name: payload.name || payload.given_name || 'Pengguna Google',
-                email: payload.email || '',
-                avatar: payload.picture || `https://placehold.co/100x100/164636/ffffff?text=${encodeURIComponent((payload.name || 'G').charAt(0))}`
-            };
-            finishGoogleLoginSuccess(user);
-        }
-
-        function finishGoogleLoginSuccess(user) {
-            closeModal('googleLoginModal');
-            setCurrentGoogleUser(user);
-            showToast(`Terhubung dengan Google: ${user.name} (${user.email})`);
-            if (typeof pendingAfterLoginAction === 'function') {
-                const fn = pendingAfterLoginAction;
-                pendingAfterLoginAction = null;
-                fn();
-            }
-        }
-
-        // Inisialisasi SDK Resmi Google Identity Services (OAuth 2.0 Popup & One Tap)
-        function initRealGoogleIdentityIfConfigured() {
-            const clientId = getConfiguredGoogleClientId();
-            if (!clientId || !window.google || !window.google.accounts) {
-                return false;
-            }
-            try {
-                // 1. Setup OAuth 2.0 Token Client (Memunculkan jendela Pop-up Asli Google untuk pilih akun)
-                if (window.google.accounts.oauth2) {
-                    googleTokenClient = window.google.accounts.oauth2.initTokenClient({
-                        client_id: clientId,
-                        scope: 'openid email profile',
-                        prompt: 'select_account',
-                        callback: async (tokenResponse) => {
-                            if (tokenResponse && tokenResponse.access_token) {
-                                try {
-                                    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                                        headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                                    });
-                                    const profile = await res.json();
-                                    finishGoogleLoginSuccess({
-                                        name: profile.name || profile.given_name || 'Pengguna Google',
-                                        email: profile.email || '',
-                                        avatar: profile.picture || `https://placehold.co/100x100/0b57d0/ffffff?text=${encodeURIComponent((profile.name || 'G').charAt(0))}`
-                                    });
-                                } catch (err) {
-                                    showToast('Gagal mengambil profil dari Google API.');
-                                }
-                            }
-                        }
-                    });
-                }
-
-                // 2. Setup Google ID Button & One-Tap
-                if (window.google.accounts.id) {
-                    window.google.accounts.id.initialize({
-                        client_id: clientId,
-                        callback: handleRealGoogleCredentialResponse,
-                        auto_select: false
-                    });
-                }
-                return true;
-            } catch (e) {
-                console.warn('GIS Init error:', e);
-                return false;
-            }
-        }
-
-        // Buka Modal Login (Tampilan simpel hanya tombol "Login dengan Google")
         function triggerGoogleSignInFlow(afterLoginCallback = null) {
             pendingAfterLoginAction = afterLoginCallback;
             openModal('googleLoginModal');
@@ -1619,129 +1435,35 @@
             openModal('googleLoginModal');
         }
 
-        // Dipanggil saat tombol "Login dengan Google" diklik -> Langsung memicu Pop-up Resmi Google
         function connectDirectlyToGoogleOAuth() {
-            const clientId = getConfiguredGoogleClientId();
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });
 
-            // Jika Client ID sudah diisi, langsung buka jendela Pop-up OAuth Resmi dari Google (accounts.google.com)
-            if (clientId && window.google && window.google.accounts && window.google.accounts.oauth2) {
-                if (!googleTokenClient) {
-                    initRealGoogleIdentityIfConfigured();
-                }
-                if (googleTokenClient) {
-                    googleTokenClient.requestAccessToken({ prompt: 'select_account' });
-                    return;
-                }
-            }
-
-            // Jika belum ada Client ID (misal masih di mode preview lokal), buka pop-up Google OAuth atau beri opsi cepat
-            const popupWidth = 500;
-            const popupHeight = 620;
-            const left = Math.max(0, (window.screen.width - popupWidth) / 2);
-            const top = Math.max(0, (window.screen.height - popupHeight) / 2);
-
-            if (!clientId) {
-                // Membuka jendela pop-up layaknya Google OAuth asli dari browser
-                const oauthWindow = window.open(
-                    'about:blank',
-                    'GoogleOAuthSignIn',
-                    `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
-                );
-
-                if (oauthWindow) {
-                    oauthWindow.document.write(`
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Sign in - Google Accounts</title>
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <style>
-                                body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; margin: 0; background: #fff; color: #202124; display: flex; flex-direction: column; min-height: 100vh; }
-                                .top-bar { padding: 14px 20px; border-bottom: 1px solid #dadce0; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #5f6368; }
-                                .container { flex: 1; padding: 32px 28px; max-width: 380px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-                                h1 { font-size: 24px; font-weight: 400; margin: 0 0 8px 0; }
-                                p.sub { font-size: 15px; color: #202124; margin: 0 0 24px 0; }
-                                .acc-list { border: 1px solid #dadce0; border-radius: 12px; overflow: hidden; }
-                                .acc-item { width: 100%; background: #fff; border: none; border-bottom: 1px solid #f1f3f4; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; text-align: left; }
-                                .acc-item:hover { background: #f8f9fa; }
-                                .acc-item img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-                                .acc-name { font-size: 14px; font-weight: 600; color: #202124; }
-                                .acc-email { font-size: 12px; color: #5f6368; }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="top-bar">
-                                <svg width="18" height="18" viewBox="0 0 24 24">
-                                    <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
-                                    <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
-                                    <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
-                                    <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 19.9 7.4 23 12 23z"/>
-                                </svg>
-                                <span>Sign in with Google</span>
-                            </div>
-                            <div class="container">
-                                <h1>Choose an account</h1>
-                                <p class="sub">to continue to <strong>SANVALAS STORY MTsN 14</strong></p>
-                                <div class="acc-list">
-                                    <button class="acc-item" onclick="window.opener.receiveGooglePopupAccount('Nabila Azzahra','nabila.azzahra@mtsn14.sch.id','https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'); window.close();">
-                                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80">
-                                        <div><div class="acc-name">Nabila Azzahra</div><div class="acc-email">nabila.azzahra@mtsn14.sch.id</div></div>
-                                    </button>
-                                    <button class="acc-item" onclick="window.opener.receiveGooglePopupAccount('Ahmad Fauzan','ahmad.fauzan@mtsn14.sch.id','https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80'); window.close();">
-                                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80">
-                                        <div><div class="acc-name">Ahmad Fauzan</div><div class="acc-email">ahmad.fauzan@mtsn14.sch.id</div></div>
-                                    </button>
-                                    <button class="acc-item" onclick="window.opener.receiveGooglePopupAccount('Siti Aisyah Putri','aisyah.putri14@gmail.com','https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80'); window.close();">
-                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80">
-                                        <div><div class="acc-name">Siti Aisyah Putri</div><div class="acc-email">aisyah.putri14@gmail.com</div></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </body>
-                        </html>
-                    `);
-                    oauthWindow.document.close();
-                } else {
-                    // Fallback jika pop-up diblokir oleh iframe preview
-                    finishGoogleLoginSuccess({
-                        name: 'Nabila Azzahra',
-                        email: 'nabila.azzahra@mtsn14.sch.id',
-                        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'
-                    });
-                }
-            }
-        }
-
-        // Callback penerima hasil klik dari jendela pop-up Google
-        window.receiveGooglePopupAccount = function(name, email, avatar) {
-            finishGoogleLoginSuccess({ name, email, avatar });
-        };
-
-        function openGoogleClientConfigModal() {
-            const saved = localStorage.getItem(GOOGLE_CLIENT_ID_KEY) || '';
-            const input = document.getElementById('googleClientIdInput');
-            if (input) input.value = saved;
-            openModal('googleClientConfigModal');
-        }
-
-        function saveGoogleClientIdConfig(e) {
-            e.preventDefault();
-            const val = document.getElementById('googleClientIdInput').value.trim();
-            if (val) {
-                localStorage.setItem(GOOGLE_CLIENT_ID_KEY, val);
-                initRealGoogleIdentityIfConfigured();
-                showToast('Client ID disimpan! Klik tombol Login Google akan membuka pop-up Google asli.');
-            } else {
-                localStorage.removeItem(GOOGLE_CLIENT_ID_KEY);
-                googleTokenClient = null;
-                showToast('Client ID dikosongkan.');
-            }
-            closeModal('googleClientConfigModal');
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    closeModal('googleLoginModal');
+                    const u = result.user;
+                    showToast(`Terhubung dengan Google: ${u.displayName || u.email}`);
+                    if (typeof pendingAfterLoginAction === 'function') {
+                        const fn = pendingAfterLoginAction;
+                        pendingAfterLoginAction = null;
+                        fn();
+                    }
+                })
+                .catch((error) => {
+                    console.error('Google Sign-In Error:', error);
+                    if (error.code === 'auth/unauthorized-domain') {
+                        showToast('Domain web ini belum didaftarkan di Firebase Authentication > Settings > Authorized domains!');
+                    } else if (error.code !== 'auth/popup-closed-by-user') {
+                        showToast('Gagal login Google: ' + error.message);
+                    }
+                });
         }
 
         function logoutGoogleUser() {
-            setCurrentGoogleUser(null);
-            showToast('Anda telah keluar dari akun Google');
+            auth.signOut().then(() => {
+                showToast('Anda telah keluar dari akun Google');
+            });
         }
 
         function isArticleLikedByCurrentGoogleUser(art) {
@@ -1750,6 +1472,9 @@
             return art.likedByUsers.some(u => u.email === user.email);
         }
 
+        // ==========================================
+        // DEFAULT DATA & CLOUD FIRESTORE REAL-TIME SYNC
+        // ==========================================
         const defaultState = {
             heroBg: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=80',
             polaroids: [
@@ -1780,10 +1505,9 @@
                     title: 'Tips Belajar Efektif Menjelang Ujian Semester',
                     category: 'Edukasi',
                     date: '20 Okt 2025',
+                    createdAt: 1729400000000,
                     likes: 245,
-                    likedByUsers: [
-                        { name: 'Nabila Azzahra', email: 'nabila.8a@mtsn14.sch.id', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80' }
-                    ],
+                    likedByUsers: [],
                     image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80',
                     images: [
                         'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80',
@@ -1791,88 +1515,38 @@
                         'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80'
                     ],
                     body: 'Menjelang ujian semester, persiapan yang matang sangat diperlukan agar hasil belajar maksimal.\n\n1. Buat jadwal belajar teratur menggunakan teknik Pomodoro (25 menit fokus, 5 menit istirahat).\n2. Rangkum poin penting setiap mata pelajaran dengan peta konsep.\n3. Diskusikan materi sulit bersama teman atau guru di MTsN 14.\n4. Jaga kesehatan dan istirahat yang cukup.',
-                    commentsList: [
-                        { id: 'c-101', author: 'Nabila Azzahra', email: 'nabila.8a@mtsn14.sch.id', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80', text: 'Tips nomor 1 ampuh banget kak, aku jadi gak gampang ngantuk pas belajar!', time: '2 jam lalu' },
-                        { id: 'c-102', author: 'Dimas Aditya', email: 'dimas.aditya14@gmail.com', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80', text: 'Terima kasih infonya tim Sanvalas Story, siap hadapi PAS semester ini!', time: '1 jam lalu' }
-                    ]
+                    commentsList: []
                 },
                 {
                     id: 'art-2',
                     title: 'Keseruan Lomba Classmeet MTsN 14',
                     category: 'Dokumentasi',
                     date: '18 Okt 2025',
+                    createdAt: 1729300000000,
                     likes: 312,
-                    likedByUsers: [
-                        { name: 'Farhan Ramadhan', email: 'farhan.9b@mtsn14.sch.id', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80' }
-                    ],
+                    likedByUsers: [],
                     image: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
                     images: [
                         'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
                         'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80'
+                        'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80'
                     ],
                     body: 'Suasana halaman MTsN 14 penuh semangat dan sorak gembira selama pekan Classmeet semester ini! Berbagai perlombaan antarkelas mulai dari futsal, cerdas cermat, hingga lomba fotografi kreatif diikuti dengan antusias oleh seluruh siswa.',
-                    commentsList: [
-                        { id: 'c-201', author: 'Farhan Ramadhan', email: 'farhan.9b@mtsn14.sch.id', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80', text: 'Seru banget kemarin final futsalnya! Ditunggu foto-foto kelas 8B kak 🔥', time: '1 hari lalu' }
-                    ]
-                },
-                {
-                    id: 'art-3',
-                    title: 'Siswa MTsN 14 Raih Juara 1 Olimpiade Matematika',
-                    category: 'Prestasi',
-                    date: '15 Okt 2025',
-                    likes: 498,
-                    likedByUsers: [],
-                    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=80',
-                    images: [
-                        'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80'
-                    ],
-                    body: 'Alhamdulillah! Prestasi membanggakan kembali diraih oleh perwakilan siswa MTsN 14 yang berhasil menyabet medali emas (Juara 1) pada ajang Olimpiade Matematika tingkat provinsi. Semoga menjadi inspirasi bagi seluruh warga madrasah!',
-                    commentsList: [
-                        { id: 'c-301', author: 'Rizky Pratama', email: 'rizky.mtsn14@gmail.com', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80', text: 'Barakallah, semoga terus menginspirasi siswa-siswi MTsN 14 lainnya.', time: '3 hari lalu' }
-                    ]
-                },
-                {
-                    id: 'art-4',
-                    title: 'Behind The Scene Acara Hari Santri',
-                    category: 'Karya Siswa',
-                    date: '12 Okt 2025',
-                    likes: 276,
-                    likedByUsers: [],
-                    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=900&q=80',
-                    images: [
-                        'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=900&q=80',
-                        'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=900&q=80'
-                    ],
-                    body: 'Intip keseruan tim dokumentasi SANVALAS STORY di balik layar peringatan Hari Santri Nasional di MTsN 14. Mulai dari persiapan pagi hari hingga proses penyuntingan video sinematik karya siswa.',
-                    commentsList: [
-                        { id: 'c-401', author: 'Zahra Amelia', email: 'zahra.amelia@mtsn14.sch.id', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80', text: 'Transisi videonya halus banget, mantap tim kreatif!', time: '4 hari lalu' }
-                    ]
+                    commentsList: []
                 }
             ],
-            inbox: [
-                {
-                    id: 'sub-1',
-                    author: 'Rizky Pratama - 9B',
-                    title: 'Esai Fotografi Pagi Hari di Madrasah',
-                    category: 'Karya Siswa',
-                    desc: 'Kumpulan foto suasana pagi yang asri di lingkungan MTsN 14 sebelum bel masuk berbunyi.'
-                }
-            ]
+            inbox: []
         };
 
-        let appState = loadState();
-        let currentMode = 'preview'; // 'preview' (Pengunjung) | 'edit' (Tim Kreatif)
+        let appState = JSON.parse(JSON.stringify(defaultState));
+        let currentMode = 'preview';
         let isCreatorAuthenticated = false;
         let activeCategory = 'Semua';
         let currentSearchQuery = '';
         let activeReadingArticleId = null;
         let activeReaderSlideIdx = 0;
-        let cardSlideIndices = {}; // Menyimpan posisi slide foto pada setiap kartu di beranda
-        let cardSizeMode = 'large'; // 'large' (2 kolom besar) | 'compact' (4 kolom)
+        let cardSlideIndices = {};
+        let cardSizeMode = 'large';
         let editorPhotosDraft = [];
         let studentSubPhotosDraft = [];
 
@@ -1883,71 +1557,155 @@
             return art.image ? [art.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'];
         }
 
-        function loadState() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    const articles = (parsed.articles || defaultState.articles).map(a => {
-                        const imgs = Array.isArray(a.images) && a.images.length > 0
-                            ? a.images
-                            : (a.image ? [a.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story']);
-                        return {
-                            ...a,
-                            image: imgs[0],
-                            images: imgs,
-                            commentsList: Array.isArray(a.commentsList) ? a.commentsList : [],
-                            likedByUsers: Array.isArray(a.likedByUsers) ? a.likedByUsers : []
-                        };
-                    });
-                    return {
-                        heroBg: parsed.heroBg || defaultState.heroBg,
-                        polaroids: Array.isArray(parsed.polaroids) && parsed.polaroids.length === 3
-                            ? parsed.polaroids
-                            : [...defaultState.polaroids],
-                        polaroidCaption: parsed.polaroidCaption || defaultState.polaroidCaption,
-                        aboutData: parsed.aboutData ? { ...defaultState.aboutData, ...parsed.aboutData } : { ...defaultState.aboutData },
-                        categories: Array.isArray(parsed.categories) && parsed.categories.length > 0
-                            ? parsed.categories
-                            : JSON.parse(JSON.stringify(defaultState.categories)),
-                        articles,
-                        inbox: parsed.inbox || defaultState.inbox
+        // Kompresi gambar otomatis jika diunggah dari galeri HP/laptop agar ringan & cepat disimpan di Cloud Firestore
+        function compressImageFileToDataURL(file, maxWidth = 1100, quality = 0.78) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
                     };
+                    img.onerror = () => resolve(ev.target.result);
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Sinkronisasi Real-Time dengan Firebase Cloud Firestore
+        function initCloudFirestoreSync() {
+            // 1. Pengaturan Web (Background Hero, 3 Polaroid, Tentang Kami, Kategori)
+            db.collection('sanvalas_meta').doc('settings').onSnapshot((docSnap) => {
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    appState.heroBg = data.heroBg || defaultState.heroBg;
+                    appState.polaroids = Array.isArray(data.polaroids) && data.polaroids.length === 3 ? data.polaroids : [...defaultState.polaroids];
+                    appState.polaroidCaption = data.polaroidCaption || defaultState.polaroidCaption;
+                    appState.aboutData = data.aboutData ? { ...defaultState.aboutData, ...data.aboutData } : { ...defaultState.aboutData };
+                    appState.categories = Array.isArray(data.categories) && data.categories.length > 0 ? data.categories : JSON.parse(JSON.stringify(defaultState.categories));
+                } else {
+                    db.collection('sanvalas_meta').doc('settings').set({
+                        heroBg: appState.heroBg,
+                        polaroids: appState.polaroids,
+                        polaroidCaption: appState.polaroidCaption,
+                        aboutData: appState.aboutData,
+                        categories: appState.categories
+                    }).catch(err => console.warn('Init settings err:', err));
                 }
-            } catch (e) {
-                console.warn('Gagal memuat state:', e);
-            }
-            return JSON.parse(JSON.stringify(defaultState));
+                renderHeroPolaroids();
+                renderAboutSectionUI();
+                renderCategoriesBar();
+                syncCategoryDropdowns();
+                if (!document.getElementById('categoryManagerModal').classList.contains('hidden')) {
+                    renderCategoryManagerList();
+                }
+            }, (error) => {
+                console.error('Firestore settings error:', error);
+                renderHeroPolaroids();
+                renderAboutSectionUI();
+                renderCategoriesBar();
+                syncCategoryDropdowns();
+            });
+
+            // 2. Postingan Artikel Real-Time
+            db.collection('sanvalas_articles').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+                if (snapshot.empty) {
+                    const batch = db.batch();
+                    defaultState.articles.forEach((art) => {
+                        const ref = db.collection('sanvalas_articles').doc(art.id);
+                        batch.set(ref, art);
+                    });
+                    batch.commit().catch(err => console.warn('Seed articles err:', err));
+                    return;
+                }
+
+                appState.articles = snapshot.docs.map(doc => {
+                    const a = doc.data();
+                    const imgs = Array.isArray(a.images) && a.images.length > 0
+                        ? a.images
+                        : (a.image ? [a.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story']);
+                    return {
+                        ...a,
+                        id: doc.id,
+                        image: imgs[0],
+                        images: imgs,
+                        commentsList: Array.isArray(a.commentsList) ? a.commentsList : [],
+                        likedByUsers: Array.isArray(a.likedByUsers) ? a.likedByUsers : []
+                    };
+                });
+
+                renderArticles();
+                checkSharedPostUrlParam();
+
+                if (activeReadingArticleId) {
+                    const currentArt = appState.articles.find(a => a.id === activeReadingArticleId);
+                    if (currentArt) {
+                        updateReaderLikeButtonUI(currentArt);
+                        renderReaderComments(currentArt);
+                    }
+                }
+            }, (error) => {
+                console.error('Firestore articles error:', error);
+                showToast('Gagal memuat database cloud. Pastikan Firestore sudah aktif dalam Test Mode.');
+                renderArticles();
+            });
+
+            // 3. Kotak Masuk Kiriman Siswa Real-Time
+            db.collection('sanvalas_inbox').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+                appState.inbox = snapshot.docs.map(doc => ({
+                    ...doc.data(),
+                    id: doc.id
+                }));
+                updateInboxBadge();
+                if (!document.getElementById('inboxModal').classList.contains('hidden')) {
+                    renderInboxListUI();
+                }
+            }, (error) => {
+                console.warn('Firestore inbox error:', error);
+            });
         }
 
-        function saveState() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-            } catch (e) {
-                console.warn('Gagal menyimpan state:', e);
-            }
+        function saveCloudSettings() {
+            return db.collection('sanvalas_meta').doc('settings').set({
+                heroBg: appState.heroBg,
+                polaroids: appState.polaroids,
+                polaroidCaption: appState.polaroidCaption,
+                aboutData: appState.aboutData,
+                categories: appState.categories
+            }, { merge: true });
         }
 
-        // Initialize Page & Check if opened via Secret Creator Link (#redaksi / ?akses=timkreatif)
+        // Initialize Page
         window.addEventListener('DOMContentLoaded', () => {
             updateGoogleNavbarUI();
             renderHeroPolaroids();
             renderAboutSectionUI();
             renderCategoriesBar();
             syncCategoryDropdowns();
-            renderArticles();
-            updateInboxBadge();
+            initCloudFirestoreSync();
             checkSecretUrlAccess();
-            checkSharedPostUrlParam();
-            initRealGoogleIdentityIfConfigured();
         });
 
-        // Open specific post if ?post=id is present in URL
+        let hasCheckedSharedUrl = false;
         function checkSharedPostUrlParam() {
+            if (hasCheckedSharedUrl) return;
             try {
                 const params = new URLSearchParams(window.location.search);
                 const postId = params.get('post');
                 if (postId && appState.articles.some(a => a.id === postId)) {
+                    hasCheckedSharedUrl = true;
                     openArticleReader(postId);
                 }
             } catch (e) {}
@@ -2016,10 +1774,8 @@
 
         function rotatePolaroidCarousel(direction = 1) {
             if (direction > 0) {
-                // Geser kanan ke tengah
                 polaroidOrder = [polaroidOrder[1], polaroidOrder[2], polaroidOrder[0]];
             } else {
-                // Geser kiri ke tengah
                 polaroidOrder = [polaroidOrder[2], polaroidOrder[0], polaroidOrder[1]];
             }
             const img1 = document.getElementById('polaroidImg1');
@@ -2041,9 +1797,7 @@
             if (polaroidSlideshowTimer) {
                 clearInterval(polaroidSlideshowTimer);
                 polaroidSlideshowTimer = null;
-                if (icon) {
-                    icon.className = 'fa-solid fa-play text-sm ml-0.5';
-                }
+                if (icon) icon.className = 'fa-solid fa-play text-sm ml-0.5';
                 if (btn) btn.classList.remove('ring-amber-400', 'bg-amber-500');
                 showToast('Pemutar foto profil dihentikan');
             } else {
@@ -2051,9 +1805,7 @@
                 polaroidSlideshowTimer = setInterval(() => {
                     rotatePolaroidCarousel(1);
                 }, 2200);
-                if (icon) {
-                    icon.className = 'fa-solid fa-pause text-sm';
-                }
+                if (icon) icon.className = 'fa-solid fa-pause text-sm';
                 if (btn) btn.classList.add('ring-amber-400');
                 showToast('Memutar & menggeser foto profil secara otomatis...');
             }
@@ -2093,17 +1845,13 @@
             if (val && prev) prev.src = val;
         }
 
-        function uploadHeroBgFile(event) {
+        async function uploadHeroBgFile(event) {
             const file = event.target.files && event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => {
-                const dataUrl = ev.target.result;
-                document.getElementById('inputHeroBgUrl').value = dataUrl;
-                document.getElementById('previewHeroBgModal').src = dataUrl;
-                showToast('Background baru siap disimpan!');
-            };
-            reader.readAsDataURL(file);
+            const compressed = await compressImageFileToDataURL(file, 1400, 0.78);
+            document.getElementById('inputHeroBgUrl').value = compressed;
+            document.getElementById('previewHeroBgModal').src = compressed;
+            showToast('Background baru siap disimpan!');
         }
 
         function syncPolaroidPreviewFromInput(idx) {
@@ -2112,20 +1860,16 @@
             if (val && prev) prev.src = val;
         }
 
-        function uploadSinglePolaroidFile(event, idx) {
+        async function uploadSinglePolaroidFile(event, idx) {
             const file = event.target.files && event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => {
-                const dataUrl = ev.target.result;
-                document.getElementById(`inputPolaroidUrl${idx}`).value = dataUrl;
-                document.getElementById(`previewPolaroidModal${idx}`).src = dataUrl;
-                showToast(`Foto kotak ke-${idx + 1} siap disimpan!`);
-            };
-            reader.readAsDataURL(file);
+            const compressed = await compressImageFileToDataURL(file, 800, 0.8);
+            document.getElementById(`inputPolaroidUrl${idx}`).value = compressed;
+            document.getElementById(`previewPolaroidModal${idx}`).src = compressed;
+            showToast(`Foto kotak ke-${idx + 1} siap disimpan!`);
         }
 
-        function savePolaroidImages(e) {
+        async function savePolaroidImages(e) {
             e.preventDefault();
             const newHeroBg = document.getElementById('inputHeroBgUrl').value.trim() || defaultState.heroBg;
             const newPolaroids = [0, 1, 2].map(i => {
@@ -2136,10 +1880,14 @@
             appState.polaroids = newPolaroids;
             appState.polaroidCaption = document.getElementById('inputPolaroidCaption').value.trim() || 'MTsN 14';
             polaroidOrder = [0, 1, 2];
-            saveState();
-            renderHeroPolaroids();
-            closeModal('polaroidManagerModal');
-            showToast('Background & 3 Foto atas berhasil diperbarui!');
+
+            try {
+                await saveCloudSettings();
+                closeModal('polaroidManagerModal');
+                showToast('Background & 3 Foto atas tersimpan online!');
+            } catch (err) {
+                showToast('Gagal menyimpan ke cloud: ' + err.message);
+            }
         }
 
         // Render & Edit "Tentang Kami" Section
@@ -2171,7 +1919,7 @@
             openModal('aboutEditorModal');
         }
 
-        function saveAboutContentFromCreator(e) {
+        async function saveAboutContentFromCreator(e) {
             e.preventDefault();
             appState.aboutData = {
                 cardTitle: document.getElementById('editAboutCardTitle').value.trim(),
@@ -2181,13 +1929,16 @@
                 paragraph1: document.getElementById('editAboutParagraph1').value.trim(),
                 paragraph2: document.getElementById('editAboutParagraph2').value.trim()
             };
-            saveState();
-            renderAboutSectionUI();
-            closeModal('aboutEditorModal');
-            showToast('Konten "Tentang Kami" berhasil diperbarui!');
+            try {
+                await saveCloudSettings();
+                closeModal('aboutEditorModal');
+                showToast('Konten "Tentang Kami" tersimpan online!');
+            } catch (err) {
+                showToast('Gagal menyimpan: ' + err.message);
+            }
         }
 
-        // Dynamic Categories Management (Bar + Select Options + Creator Modal)
+        // Dynamic Categories Management
         function getCategoriesList() {
             if (!Array.isArray(appState.categories) || appState.categories.length === 0) {
                 appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
@@ -2250,7 +2001,7 @@
             `).join('');
         }
 
-        function addNewCategoryFromCreator(e) {
+        async function addNewCategoryFromCreator(e) {
             e.preventDefault();
             const nameInput = document.getElementById('newCategoryNameInput');
             const iconSelect = document.getElementById('newCategoryIconSelect');
@@ -2265,25 +2016,19 @@
             }
 
             cats.push({ name, icon });
-            saveState();
             nameInput.value = '';
-            renderCategoriesBar();
-            syncCategoryDropdowns();
-            renderCategoryManagerList();
-            showToast(`Kategori "${name}" berhasil ditambahkan!`);
+            await saveCloudSettings();
+            showToast(`Kategori "${name}" berhasil ditambahkan secara online!`);
         }
 
-        function deleteCategoryAt(idx) {
+        async function deleteCategoryAt(idx) {
             const cats = getCategoriesList();
             if (cats.length <= 1) return;
             const removed = cats.splice(idx, 1)[0];
             if (activeCategory === removed.name) {
                 activeCategory = 'Semua';
             }
-            saveState();
-            renderCategoriesBar();
-            syncCategoryDropdowns();
-            renderCategoryManagerList();
+            await saveCloudSettings();
             renderArticles();
             showToast(`Kategori "${removed.name}" dihapus`);
         }
@@ -2354,16 +2099,12 @@
             }
         }
 
-        let suppressHashLoginTrigger = false;
-
         function unlockCreatorMode() {
             isCreatorAuthenticated = true;
             closeModal('creatorLoginModal');
-            suppressHashLoginTrigger = true;
             try {
                 window.location.hash = 'redaksi';
             } catch (err) {}
-            setTimeout(() => { suppressHashLoginTrigger = false; }, 150);
             setAppMode('edit');
         }
 
@@ -2373,18 +2114,12 @@
                 e.stopPropagation();
             }
             isCreatorAuthenticated = false;
-            suppressHashLoginTrigger = true;
             try {
-                if (window.location.hash) {
-                    window.location.hash = '';
-                }
+                if (window.location.hash) window.location.hash = '';
                 if (window.history && window.history.replaceState) {
                     window.history.replaceState(null, '', window.location.pathname + window.location.search);
                 }
-            } catch (err) {
-                // Safe fallback inside restricted sandbox/iframe
-            }
-            setTimeout(() => { suppressHashLoginTrigger = false; }, 250);
+            } catch (err) {}
             closeModal('articleEditorModal');
             closeModal('inboxModal');
             closeModal('accessGuideModal');
@@ -2393,18 +2128,16 @@
             setAppMode('preview');
         }
 
-        // Switch between Visitor Mode and Creator Mode
         function setAppMode(mode) {
             currentMode = mode;
             const isCreator = mode === 'edit';
             if (isCreator) {
                 document.body.classList.add('is-creator-mode');
-                showToast('Mode Tim Kreatif Aktif: Silakan kelola & posting konten');
+                showToast('Mode Tim Kreatif Aktif: Semua perubahan langsung tersimpan online!');
             } else {
                 document.body.classList.remove('is-creator-mode');
                 showToast('Berhasil keluar ke Tampilan Pengunjung');
             }
-
             renderArticles();
         }
 
@@ -2425,7 +2158,7 @@
             }
             renderArticles();
         }
-        // Geser slide foto langsung pada kartu konten di halaman utama
+
         function stepCardSlide(event, articleId, delta) {
             if (event) {
                 event.preventDefault();
@@ -2479,7 +2212,7 @@
             }
         }
 
-        // Render Articles Grid (Clean Interactive Carousel on Cards + Balanced Proportions)
+        // Render Articles Grid
         function renderArticles() {
             const grid = document.getElementById('articlesGrid');
             const filtered = appState.articles.filter(art => {
@@ -2511,7 +2244,6 @@
 
                 return `
                 <article class="content-card bg-white rounded-2xl overflow-hidden border border-slate-200/85 shadow-xs flex flex-col justify-between group relative">
-                    <!-- Creator Posting Management Buttons (Only in Tim Kreatif Mode) -->
                     ${currentMode === 'edit' ? `
                         <div class="absolute top-3 right-3 z-30 flex items-center gap-1.5">
                             <button type="button" onclick="openEditArticleModal('${art.id}')" class="bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1" title="Edit Postingan">
@@ -2524,9 +2256,7 @@
                     ` : ''}
 
                     <div>
-                        <!-- Card Interactive Photo Slider Header -->
-                        <div class="relative ${isLarge ? 'aspect-[16/10]' : 'aspect-[16/10]'} w-full bg-slate-900 overflow-hidden select-none">
-                            <!-- Main Clickable Image -->
+                        <div class="relative aspect-[16/10] w-full bg-slate-900 overflow-hidden select-none">
                             <img
                                 id="cardSlideImg-${art.id}"
                                 onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)"
@@ -2536,22 +2266,17 @@
                                 onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
                             >
 
-                            <!-- Subtle Bottom Gradient so Badges & Dots pop cleanly -->
                             <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/65 via-black/20 to-transparent pointer-events-none"></div>
 
-                            <!-- Category Pill Bottom-Left -->
                             <span class="absolute bottom-3 left-3.5 z-10 bg-white/95 backdrop-blur-xs text-slate-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm">
                                 ${art.category}
                             </span>
 
-                            <!-- Multi-Photo Controls right on the Card -->
                             ${photoCount > 1 ? `
-                                <!-- Slide Counter Badge Top-Left -->
                                 <span id="cardSlideCounter-${art.id}" class="absolute top-3 left-3.5 z-20 bg-black/65 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-white/15 shadow">
                                     <i class="fa-regular fa-images"></i> ${currentSlideIdx + 1}/${photoCount}
                                 </span>
 
-                                <!-- Prev / Next Buttons on Card -->
                                 <button
                                     type="button"
                                     onclick="stepCardSlide(event, '${art.id}', -1)"
@@ -2569,7 +2294,6 @@
                                     <i class="fa-solid fa-chevron-right text-xs"></i>
                                 </button>
 
-                                <!-- Interactive Slide Dots Bottom-Right -->
                                 <div id="cardSlideDots-${art.id}" class="absolute bottom-3.5 right-3.5 z-20 flex items-center gap-1.5 bg-black/40 backdrop-blur-xs px-2 py-1 rounded-full">
                                     ${photos.map((_, idx) => `
                                         <button
@@ -2583,7 +2307,6 @@
                             ` : ''}
                         </div>
 
-                        <!-- Card Title, Excerpt & Date -->
                         <div onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)" class="${isLarge ? 'p-5 pb-3.5' : 'p-4 pb-2.5'} cursor-pointer space-y-2">
                             <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
                                 <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-emerald-800"></i> ${art.date}</span>
@@ -2598,12 +2321,11 @@
                         </div>
                     </div>
 
-                    <!-- Card Footer: Likes, Comments & Share -->
                     <div class="${isLarge ? 'px-5 py-3.5' : 'px-4 py-2.5'} border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-600 font-semibold">
                         <div class="flex items-center gap-3.5">
                             <button type="button" onclick="quickLikeArticle(event, '${art.id}')" class="flex items-center gap-1.5 ${likedByMe ? 'text-rose-600 font-extrabold' : 'hover:text-rose-600'} transition" title="${likedByMe ? 'Kamu menyukai ini (Klik untuk batal)' : 'Login Google & Sukai konten ini'}">
                                 <i class="fa-solid fa-heart ${likedByMe ? 'text-rose-600 heart-pop-anim' : 'text-slate-700'}"></i>
-                                <span>${art.likes}</span>
+                                <span>${art.likes || 0}</span>
                             </button>
                             <button type="button" onclick="openArticleReader('${art.id}')" class="flex items-center gap-1.5 hover:text-emerald-800 transition" title="Lihat & tulis komentar">
                                 <i class="fa-regular fa-comment text-slate-500"></i>
@@ -2622,6 +2344,7 @@
                 </article>
             `}).join('');
         }
+
         // Reader & Multi-Photo Carousel + Active Comments Modal
         function openArticleReader(id, initialSlideIdx = 0) {
             const art = appState.articles.find(a => a.id === id);
@@ -2728,17 +2451,12 @@
             renderReaderGallerySlide(art);
         }
 
-        // Keyboard Left/Right support when Reader Modal is open
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('articleReaderModal');
             if (!modal || modal.classList.contains('hidden')) return;
-            if (e.key === 'ArrowLeft') {
-                stepReaderGallery(-1);
-            } else if (e.key === 'ArrowRight') {
-                stepReaderGallery(1);
-            } else if (e.key === 'Escape') {
-                closeModal('articleReaderModal');
-            }
+            if (e.key === 'ArrowLeft') stepReaderGallery(-1);
+            else if (e.key === 'ArrowRight') stepReaderGallery(1);
+            else if (e.key === 'Escape') closeModal('articleReaderModal');
         });
 
         function updateReaderLikeButtonUI(art) {
@@ -2753,7 +2471,7 @@
                 : 'flex items-center gap-2 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-4 py-2 rounded-full transition';
             btn.innerHTML = `
                 <i class="fa-solid fa-heart ${likedByMe ? 'heart-pop-anim' : ''}"></i>
-                <span id="readerLikesCount">${art.likes}</span> ${likedByMe ? 'Disukai (Batal)' : 'Suka'}
+                <span id="readerLikesCount">${art.likes || 0}</span> ${likedByMe ? 'Disukai (Batal)' : 'Suka'}
             `;
 
             if (likedByBox && likedByAvatars) {
@@ -2858,7 +2576,7 @@
 
         const BAD_WORDS = ['bodoh', 'tolol', 'goblok', 'anjing', 'babi', 'bangsat', 'kasar'];
 
-        function submitComment(e) {
+        async function submitComment(e) {
             e.preventDefault();
             if (!activeReadingArticleId) return;
             const art = appState.articles.find(a => a.id === activeReadingArticleId);
@@ -2880,31 +2598,41 @@
                 return;
             }
 
-            if (!Array.isArray(art.commentsList)) art.commentsList = [];
-            art.commentsList.unshift({
-                id: 'c-' + Date.now(),
-                author: user.name,
-                email: user.email,
-                avatar: user.avatar,
-                text,
-                time: 'Baru saja'
-            });
+            const updatedComments = [
+                {
+                    id: 'c-' + Date.now(),
+                    author: user.name,
+                    email: user.email,
+                    avatar: user.avatar,
+                    text,
+                    time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+                },
+                ...(Array.isArray(art.commentsList) ? art.commentsList : [])
+            ];
 
-            saveState();
             msgInput.value = '';
-            renderReaderComments(art);
-            renderArticles();
-            showToast(`Komentar dikirim sebagai ${user.name}!`);
+            try {
+                await db.collection('sanvalas_articles').doc(art.id).update({
+                    commentsList: updatedComments
+                });
+                showToast(`Komentar dikirim sebagai ${user.name}!`);
+            } catch (err) {
+                showToast('Gagal mengirim komentar: ' + err.message);
+            }
         }
 
-        function deleteComment(articleId, commentId) {
+        async function deleteComment(articleId, commentId) {
             const art = appState.articles.find(a => a.id === articleId);
             if (!art || !Array.isArray(art.commentsList)) return;
-            art.commentsList = art.commentsList.filter(c => c.id !== commentId);
-            saveState();
-            renderReaderComments(art);
-            renderArticles();
-            showToast('Komentar dihapus oleh Tim Kreatif');
+            const updatedComments = art.commentsList.filter(c => c.id !== commentId);
+            try {
+                await db.collection('sanvalas_articles').doc(articleId).update({
+                    commentsList: updatedComments
+                });
+                showToast('Komentar dihapus oleh Tim Kreatif');
+            } catch (err) {
+                showToast('Gagal menghapus komentar: ' + err.message);
+            }
         }
 
         function quickLikeArticle(event, id) {
@@ -2935,39 +2663,43 @@
             toggleArticleLikeByGoogleUser(activeReadingArticleId, x, y);
         }
 
-        function toggleArticleLikeByGoogleUser(id, clientX, clientY) {
+        async function toggleArticleLikeByGoogleUser(id, clientX, clientY) {
             const art = appState.articles.find(a => a.id === id);
             const user = getCurrentGoogleUser();
             if (!art || !user) return;
 
-            if (!Array.isArray(art.likedByUsers)) art.likedByUsers = [];
-            const existingIdx = art.likedByUsers.findIndex(u => u.email === user.email);
+            const likedUsers = Array.isArray(art.likedByUsers) ? [...art.likedByUsers] : [];
+            const existingIdx = likedUsers.findIndex(u => u.email === user.email);
+            let newLikesCount = art.likes || 0;
 
             if (existingIdx > -1) {
-                art.likedByUsers.splice(existingIdx, 1);
-                art.likes = Math.max(0, art.likes - 1);
+                likedUsers.splice(existingIdx, 1);
+                newLikesCount = Math.max(0, newLikesCount - 1);
                 showToast(`Batal menyukai (${user.email})`);
             } else {
-                art.likedByUsers.unshift({
+                likedUsers.unshift({
                     name: user.name,
                     email: user.email,
                     avatar: user.avatar
                 });
-                art.likes++;
+                newLikesCount++;
                 if (clientX && clientY) {
                     spawnHeartBurst(clientX, clientY);
                 }
-                showToast(`Disukai sebagai ${user.name} (${user.email})!`);
+                showToast(`Disukai sebagai ${user.name}!`);
             }
 
-            saveState();
-            if (activeReadingArticleId === id) {
-                updateReaderLikeButtonUI(art);
+            try {
+                await db.collection('sanvalas_articles').doc(id).update({
+                    likes: newLikesCount,
+                    likedByUsers: likedUsers
+                });
+            } catch (err) {
+                showToast('Gagal memperbarui Like: ' + err.message);
             }
-            renderArticles();
         }
 
-        // Category Filter
+        // Category Filter & Search
         function setActiveCategory(cat) {
             activeCategory = cat;
             renderCategoriesBar();
@@ -3016,11 +2748,13 @@
             }
         }
 
-        function deleteArticle(id) {
-            appState.articles = appState.articles.filter(a => a.id !== id);
-            saveState();
-            renderArticles();
-            showToast('Postingan telah dihapus');
+        async function deleteArticle(id) {
+            try {
+                await db.collection('sanvalas_articles').doc(id).delete();
+                showToast('Postingan telah dihapus dari database online');
+            } catch (err) {
+                showToast('Gagal menghapus postingan: ' + err.message);
+            }
         }
 
         function openAccessGuideModal() {
@@ -3038,7 +2772,7 @@
             showToast(msg);
         }
 
-        // Add / Edit Article Modal with Multi-Photo Support (Only for Tim Kreatif)
+        // Add / Edit Article Modal (Cloud Firestore)
         function openAddArticleModal() {
             syncCategoryDropdowns();
             document.getElementById('editorModalTitle').textContent = 'Posting Konten Baru';
@@ -3046,7 +2780,7 @@
             document.getElementById('editArticleTitle').value = '';
             const cats = getCategoriesList();
             document.getElementById('editArticleCategory').value = cats[0] ? cats[0].name : 'Edukasi';
-            document.getElementById('editArticleDate').value = '25 Okt 2025';
+            document.getElementById('editArticleDate').value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
             document.getElementById('editArticleImage').value = '';
             document.getElementById('editArticleBody').value = '';
             editorPhotosDraft = [
@@ -3110,27 +2844,29 @@
             renderEditorPhotosPreview();
         }
 
-        function handleMultiFileUploadToEditor(event) {
+        async function handleMultiFileUploadToEditor(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = ev => {
-                    editorPhotosDraft.push(ev.target.result);
-                    renderEditorPhotosPreview();
-                };
-                reader.readAsDataURL(file);
-            });
+            for (const file of files) {
+                const compressed = await compressImageFileToDataURL(file, 1000, 0.78);
+                editorPhotosDraft.push(compressed);
+                renderEditorPhotosPreview();
+            }
             showToast(`${files.length} foto berhasil ditambahkan ke galeri postingan!`);
             event.target.value = '';
         }
 
-        function saveArticleFromModal(e) {
+        async function saveArticleFromModal(e) {
             e.preventDefault();
+            const submitBtn = document.getElementById('saveArticleSubmitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Menyimpan ke Cloud...';
+            }
+
             const id = document.getElementById('editArticleId').value;
             const existing = id ? appState.articles.find(a => a.id === id) : null;
 
-            // If user typed a URL in the input box without clicking "+ Tambah URL", include it automatically
             const pendingUrl = document.getElementById('editArticleImage').value.trim();
             if (pendingUrl) {
                 editorPhotosDraft.push(pendingUrl);
@@ -3139,33 +2875,36 @@
                 editorPhotosDraft.push('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80');
             }
 
+            const docId = id || ('art-' + Date.now());
             const payload = {
-                id: id || 'art-' + Date.now(),
+                id: docId,
                 title: document.getElementById('editArticleTitle').value.trim(),
                 category: document.getElementById('editArticleCategory').value,
                 date: document.getElementById('editArticleDate').value.trim(),
+                createdAt: existing && existing.createdAt ? existing.createdAt : Date.now(),
                 image: editorPhotosDraft[0],
                 images: [...editorPhotosDraft],
-                likes: existing ? existing.likes : 1,
+                likes: existing ? (existing.likes || 0) : 0,
                 likedByUsers: existing && Array.isArray(existing.likedByUsers) ? existing.likedByUsers : [],
                 commentsList: existing && Array.isArray(existing.commentsList) ? existing.commentsList : [],
                 body: document.getElementById('editArticleBody').value.trim()
             };
 
-            if (id) {
-                const idx = appState.articles.findIndex(a => a.id === id);
-                if (idx > -1) appState.articles[idx] = payload;
-                showToast(`Postingan (${payload.images.length} foto) berhasil diperbarui!`);
-            } else {
-                appState.articles.unshift(payload);
-                showToast(`Postingan baru (${payload.images.length} foto) berhasil diterbitkan!`);
+            try {
+                await db.collection('sanvalas_articles').doc(docId).set(payload);
+                closeModal('articleEditorModal');
+                showToast(id ? `Postingan (${payload.images.length} foto) diperbarui online!` : `Postingan baru (${payload.images.length} foto) diterbitkan online!`);
+            } catch (err) {
+                showToast('Gagal menyimpan postingan (coba kurangi jumlah/ukuran foto): ' + err.message);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Simpan & Terbitkan';
+                }
             }
-
-            saveState();
-            renderArticles();
-            closeModal('articleEditorModal');
         }
-        // Student Work Submission & Inbox (Supports Multiple Photos)
+
+        // Student Work Submission & Inbox (Cloud Firestore)
         function openSubmitWorkModal(e) {
             if (e) e.stopPropagation();
             const user = getCurrentGoogleUser();
@@ -3182,52 +2921,54 @@
             openModal('submitWorkModal');
         }
 
-        function handleStudentMultiFileUpload(event) {
+        async function handleStudentMultiFileUpload(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
             const previewEl = document.getElementById('subPhotosPreview');
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = ev => {
-                    studentSubPhotosDraft.push(ev.target.result);
-                    if (previewEl) {
-                        previewEl.classList.remove('hidden');
-                        previewEl.innerHTML = studentSubPhotosDraft.map((img, i) => `
-                            <div class="relative aspect-square rounded-lg overflow-hidden border border-slate-300">
-                                <img src="${img}" class="w-full h-full object-cover">
-                                <span class="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] px-1 rounded">#${i + 1}</span>
-                            </div>
-                        `).join('');
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
+            for (const file of files) {
+                const compressed = await compressImageFileToDataURL(file, 900, 0.78);
+                studentSubPhotosDraft.push(compressed);
+                if (previewEl) {
+                    previewEl.classList.remove('hidden');
+                    previewEl.innerHTML = studentSubPhotosDraft.map((img, i) => `
+                        <div class="relative aspect-square rounded-lg overflow-hidden border border-slate-300">
+                            <img src="${img}" class="w-full h-full object-cover">
+                            <span class="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] px-1 rounded">#${i + 1}</span>
+                        </div>
+                    `).join('');
+                }
+            }
             showToast(`${files.length} foto karya siap dikirim!`);
         }
 
-        function submitStudentWork(e) {
+        async function submitStudentWork(e) {
             e.preventDefault();
             const customImg = document.getElementById('subImage') ? document.getElementById('subImage').value.trim() : '';
             if (customImg) studentSubPhotosDraft.unshift(customImg);
             if (studentSubPhotosDraft.length === 0) {
                 studentSubPhotosDraft.push('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80');
             }
+            const subId = 'sub-' + Date.now();
             const newSub = {
-                id: 'sub-' + Date.now(),
+                id: subId,
                 author: document.getElementById('subName').value.trim(),
                 title: document.getElementById('subTitle').value.trim(),
                 category: document.getElementById('subCat').value,
                 image: studentSubPhotosDraft[0],
                 images: [...studentSubPhotosDraft],
-                desc: document.getElementById('subDesc').value.trim()
+                desc: document.getElementById('subDesc').value.trim(),
+                createdAt: Date.now()
             };
-            appState.inbox.unshift(newSub);
-            saveState();
-            updateInboxBadge();
-            e.target.reset();
-            studentSubPhotosDraft = [];
-            closeModal('submitWorkModal');
-            showToast('Karyamu berhasil dikirim ke Tim Kreatif SANVALAS STORY!');
+
+            try {
+                await db.collection('sanvalas_inbox').doc(subId).set(newSub);
+                e.target.reset();
+                studentSubPhotosDraft = [];
+                closeModal('submitWorkModal');
+                showToast('Karyamu berhasil dikirim ke Tim Kreatif SANVALAS STORY!');
+            } catch (err) {
+                showToast('Gagal mengirim karya: ' + err.message);
+            }
         }
 
         function updateInboxBadge() {
@@ -3235,8 +2976,9 @@
             if (badge) badge.textContent = appState.inbox.length;
         }
 
-        function openInboxModal() {
+        function renderInboxListUI() {
             const container = document.getElementById('inboxListContainer');
+            if (!container) return;
             if (appState.inbox.length === 0) {
                 container.innerHTML = `<div class="text-center py-6 text-slate-400">Belum ada kiriman karya siswa baru.</div>`;
             } else {
@@ -3256,40 +2998,51 @@
                     </div>
                 `).join('');
             }
+        }
+
+        function openInboxModal() {
+            renderInboxListUI();
             openModal('inboxModal');
         }
 
-        function approveSubmission(subId) {
-            const idx = appState.inbox.findIndex(s => s.id === subId);
-            if (idx === -1) return;
-            const item = appState.inbox[idx];
+        async function approveSubmission(subId) {
+            const item = appState.inbox.find(s => s.id === subId);
+            if (!item) return;
             const imgs = Array.isArray(item.images) && item.images.length > 0
                 ? item.images
                 : [item.image || 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80'];
-            appState.articles.unshift({
-                id: 'art-' + Date.now(),
-                title: item.title,
-                category: item.category,
-                date: 'Baru Saja',
-                likes: 1,
-                likedByUsers: [],
-                commentsList: [],
-                image: imgs[0],
-                images: imgs,
-                body: `Karya kiriman dari: ${item.author}\n\n${item.desc}`
-            });
-            appState.inbox.splice(idx, 1);
-            saveState();
-            updateInboxBadge();
-            renderArticles();
-            openInboxModal();
-            showToast('Karya siswa berhasil diterbitkan ke halaman utama!');
+            const artId = 'art-' + Date.now();
+
+            try {
+                await db.collection('sanvalas_articles').doc(artId).set({
+                    id: artId,
+                    title: item.title,
+                    category: item.category,
+                    date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    createdAt: Date.now(),
+                    likes: 0,
+                    likedByUsers: [],
+                    commentsList: [],
+                    image: imgs[0],
+                    images: imgs,
+                    body: `Karya kiriman dari: ${item.author}\n\n${item.desc}`
+                });
+                await db.collection('sanvalas_inbox').doc(subId).delete();
+                showToast('Karya siswa berhasil diterbitkan secara online!');
+            } catch (err) {
+                showToast('Gagal menerbitkan karya: ' + err.message);
+            }
         }
 
-        function resetToDefaultData() {
-            localStorage.removeItem(STORAGE_KEY);
-            appState = JSON.parse(JSON.stringify(defaultState));
-            location.reload();
+        async function resetToDefaultData() {
+            if (!confirm('Reset tampilan Tentang Kami & Kategori ke bawaan awal?')) return;
+            appState.heroBg = defaultState.heroBg;
+            appState.polaroids = [...defaultState.polaroids];
+            appState.polaroidCaption = defaultState.polaroidCaption;
+            appState.aboutData = { ...defaultState.aboutData };
+            appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
+            await saveCloudSettings();
+            showToast('Pengaturan tampilan berhasil dikembalikan ke awal');
         }
 
         // Helpers
@@ -3331,8 +3084,11 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 box.classList.add('hidden');
-            }, 3000);
+            }, 3200);
         }
     </script>
 </body>
 </html>
+```
+
+File `index.html` sudah selesai dibuat ulang secara utuh dengan **Firebase Authentication (Google Sign-In Pop-up)** dan **Cloud Firestore Real-Time**. Silakan download atau salin seluruh isinya ke repository **GitHub** kamu agar Vercel langsung menayangkan versi online-nya.
