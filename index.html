@@ -49,7 +49,6 @@
             overflow-x: hidden;
         }
 
-        /* Polaroid styling & realistic shadows */
         .polaroid-card {
             background: #ffffff;
             padding: 8px 8px 26px 8px;
@@ -62,7 +61,6 @@
             z-index: 30 !important;
         }
 
-        /* Hide creator-only elements when in visitor mode */
         body:not(.is-creator-mode) .edit-only {
             display: none !important;
         }
@@ -70,7 +68,6 @@
             display: none !important;
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -83,7 +80,6 @@
             border-radius: 9999px;
         }
 
-        /* Subtle card hover */
         .content-card {
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
@@ -92,7 +88,6 @@
             box-shadow: 0 14px 28px -6px rgba(15, 53, 41, 0.14), 0 4px 10px -2px rgba(15, 53, 41, 0.06);
         }
 
-        /* Smooth Photo Slide Transition */
         @keyframes photoFadeIn {
             from { opacity: 0.35; transform: scale(1.02); }
             to { opacity: 1; transform: scale(1); }
@@ -101,7 +96,6 @@
             animation: photoFadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        /* Hide scrollbars on thumbnail strips */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -110,7 +104,6 @@
             scrollbar-width: none;
         }
 
-        /* Cool Click & Micro-Interaction Animations */
         .btn-interactive, button, .cat-pill, .nav-link {
             position: relative;
             overflow: hidden;
@@ -120,7 +113,6 @@
             transform: scale(0.93) !important;
         }
 
-        /* Click Ripple Wave Effect */
         .click-ripple {
             position: absolute;
             border-radius: 9999px;
@@ -137,7 +129,6 @@
             }
         }
 
-        /* Modal Pop Entrance Animation */
         @keyframes modalPopIn {
             0% {
                 opacity: 0;
@@ -152,7 +143,6 @@
             animation: modalPopIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        /* Heart Like Pop & Floating Particle Burst */
         @keyframes heartBeatPop {
             0% { transform: scale(1); }
             35% { transform: scale(1.45) rotate(-8deg); }
@@ -193,52 +183,138 @@
                     <i class="fa-solid fa-user-astronaut"></i> Mode Tim Kreatif
                 </span>
                 <span class="text-emerald-100 text-xs hidden md:inline">Tersambung Cloud Firestore: Semua perubahan langsung tersimpan online untuk semua pengunjung.</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="openAddArticleModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-plus"></i> Posting Konten Baru
+                </button>
+                <button onclick="openCategoryManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
+                    <i class="fa-solid fa-tags"></i> + Kategori
+                </button>
+                <button onclick="openLogoManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
+                    <i class="fa-solid fa-shield-halved text-amber-300"></i> Upload Logo Asli
+                </button>
+                <button onclick="openPolaroidManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
+                    <i class="fa-solid fa-images"></i> Foto Atas & Background
+                </button>
+                <button onclick="openAboutEditorModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
+                    <i class="fa-solid fa-circle-info"></i> Edit Tentang Kami
+                </button>
+                <button onclick="openInboxModal()" class="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-inbox"></i> Kiriman Siswa (<span id="inboxCountBadge">0</span>)
+                </button>
+                <button onclick="openAccessGuideModal()" class="bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50" title="Lihat Link Khusus Tim vs Link Pengunjung">
+                    <i class="fa-solid fa-link"></i> Link Akses
+                </button>
+                <button onclick="resetToDefaultData()" class="bg-white/10 hover:bg-rose-700 text-white/80 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition" title="Reset Tampilan Awal">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+                <button onclick="logoutCreatorMode()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-1">
+                    <i class="fa-solid fa-right-from-bracket"></i> Keluar ke Mode Pengunjung
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- NAVBAR -->
+    <!-- ========================================== -->
+    <header class="bg-sanvalas-900 text-white border-b border-white/10 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             <!-- Brand Logo (MTsN 14 Paling Kiri + OSIS MTsN 14 di Kanannya) -->
             <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda'))" class="flex items-center gap-2.5 group shrink-0">
                 <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-xl border border-white/15 shadow-xs">
-                    <!-- Logo 1 (Paling Kiri): MTsN 14 Jakarta Timur (Foto 5) -->
-                    <svg viewBox="0 0 100 110" class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-300 group-hover:scale-105" aria-label="Logo MTsN 14 Jakarta Timur">
-                        <!-- Perisai Biru & Kuning -->
-                        <path d="M50 5 C70 15, 88 18, 92 20 C93 58, 78 82, 50 94 C22 82, 7 58, 8 20 C12 18, 30 15, 50 5 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
-                        <!-- Teks MTs N 14 -->
-                        <text x="50" y="30" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="900" font-size="13.5">MTs N 14</text>
-                        <!-- Padi & Kapas -->
-                        <path d="M36 74 C21 66, 17 48, 26 33" fill="none" stroke="#eab308" stroke-width="3.2" stroke-linecap="round"/>
-                        <path d="M64 74 C79 66, 83 48, 74 33" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="4 3"/>
-                        <!-- Tugu Monas -->
-                        <polygon points="48,37 52,37 54,67 46,67" fill="#f8fafc"/>
-                        <polygon points="41,67 59,67 56,72 44,72" fill="#d97706"/>
-                        <polygon points="50,31 52.5,36 47.5,36" fill="#f59e0b"/>
-                        <!-- Kotak SMART -->
-                        <rect x="39" y="72" width="22" height="8" rx="1.5" fill="#fde047" stroke="#0f172a" stroke-width="1"/>
-                        <text x="50" y="78" text-anchor="middle" fill="#0f172a" font-family="sans-serif" font-weight="900" font-size="5">SMART</text>
-                        <!-- Pita Bawah -->
-                        <path d="M14 86 Q50 104 86 86 L82 96 Q50 110 18 96 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1.5"/>
-                        <text x="50" y="99" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="800" font-size="6.2">JAKARTA TIMUR</text>
-                    </svg>
+                    <!-- Logo 1 (Paling Kiri): MTsN 14 Jakarta Timur -->
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                        <img id="navLogoMtsImg" src="" alt="Logo MTsN 14 Jakarta Timur" class="hidden w-full h-full object-contain rounded-sm">
+                        <svg id="navLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo MTsN 14 Jakarta Timur">
+                            <!-- Perisai Biru Terang dengan Outline Kuning -->
+                            <path d="M60 6 C82 17, 102 21, 108 23 C109 68, 92 96, 60 110 C28 96, 11 68, 12 23 C18 21, 38 17, 60 6 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                            <!-- Teks MTs N 14 -->
+                            <text x="60" y="34" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="16.5" letter-spacing="0.5">MTs N 14</text>
+                            <!-- Tangkai Padi (Kiri) -->
+                            <path d="M48 92 C29 83, 22 61, 33 41" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
+                            <g fill="#eab308" stroke="#1e293b" stroke-width="0.9">
+                                <ellipse cx="30" cy="46" rx="2.6" ry="5" transform="rotate(-25 30 46)"/>
+                                <ellipse cx="27" cy="54" rx="2.6" ry="5" transform="rotate(-15 27 54)"/>
+                                <ellipse cx="26" cy="63" rx="2.6" ry="5" transform="rotate(-5 26 63)"/>
+                                <ellipse cx="28" cy="72" rx="2.6" ry="5" transform="rotate(15 28 72)"/>
+                                <ellipse cx="33" cy="80" rx="2.6" ry="5" transform="rotate(30 33 80)"/>
+                                <ellipse cx="41" cy="86" rx="2.6" ry="5" transform="rotate(45 41 86)"/>
+                            </g>
+                            <!-- Tangkai Kapas (Kanan) -->
+                            <path d="M72 92 C91 83, 98 61, 87 41" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round"/>
+                            <g fill="#ffffff" stroke="#1e293b" stroke-width="1.1">
+                                <circle cx="88" cy="45" r="3.8"/>
+                                <circle cx="92" cy="54" r="4"/>
+                                <circle cx="93" cy="63" r="4"/>
+                                <circle cx="90" cy="72" r="4"/>
+                                <circle cx="84" cy="80" r="3.8"/>
+                                <circle cx="76" cy="86" r="3.6"/>
+                            </g>
+                            <!-- Tugu Monas di Tengah -->
+                            <polygon points="58,44 62,44 64,79 56,79" fill="#f1f5f9" stroke="#94a3b8" stroke-width="0.7"/>
+                            <polygon points="48,79 72,79 68,84 52,84" fill="#d97706" stroke="#92400e" stroke-width="0.7"/>
+                            <rect x="57" y="42" width="6" height="3" fill="#cbd5e1"/>
+                            <path d="M60 35 C62 38, 62 41, 60 42 C58 41, 58 38, 60 35 Z" fill="#f59e0b"/>
+                            <!-- Kotak SMART di Tengah Bawah -->
+                            <rect x="48" y="85" width="24" height="10" rx="2" fill="#fde047" stroke="#0f172a" stroke-width="1.4"/>
+                            <text x="60" y="92" text-anchor="middle" fill="#14532d" font-family="sans-serif" font-weight="900" font-size="6">SMART</text>
+                            <!-- Pita Biru Tua JAKARTA TIMUR -->
+                            <path d="M18 96 L12 106 L24 108 L22 100 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1"/>
+                            <path d="M102 96 L108 106 L96 108 L98 100 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1"/>
+                            <path d="M21 101 Q60 120 99 101 L95 113 Q60 130 25 113 Z" fill="#1e40af" stroke="#fde047" stroke-width="1.5"/>
+                            <text x="60" y="116" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="7.3" letter-spacing="0.4">JAKARTA TIMUR</text>
+                        </svg>
+                    </div>
 
-                    <!-- Logo 2 (Kanannya): OSIS MTsN 14 (Foto 4) -->
-                    <svg viewBox="0 0 100 110" class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-300 group-hover:scale-105" aria-label="Logo OSIS MTsN 14">
-                        <defs>
-                            <clipPath id="osisShieldClipNav">
-                                <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z"/>
-                            </clipPath>
-                        </defs>
-                        <g clip-path="url(#osisShieldClipNav)">
-                            <rect x="0" y="0" width="100" height="110" fill="#ffffff"/>
-                            <polygon points="0,0 100,0 0,105" fill="#b91c1c"/>
-                        </g>
-                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#ffffff" stroke-width="4.5"/>
-                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#1e293b" stroke-width="1.5"/>
-                        <!-- Sayap Biru & Pentagon Kemenag Hijau -->
-                        <path d="M22 36 Q35 46 50 48 Q65 46 78 36 Q72 56 50 64 Q28 56 22 36 Z" fill="#0284c7"/>
-                        <polygon points="50,33 65,44 59,61 41,61 35,44" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
-                        <circle cx="50" cy="40" r="2.2" fill="#fde047"/>
-                        <rect x="44" y="45" width="12" height="8" rx="1" fill="#ffffff"/>
-                        <!-- Rantai & SMART -->
-                        <ellipse cx="50" cy="79" rx="14" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5"/>
-                        <text x="50" y="91" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="8.5">SMART</text>
-                    </svg>
+                    <!-- Logo 2 (Kanannya): OSIS MTsN 14 Jakarta Timur -->
+                    <div class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                        <img id="navLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
+                        <svg id="navLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo OSIS MTsN 14">
+                            <defs>
+                                <clipPath id="osisShieldClipNav">
+                                    <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z"/>
+                                </clipPath>
+                                <path id="osisTopArcNav" d="M 21,37 Q 60,21 99,37" fill="none"/>
+                            </defs>
+                            <!-- Isi Perisai Diagonal Merah-Putih -->
+                            <g clip-path="url(#osisShieldClipNav)">
+                                <rect x="0" y="0" width="120" height="132" fill="#ffffff"/>
+                                <polygon points="0,0 120,0 0,124" fill="#b91c1c"/>
+                            </g>
+                            <!-- Bingkai Perisai Putih & Garis Hitam -->
+                            <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#ffffff" stroke-width="5.5"/>
+                            <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#0f172a" stroke-width="1.8"/>
+                            <!-- Teks Melengkung OSIS MTsN 14 & JAKARTA TIMUR -->
+                            <text fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="11.2" letter-spacing="0.4">
+                                <textPath href="#osisTopArcNav" startOffset="50%" text-anchor="middle">OSIS MTsN 14</textPath>
+                            </text>
+                            <text x="60" y="39" text-anchor="middle" fill="#38bdf8" font-family="sans-serif" font-weight="800" font-size="5.6" letter-spacing="0.4">JAKARTA TIMUR</text>
+                            <!-- Sayap Biru -->
+                            <path d="M24 41 Q41 53 60 56 Q79 53 96 41 Q90 66 60 76 Q30 66 24 41 Z" fill="#0284c7"/>
+                            <path d="M51 74 L60 83 L69 74 Z" fill="#0284c7"/>
+                            <!-- Segilima Hijau Kemenag -->
+                            <polygon points="60,40 78,53 71,74 49,74 42,53" fill="#15803d" stroke="#fde047" stroke-width="1.5"/>
+                            <circle cx="60" cy="47" r="2.5" fill="#fde047"/>
+                            <rect x="53" y="53" width="14" height="10" rx="1" fill="#ffffff"/>
+                            <line x1="60" y1="53" x2="60" y2="63" stroke="#15803d" stroke-width="1"/>
+                            <rect x="52" y="66" width="16" height="4" rx="1" fill="#ffffff"/>
+                            <!-- Padi Kuning (Kanan) & Rangkaian Daun Hijau (Kiri) -->
+                            <path d="M26 60 C23 76, 33 88, 46 92" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 2"/>
+                            <path d="M94 60 C97 76, 87 88, 74 92" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+                            <!-- 5 Cincin Rantai Emas -->
+                            <g fill="none" stroke="#eab308" stroke-width="2.4">
+                                <circle cx="48" cy="95" r="4"/>
+                                <circle cx="54" cy="95" r="4"/>
+                                <circle cx="60" cy="95" r="4"/>
+                                <circle cx="66" cy="95" r="4"/>
+                                <circle cx="72" cy="95" r="4"/>
+                            </g>
+                            <!-- Teks SMART Biru -->
+                            <text x="60" y="109" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="9.5" letter-spacing="0.4">SMART</text>
+                        </svg>
+                    </div>
                 </div>
                 <div class="leading-none">
                     <div class="font-display font-extrabold text-sm sm:text-base tracking-wider uppercase">SANVALAS</div>
@@ -821,30 +897,44 @@
                     <div class="flex items-center gap-3.5">
                         <div class="flex items-center gap-1.5 px-2.5 py-2 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 shadow-lg">
                             <!-- Logo MTsN 14 Paling Kiri -->
-                            <svg viewBox="0 0 100 110" class="w-8 h-8 shrink-0">
-                                <path d="M50 5 C70 15, 88 18, 92 20 C93 58, 78 82, 50 94 C22 82, 7 58, 8 20 C12 18, 30 15, 50 5 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
-                                <text x="50" y="30" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="900" font-size="13.5">MTs N 14</text>
-                                <polygon points="48,37 52,37 54,67 46,67" fill="#f8fafc"/>
-                                <polygon points="41,67 59,67 56,72 44,72" fill="#d97706"/>
-                                <rect x="39" y="72" width="22" height="8" rx="1.5" fill="#fde047"/>
-                                <path d="M14 86 Q50 104 86 86 L82 96 Q50 110 18 96 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1.5"/>
-                            </svg>
+                            <div class="w-8 h-8 shrink-0 flex items-center justify-center">
+                                <img id="aboutLogoMtsImg" src="" alt="Logo MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
+                                <svg id="aboutLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full">
+                                    <path d="M60 6 C82 17, 102 21, 108 23 C109 68, 92 96, 60 110 C28 96, 11 68, 12 23 C18 21, 38 17, 60 6 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                                    <text x="60" y="34" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="16.5">MTs N 14</text>
+                                    <path d="M48 92 C29 83, 22 61, 33 41" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round"/>
+                                    <path d="M72 92 C91 83, 98 61, 87 41" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+                                    <polygon points="58,44 62,44 64,79 56,79" fill="#f1f5f9"/>
+                                    <polygon points="48,79 72,79 68,84 52,84" fill="#d97706"/>
+                                    <path d="M60 35 C62 38, 62 41, 60 42 C58 41, 58 38, 60 35 Z" fill="#f59e0b"/>
+                                    <rect x="48" y="85" width="24" height="10" rx="2" fill="#fde047" stroke="#0f172a" stroke-width="1.2"/>
+                                    <text x="60" y="92" text-anchor="middle" fill="#14532d" font-family="sans-serif" font-weight="900" font-size="6">SMART</text>
+                                    <path d="M21 101 Q60 120 99 101 L95 113 Q60 130 25 113 Z" fill="#1e40af" stroke="#fde047" stroke-width="1.5"/>
+                                    <text x="60" y="116" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="7.3">JAKARTA TIMUR</text>
+                                </svg>
+                            </div>
                             <!-- Logo OSIS MTsN 14 di Kanannya -->
-                            <svg viewBox="0 0 100 110" class="w-8 h-8 shrink-0">
-                                <defs>
-                                    <clipPath id="osisShieldClipAbout">
-                                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z"/>
-                                    </clipPath>
-                                </defs>
-                                <g clip-path="url(#osisShieldClipAbout)">
-                                    <rect x="0" y="0" width="100" height="110" fill="#ffffff"/>
-                                    <polygon points="0,0 100,0 0,105" fill="#b91c1c"/>
-                                </g>
-                                <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#ffffff" stroke-width="4.5"/>
-                                <path d="M22 36 Q35 46 50 48 Q65 46 78 36 Q72 56 50 64 Q28 56 22 36 Z" fill="#0284c7"/>
-                                <polygon points="50,33 65,44 59,61 41,61 35,44" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
-                                <ellipse cx="50" cy="79" rx="14" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5"/>
-                            </svg>
+                            <div class="w-8 h-8 shrink-0 flex items-center justify-center">
+                                <img id="aboutLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
+                                <svg id="aboutLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full">
+                                    <defs>
+                                        <clipPath id="osisShieldClipAbout">
+                                            <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z"/>
+                                        </clipPath>
+                                    </defs>
+                                    <g clip-path="url(#osisShieldClipAbout)">
+                                        <rect x="0" y="0" width="120" height="132" fill="#ffffff"/>
+                                        <polygon points="0,0 120,0 0,124" fill="#b91c1c"/>
+                                    </g>
+                                    <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#ffffff" stroke-width="5.5"/>
+                                    <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#0f172a" stroke-width="1.8"/>
+                                    <path d="M24 41 Q41 53 60 56 Q79 53 96 41 Q90 66 60 76 Q30 66 24 41 Z" fill="#0284c7"/>
+                                    <polygon points="60,40 78,53 71,74 49,74 42,53" fill="#15803d" stroke="#fde047" stroke-width="1.5"/>
+                                    <circle cx="60" cy="47" r="2.5" fill="#fde047"/>
+                                    <rect x="53" y="53" width="14" height="10" rx="1" fill="#ffffff"/>
+                                    <text x="60" y="109" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="9.5">SMART</text>
+                                </svg>
+                            </div>
                         </div>
                         <div>
                             <span id="aboutModalBadge" class="inline-block text-[10px] font-extrabold uppercase tracking-widest bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full mb-1">Tim Kreatif OSIS MTsN 14</span>
@@ -1048,6 +1138,75 @@
                         <i class="fa-solid fa-check"></i>
                         <span>Simpan 3 Foto Atas</span>
                     </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 9B: UPLOAD LOGO ASLI MTsN 14 & OSIS (PNG TRANSPARAN) -->
+    <!-- ========================================== -->
+    <div id="logoManagerModal" onclick="if(event.target === this) closeModal('logoManagerModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-900 text-amber-300 flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900">Pasang Gambar Logo Asli</h3>
+                        <p class="text-[11px] text-slate-500">Upload file PNG/JPG logo MTsN 14 (kiri) &amp; logo OSIS (kanan)</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('logoManagerModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveCustomBrandLogos(event)" class="space-y-4 text-xs">
+                <!-- Logo 1: MTsN 14 (Paling Kiri) -->
+                <div class="p-3.5 rounded-xl bg-sky-50/70 border border-sky-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-slate-900">1. Logo MTsN 14 Jakarta Timur (Paling Kiri)</span>
+                        <label class="bg-sky-700 hover:bg-sky-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-upload"></i> Upload File Logo MTsN 14
+                            <input type="file" accept="image/*" class="hidden" onchange="handleBrandLogoFileUpload(event, 'mts')">
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-950 border border-slate-300 flex items-center justify-center p-1.5 shrink-0">
+                            <img id="previewLogoMtsModal" src="" class="max-w-full max-h-full object-contain" alt="Preview MTsN 14">
+                        </div>
+                        <input id="inputLogoMtsUrl" type="text" oninput="syncBrandLogoPreview('mts')" placeholder="Atau tempel URL / nama file (misal: logo-mtsn14.png)..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 text-xs focus:outline-none focus:border-emerald-700">
+                    </div>
+                </div>
+
+                <!-- Logo 2: OSIS MTsN 14 (Di Kanannya) -->
+                <div class="p-3.5 rounded-xl bg-rose-50/60 border border-rose-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-slate-900">2. Logo OSIS MTsN 14 (Di Sebelah Kanannya)</span>
+                        <label class="bg-rose-700 hover:bg-rose-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-upload"></i> Upload File Logo OSIS
+                            <input type="file" accept="image/*" class="hidden" onchange="handleBrandLogoFileUpload(event, 'osis')">
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-950 border border-slate-300 flex items-center justify-center p-1.5 shrink-0">
+                            <img id="previewLogoOsisModal" src="" class="max-w-full max-h-full object-contain" alt="Preview OSIS">
+                        </div>
+                        <input id="inputLogoOsisUrl" type="text" oninput="syncBrandLogoPreview('osis')" placeholder="Atau tempel URL / nama file (misal: logo-osis.png)..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 text-xs focus:outline-none focus:border-emerald-700">
+                    </div>
+                </div>
+
+                <div class="pt-1 flex items-center justify-between gap-2">
+                    <button type="button" onclick="resetBrandLogosToVector()" class="text-slate-500 hover:text-rose-600 font-bold underline">Gunakan Logo Bawaan</button>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="closeModal('logoManagerModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
+                        <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Simpan Logo Online</span>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -1564,30 +1723,44 @@
             <div class="flex items-center gap-2.5">
                 <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-xl border border-white/15">
                     <!-- Logo MTsN 14 Paling Kiri -->
-                    <svg viewBox="0 0 100 110" class="w-6 h-6 shrink-0" aria-label="Logo MTsN 14 Jakarta Timur">
-                        <path d="M50 5 C70 15, 88 18, 92 20 C93 58, 78 82, 50 94 C22 82, 7 58, 8 20 C12 18, 30 15, 50 5 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
-                        <text x="50" y="30" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="900" font-size="13.5">MTs N 14</text>
-                        <polygon points="48,37 52,37 54,67 46,67" fill="#f8fafc"/>
-                        <polygon points="41,67 59,67 56,72 44,72" fill="#d97706"/>
-                        <rect x="39" y="72" width="22" height="8" rx="1.5" fill="#fde047"/>
-                        <path d="M14 86 Q50 104 86 86 L82 96 Q50 110 18 96 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1.5"/>
-                    </svg>
+                    <div class="w-6 h-6 shrink-0 flex items-center justify-center">
+                        <img id="footerLogoMtsImg" src="" alt="Logo MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
+                        <svg id="footerLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo MTsN 14 Jakarta Timur">
+                            <path d="M60 6 C82 17, 102 21, 108 23 C109 68, 92 96, 60 110 C28 96, 11 68, 12 23 C18 21, 38 17, 60 6 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                            <text x="60" y="34" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="16.5">MTs N 14</text>
+                            <path d="M48 92 C29 83, 22 61, 33 41" fill="none" stroke="#eab308" stroke-width="3.5" stroke-linecap="round"/>
+                            <path d="M72 92 C91 83, 98 61, 87 41" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+                            <polygon points="58,44 62,44 64,79 56,79" fill="#f1f5f9"/>
+                            <polygon points="48,79 72,79 68,84 52,84" fill="#d97706"/>
+                            <path d="M60 35 C62 38, 62 41, 60 42 C58 41, 58 38, 60 35 Z" fill="#f59e0b"/>
+                            <rect x="48" y="85" width="24" height="10" rx="2" fill="#fde047" stroke="#0f172a" stroke-width="1.2"/>
+                            <text x="60" y="92" text-anchor="middle" fill="#14532d" font-family="sans-serif" font-weight="900" font-size="6">SMART</text>
+                            <path d="M21 101 Q60 120 99 101 L95 113 Q60 130 25 113 Z" fill="#1e40af" stroke="#fde047" stroke-width="1.5"/>
+                            <text x="60" y="116" text-anchor="middle" fill="#fde047" font-family="Georgia, serif" font-weight="900" font-size="7.3">JAKARTA TIMUR</text>
+                        </svg>
+                    </div>
                     <!-- Logo OSIS MTsN 14 di Kanannya -->
-                    <svg viewBox="0 0 100 110" class="w-6 h-6 shrink-0" aria-label="Logo OSIS MTsN 14">
-                        <defs>
-                            <clipPath id="osisShieldClipFooter">
-                                <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z"/>
-                            </clipPath>
-                        </defs>
-                        <g clip-path="url(#osisShieldClipFooter)">
-                            <rect x="0" y="0" width="100" height="110" fill="#ffffff"/>
-                            <polygon points="0,0 100,0 0,105" fill="#b91c1c"/>
-                        </g>
-                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#ffffff" stroke-width="4.5"/>
-                        <path d="M22 36 Q35 46 50 48 Q65 46 78 36 Q72 56 50 64 Q28 56 22 36 Z" fill="#0284c7"/>
-                        <polygon points="50,33 65,44 59,61 41,61 35,44" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
-                        <ellipse cx="50" cy="79" rx="14" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5"/>
-                    </svg>
+                    <div class="w-6 h-6 shrink-0 flex items-center justify-center">
+                        <img id="footerLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
+                        <svg id="footerLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo OSIS MTsN 14">
+                            <defs>
+                                <clipPath id="osisShieldClipFooter">
+                                    <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z"/>
+                                </clipPath>
+                            </defs>
+                            <g clip-path="url(#osisShieldClipFooter)">
+                                <rect x="0" y="0" width="120" height="132" fill="#ffffff"/>
+                                <polygon points="0,0 120,0 0,124" fill="#b91c1c"/>
+                            </g>
+                            <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#ffffff" stroke-width="5.5"/>
+                            <path d="M60 7 C84 20, 104 23, 109 25 C109 73, 90 102, 60 122 C30 102, 11 73, 11 25 C16 23, 36 20, 60 7 Z" fill="none" stroke="#0f172a" stroke-width="1.8"/>
+                            <path d="M24 41 Q41 53 60 56 Q79 53 96 41 Q90 66 60 76 Q30 66 24 41 Z" fill="#0284c7"/>
+                            <polygon points="60,40 78,53 71,74 49,74 42,53" fill="#15803d" stroke="#fde047" stroke-width="1.5"/>
+                            <circle cx="60" cy="47" r="2.5" fill="#fde047"/>
+                            <rect x="53" y="53" width="14" height="10" rx="1" fill="#ffffff"/>
+                            <text x="60" y="109" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="9.5">SMART</text>
+                        </svg>
+                    </div>
                 </div>
                 <div class="leading-tight">
                     <div class="font-display font-bold tracking-wider text-xs uppercase">SANVALAS STORY</div>
@@ -1640,7 +1813,6 @@
         let pendingAfterLoginAction = null;
         let currentGoogleUser = null;
 
-        // Global Click Ripple & Animation Initializer
         document.addEventListener('click', (e) => {
             const targetBtn = e.target.closest('button, .cat-pill, a.nav-link');
             if (targetBtn) {
@@ -1681,7 +1853,7 @@
         }
 
         // ==========================================
-        // FIREBASE GOOGLE AUTHENTICATION (POP-UP GOOGLE ASLI)
+        // FIREBASE GOOGLE AUTHENTICATION (ROBUST & SANDBOX SAFE)
         // ==========================================
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -1742,6 +1914,38 @@
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
 
+            // Cek apakah berjalan di lingkungan blob/iframe sandbox
+            const isSandbox = window.location.protocol === 'blob:' || window.location.protocol === 'about:';
+
+            if (isSandbox) {
+                // Berikan akun demo profesional untuk pratinjau sandbox / uji coba tanpa error
+                const demoUser = {
+                    uid: 'sandbox-user-' + Date.now(),
+                    name: 'Nabila Azzahra (Siswa)',
+                    email: 'nabila.azzahra@mtsn14.sch.id',
+                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80'
+                };
+                closeModal('googleLoginModal');
+                currentGoogleUser = demoUser;
+                updateGoogleNavbarUI();
+                if (activeReadingArticleId) {
+                    const art = appState.articles.find(a => a.id === activeReadingArticleId);
+                    if (art) {
+                        renderCommentGoogleBanner();
+                        updateReaderLikeButtonUI(art);
+                    }
+                }
+                renderArticles();
+                showToast(`Berhasil masuk sebagai ${demoUser.name} (Mode Preview Sandbox)`);
+                if (typeof pendingAfterLoginAction === 'function') {
+                    const fn = pendingAfterLoginAction;
+                    pendingAfterLoginAction = null;
+                    fn();
+                }
+                return;
+            }
+
+            // Saat di-publish di Vercel/GitHub Pages, gunakan Popup resmi Google Auth
             auth.signInWithPopup(provider)
                 .then((result) => {
                     closeModal('googleLoginModal');
@@ -1757,15 +1961,26 @@
                     console.error('Google Sign-In Error:', error);
                     if (error.code === 'auth/unauthorized-domain') {
                         showToast('Domain web ini belum didaftarkan di Firebase Authentication > Settings > Authorized domains!');
-                    } else if (error.code !== 'auth/popup-closed-by-user') {
-                        showToast('Gagal login Google: ' + error.message);
+                    } else {
+                        // Fallback ke signInWithRedirect jika popup diblokir browser
+                        auth.signInWithRedirect(provider).catch(err => {
+                            showToast('Gagal login Google: ' + err.message);
+                        });
                     }
                 });
         }
 
         function logoutGoogleUser() {
             auth.signOut().then(() => {
+                currentGoogleUser = null;
+                updateGoogleNavbarUI();
+                renderArticles();
                 showToast('Anda telah keluar dari akun Google');
+            }).catch(() => {
+                currentGoogleUser = null;
+                updateGoogleNavbarUI();
+                renderArticles();
+                showToast('Anda telah keluar');
             });
         }
 
@@ -1780,6 +1995,8 @@
         // ==========================================
         const defaultState = {
             heroBg: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=80',
+            logoMtsUrl: '',
+            logoOsisUrl: '',
             polaroids: [
                 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=500&q=80',
                 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80',
@@ -1826,7 +2043,6 @@
             return art.image ? [art.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'];
         }
 
-        // Kompresi gambar otomatis jika diunggah dari galeri HP/laptop agar ringan & cepat disimpan di Cloud Firestore
         function compressImageFileToDataURL(file, maxWidth = 1100, quality = 0.78) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -1853,13 +2069,130 @@
             });
         }
 
+        // Render Custom Brand Logos (MTsN 14 paling kiri + OSIS MTsN 14 di kanannya)
+        function renderBrandLogosUI() {
+            const mtsUrl = (appState.logoMtsUrl || '').trim();
+            const osisUrl = (appState.logoOsisUrl || '').trim();
+
+            const pairs = [
+                { imgId: 'navLogoMtsImg', svgId: 'navLogoMtsSvg', url: mtsUrl },
+                { imgId: 'navLogoOsisImg', svgId: 'navLogoOsisSvg', url: osisUrl },
+                { imgId: 'footerLogoMtsImg', svgId: 'footerLogoMtsSvg', url: mtsUrl },
+                { imgId: 'footerLogoOsisImg', svgId: 'footerLogoOsisSvg', url: osisUrl },
+                { imgId: 'aboutLogoMtsImg', svgId: 'aboutLogoMtsSvg', url: mtsUrl },
+                { imgId: 'aboutLogoOsisImg', svgId: 'aboutLogoOsisSvg', url: osisUrl }
+            ];
+
+            pairs.forEach(item => {
+                const imgEl = document.getElementById(item.imgId);
+                const svgEl = document.getElementById(item.svgId);
+                if (!imgEl || !svgEl) return;
+
+                if (item.url) {
+                    imgEl.src = item.url;
+                    imgEl.classList.remove('hidden');
+                    svgEl.classList.add('hidden');
+                    imgEl.onerror = () => {
+                        imgEl.classList.add('hidden');
+                        svgEl.classList.remove('hidden');
+                    };
+                } else {
+                    imgEl.classList.add('hidden');
+                    svgEl.classList.remove('hidden');
+                }
+            });
+        }
+
+        function openLogoManagerModal() {
+            const mtsInput = document.getElementById('inputLogoMtsUrl');
+            const osisInput = document.getElementById('inputLogoOsisUrl');
+            if (mtsInput) mtsInput.value = appState.logoMtsUrl || '';
+            if (osisInput) osisInput.value = appState.logoOsisUrl || '';
+            syncBrandLogoPreview('mts');
+            syncBrandLogoPreview('osis');
+            openModal('logoManagerModal');
+        }
+
+        function syncBrandLogoPreview(which) {
+            const input = document.getElementById(which === 'mts' ? 'inputLogoMtsUrl' : 'inputLogoOsisUrl');
+            const prev = document.getElementById(which === 'mts' ? 'previewLogoMtsModal' : 'previewLogoOsisModal');
+            if (!input || !prev) return;
+            const val = input.value.trim();
+            prev.src = val || (which === 'mts'
+                ? 'https://placehold.co/100x100/0088ff/fde047?text=MTsN+14'
+                : 'https://placehold.co/100x100/b91c1c/ffffff?text=OSIS+14');
+        }
+
+        function handleBrandLogoFileUpload(event, which) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            // Simpan file asli (atau kompres ke PNG transparan maks 240px agar pinggiran logo tetap bersih)
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 240;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
+                        }
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    const pngDataUrl = canvas.toDataURL('image/png');
+                    const inputId = which === 'mts' ? 'inputLogoMtsUrl' : 'inputLogoOsisUrl';
+                    document.getElementById(inputId).value = pngDataUrl;
+                    syncBrandLogoPreview(which);
+                    showToast(`Logo ${which === 'mts' ? 'MTsN 14' : 'OSIS MTsN 14'} siap disimpan!`);
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveCustomBrandLogos(e) {
+            e.preventDefault();
+            appState.logoMtsUrl = document.getElementById('inputLogoMtsUrl').value.trim();
+            appState.logoOsisUrl = document.getElementById('inputLogoOsisUrl').value.trim();
+            try {
+                await saveCloudSettings();
+                renderBrandLogosUI();
+                closeModal('logoManagerModal');
+                showToast('Logo MTsN 14 & OSIS berhasil disimpan online!');
+            } catch (err) {
+                showToast('Gagal menyimpan logo: ' + err.message);
+            }
+        }
+
+        async function resetBrandLogosToVector() {
+            appState.logoMtsUrl = '';
+            appState.logoOsisUrl = '';
+            document.getElementById('inputLogoMtsUrl').value = '';
+            document.getElementById('inputLogoOsisUrl').value = '';
+            syncBrandLogoPreview('mts');
+            syncBrandLogoPreview('osis');
+            await saveCloudSettings();
+            renderBrandLogosUI();
+            showToast('Kembali menggunakan emblem vektor bawaan');
+        }
+
         // Sinkronisasi Real-Time dengan Firebase Cloud Firestore
         function initCloudFirestoreSync() {
-            // 1. Pengaturan Web (Background Hero, 3 Polaroid, Tentang Kami, Kategori)
             db.collection('sanvalas_meta').doc('settings').onSnapshot((docSnap) => {
                 if (docSnap.exists) {
                     const data = docSnap.data();
                     appState.heroBg = data.heroBg || defaultState.heroBg;
+                    appState.logoMtsUrl = data.logoMtsUrl || '';
+                    appState.logoOsisUrl = data.logoOsisUrl || '';
                     appState.polaroids = Array.isArray(data.polaroids) && data.polaroids.length === 3 ? data.polaroids : [...defaultState.polaroids];
                     appState.polaroidCaption = data.polaroidCaption || defaultState.polaroidCaption;
                     appState.aboutData = data.aboutData ? { ...defaultState.aboutData, ...data.aboutData } : { ...defaultState.aboutData };
@@ -1867,12 +2200,15 @@
                 } else {
                     db.collection('sanvalas_meta').doc('settings').set({
                         heroBg: appState.heroBg,
+                        logoMtsUrl: appState.logoMtsUrl,
+                        logoOsisUrl: appState.logoOsisUrl,
                         polaroids: appState.polaroids,
                         polaroidCaption: appState.polaroidCaption,
                         aboutData: appState.aboutData,
                         categories: appState.categories
                     }).catch(err => console.warn('Init settings err:', err));
                 }
+                renderBrandLogosUI();
                 renderHeroPolaroids();
                 renderAboutSectionUI();
                 renderCategoriesBar();
@@ -1882,13 +2218,13 @@
                 }
             }, (error) => {
                 console.error('Firestore settings error:', error);
+                renderBrandLogosUI();
                 renderHeroPolaroids();
                 renderAboutSectionUI();
                 renderCategoriesBar();
                 syncCategoryDropdowns();
             });
 
-            // 2. Postingan Artikel Real-Time
             db.collection('sanvalas_articles').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
                 appState.articles = snapshot.docs.map(doc => {
                     const a = doc.data();
@@ -1921,7 +2257,6 @@
                 renderArticles();
             });
 
-            // 3. Kotak Masuk Kiriman Siswa Real-Time
             db.collection('sanvalas_inbox').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
                 appState.inbox = snapshot.docs.map(doc => ({
                     ...doc.data(),
@@ -1939,6 +2274,8 @@
         function saveCloudSettings() {
             return db.collection('sanvalas_meta').doc('settings').set({
                 heroBg: appState.heroBg,
+                logoMtsUrl: appState.logoMtsUrl || '',
+                logoOsisUrl: appState.logoOsisUrl || '',
                 polaroids: appState.polaroids,
                 polaroidCaption: appState.polaroidCaption,
                 aboutData: appState.aboutData,
@@ -1946,7 +2283,6 @@
             }, { merge: true });
         }
 
-        // Switch between OSIS MTsN 14 & MTsN 14 Jakarta in Sidebar
         function switchSidebarSocialTab(tab) {
             const osisBtn = document.getElementById('tabSidebarOsisBtn');
             const mtsBtn = document.getElementById('tabSidebarMtsBtn');
@@ -1971,9 +2307,9 @@
             openModal('allSocialMediaModal');
         }
 
-        // Initialize Page
         window.addEventListener('DOMContentLoaded', () => {
             updateGoogleNavbarUI();
+            renderBrandLogosUI();
             renderHeroPolaroids();
             renderAboutSectionUI();
             renderCategoriesBar();
@@ -2035,7 +2371,6 @@
             showToast('Link postingan berhasil disalin!');
         }
 
-        // Render 3 Hero Polaroid Photos, Caption & Background + Interactive Carousel
         let polaroidOrder = [0, 1, 2];
         let polaroidSlideshowTimer = null;
 
@@ -2174,7 +2509,6 @@
             }
         }
 
-        // Render & Edit "Tentang Kami" Section
         function renderAboutSectionUI() {
             const about = appState.aboutData || defaultState.aboutData;
             const cardTitle = document.getElementById('aboutCardTitle');
@@ -2222,7 +2556,6 @@
             }
         }
 
-        // Dynamic Categories Management
         function getCategoriesList() {
             if (!Array.isArray(appState.categories) || appState.categories.length === 0) {
                 appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
@@ -2337,7 +2670,6 @@
             }
         }
 
-        // Triple-click secret on Footer copyright
         let footerClickCount = 0;
         let footerClickTimer = null;
         function handleSecretFooterClick() {
@@ -2412,6 +2744,7 @@
             closeModal('inboxModal');
             closeModal('accessGuideModal');
             closeModal('polaroidManagerModal');
+            closeModal('logoManagerModal');
             closeModal('categoryManagerModal');
             setAppMode('preview');
         }
@@ -2500,7 +2833,6 @@
             }
         }
 
-        // Render Articles Grid
         function renderArticles() {
             const grid = document.getElementById('articlesGrid');
             const filtered = appState.articles.filter(art => {
@@ -2633,7 +2965,6 @@
             `}).join('');
         }
 
-        // Reader & Multi-Photo Carousel + Active Comments Modal
         function openArticleReader(id, initialSlideIdx = 0) {
             const art = appState.articles.find(a => a.id === id);
             if (!art) return;
@@ -2987,7 +3318,6 @@
             }
         }
 
-        // Category Filter & Search
         function setActiveNavIndicator(linkEl) {
             const navLinks = document.querySelectorAll('#desktopMainNav .nav-link');
             navLinks.forEach(el => {
@@ -3077,7 +3407,6 @@
             showToast(msg);
         }
 
-        // Add / Edit Article Modal (Cloud Firestore)
         function openAddArticleModal() {
             syncCategoryDropdowns();
             document.getElementById('editorModalTitle').textContent = 'Posting Konten Baru';
@@ -3209,7 +3538,6 @@
             }
         }
 
-        // Student Work Submission & Inbox (Cloud Firestore)
         function openSubmitWorkModal(e) {
             if (e) e.stopPropagation();
             const user = getCurrentGoogleUser();
@@ -3276,7 +3604,6 @@
             }
         }
 
-        // Kirim Prestasi Siswa (Kategori Otomatis Prestasi)
         function openSubmitPrestasiModal(e) {
             if (e) e.stopPropagation();
             const user = getCurrentGoogleUser();
@@ -3409,15 +3736,17 @@
         async function resetToDefaultData() {
             if (!confirm('Reset tampilan Tentang Kami & Kategori ke bawaan awal?')) return;
             appState.heroBg = defaultState.heroBg;
+            appState.logoMtsUrl = '';
+            appState.logoOsisUrl = '';
             appState.polaroids = [...defaultState.polaroids];
             appState.polaroidCaption = defaultState.polaroidCaption;
             appState.aboutData = { ...defaultState.aboutData };
             appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
             await saveCloudSettings();
+            renderBrandLogosUI();
             showToast('Pengaturan tampilan berhasil dikembalikan ke awal');
         }
 
-        // Helpers
         function openAboutModal(e) {
             if (e) e.stopPropagation();
             openModal('aboutModal');
