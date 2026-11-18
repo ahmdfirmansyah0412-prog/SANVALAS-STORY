@@ -590,44 +590,88 @@
                     <div>
                         <h3 class="font-hand text-3xl font-bold text-slate-900 leading-none" data-edit-key="followHeading">Follow Us!</h3>
                         <p class="text-xs text-slate-600 mt-1 leading-relaxed" data-edit-key="followSub">
-                            Dapatkan update terbaru dari kami di media sosial.
+                            Dapatkan update terbaru dari OSIS &amp; MTsN 14 Jakarta.
                         </p>
                     </div>
 
-                    <div class="space-y-3">
-                        <a href="#medsos" onclick="showToast('Membuka Instagram @sanvalasstory')" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/80 transition group">
+                    <!-- Tab Switcher: OSIS MTsN 14 vs MTsN 14 Jakarta -->
+                    <div class="grid grid-cols-2 gap-1 bg-white/80 p-1 rounded-xl border border-slate-200/80 text-[11px] font-extrabold">
+                        <button type="button" id="tabSidebarOsisBtn" onclick="switchSidebarSocialTab('osis')" class="py-1.5 px-2 rounded-lg bg-emerald-900 text-white shadow-2xs transition">
+                            OSIS MTsN 14
+                        </button>
+                        <button type="button" id="tabSidebarMtsBtn" onclick="switchSidebarSocialTab('mts')" class="py-1.5 px-2 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                            MTsN 14 JKT
+                        </button>
+                    </div>
+
+                    <!-- Daftar Akun OSIS MTsN 14 -->
+                    <div id="sidebarSocialListOsis" class="space-y-2.5">
+                        <a href="https://www.instagram.com/osismtsn14jkt/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
                             <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
                                 <i class="fa-brands fa-instagram text-lg"></i>
                             </div>
-                            <div class="leading-tight">
-                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-pink-600 transition">Instagram</div>
-                                <div class="text-[11px] text-slate-500" data-edit-key="igHandle">@sanvalasstory</div>
+                            <div class="leading-tight min-w-0">
+                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-pink-600 transition">Instagram OSIS</div>
+                                <div class="text-[11px] text-slate-500 truncate">@osismtsn14jkt</div>
                             </div>
                         </a>
 
-                        <a href="#medsos" onclick="showToast('Membuka TikTok @sanvalasstory')" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/80 transition group">
+                        <a href="https://www.tiktok.com/@osismpkmtsn14jkt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
                             <div class="w-9 h-9 rounded-xl bg-slate-950 text-white flex items-center justify-center shrink-0 shadow-sm">
                                 <i class="fa-brands fa-tiktok text-base"></i>
                             </div>
-                            <div class="leading-tight">
-                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-slate-700 transition">TikTok</div>
-                                <div class="text-[11px] text-slate-500" data-edit-key="tiktokHandle">@sanvalasstory</div>
+                            <div class="leading-tight min-w-0">
+                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-slate-700 transition">TikTok OSIS MPK</div>
+                                <div class="text-[11px] text-slate-500 truncate">@osismpkmtsn14jkt</div>
                             </div>
                         </a>
 
-                        <a href="#medsos" onclick="showToast('Membuka YouTube Sanvalas Story')" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/80 transition group">
+                        <a href="https://www.youtube.com/@OSISMTsN14" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
                             <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-sm">
                                 <i class="fa-brands fa-youtube text-base"></i>
                             </div>
-                            <div class="leading-tight">
-                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-red-600 transition">YouTube</div>
-                                <div class="text-[11px] text-slate-500" data-edit-key="ytHandle">Sanvalas Story</div>
+                            <div class="leading-tight min-w-0">
+                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-red-600 transition">YouTube OSIS</div>
+                                <div class="text-[11px] text-slate-500 truncate">@OSISMTsN14</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Daftar Akun Resmi MTsN 14 Jakarta -->
+                    <div id="sidebarSocialListMts" class="hidden space-y-2.5">
+                        <a href="https://www.instagram.com/mtsnegeri14jakarta/?hl=en" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
+                            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-brands fa-instagram text-lg"></i>
+                            </div>
+                            <div class="leading-tight min-w-0">
+                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-pink-600 transition">Instagram MTsN 14</div>
+                                <div class="text-[11px] text-slate-500 truncate">@mtsnegeri14jakarta</div>
+                            </div>
+                        </a>
+
+                        <a href="https://www.tiktok.com/@mtsnegeri14jakarta" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
+                            <div class="w-9 h-9 rounded-xl bg-slate-950 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-brands fa-tiktok text-base"></i>
+                            </div>
+                            <div class="leading-tight min-w-0">
+                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-slate-700 transition">TikTok MTsN 14</div>
+                                <div class="text-[11px] text-slate-500 truncate">@mtsnegeri14jakarta</div>
+                            </div>
+                        </a>
+
+                        <a href="https://www.youtube.com/@mtsnegeri14jakarta" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 p-2 rounded-xl hover:bg-white/90 transition group">
+                            <div class="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-brands fa-youtube text-base"></i>
+                            </div>
+                            <div class="leading-tight min-w-0">
+                                <div class="text-xs font-extrabold text-slate-900 group-hover:text-red-600 transition">YouTube MTsN 14</div>
+                                <div class="text-[11px] text-slate-500 truncate">@mtsnegeri14jakarta</div>
                             </div>
                         </a>
                     </div>
 
                     <div class="pt-1 border-t border-slate-300/60">
-                        <button onclick="showToast('Menampilkan daftar lengkap tautan media sosial MTsN 14')" class="text-xs font-bold text-slate-700 hover:text-emerald-900 flex items-center gap-1.5 transition">
+                        <button type="button" onclick="openAllSocialMediaModal()" class="text-xs font-bold text-slate-700 hover:text-emerald-900 flex items-center gap-1.5 transition cursor-pointer">
                             <span>Lihat Semua Media Sosial</span>
                             <i class="fa-solid fa-arrow-right text-[11px]"></i>
                         </button>
@@ -1069,6 +1113,142 @@
                         <span>Salin Link</span>
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 12: SEMUA MEDIA SOSIAL RESMI (MTsN 14 JAKARTA vs OSIS MTsN 14) -->
+    <!-- ========================================== -->
+    <div id="allSocialMediaModal" onclick="if(event.target === this) closeModal('allSocialMediaModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="modal-card-pop bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-sanvalas-950 via-sanvalas-800 to-emerald-700 text-white p-6 flex items-start justify-between gap-4">
+                <div>
+                    <span class="inline-block text-[10px] font-extrabold uppercase tracking-widest bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full mb-1.5">Kanal Resmi Sekolah &amp; Siswa</span>
+                    <h3 class="text-lg sm:text-xl font-extrabold tracking-tight">Media Sosial MTsN 14 Jakarta &amp; OSIS</h3>
+                    <p class="text-xs text-emerald-100/85 mt-0.5">Ikuti kedua akun resmi berikut agar tidak ketinggalan informasi madrasah maupun konten kreatif OSIS.</p>
+                </div>
+                <button type="button" onclick="closeModal('allSocialMediaModal')" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center shrink-0 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- 2-Column Comparison Grid: MTsN 14 Jakarta vs OSIS MTsN 14 -->
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Kolom 1: Media Sosial Resmi MTsN 14 Jakarta -->
+                <div class="rounded-2xl border-2 border-emerald-800/20 bg-emerald-50/40 p-4 space-y-3">
+                    <div class="flex items-center gap-2.5 pb-2 border-b border-emerald-900/10">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-900 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <i class="fa-solid fa-school text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Akun Resmi Madrasah</span>
+                            <h4 class="text-sm font-extrabold text-slate-900 mt-0.5">MTsN 14 Jakarta</h4>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">Informasi resmi akademik, PPDB, pengumuman madrasah, dan agenda kegiatan sekolah.</p>
+
+                    <div class="space-y-2 pt-1">
+                        <a href="https://www.youtube.com/@mtsnegeri14jakarta" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2.5 rounded-xl bg-white hover:bg-red-50 border border-slate-200/80 hover:border-red-200 transition group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-youtube text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-xs font-extrabold text-slate-900 group-hover:text-red-600">YouTube MTsN 14</div>
+                                    <div class="text-[10px] text-slate-500 truncate">@mtsnegeri14jakarta</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-red-600"></i>
+                        </a>
+
+                        <a href="https://www.tiktok.com/@mtsnegeri14jakarta" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200/80 transition group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-slate-950 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-tiktok text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-xs font-extrabold text-slate-900">TikTok MTsN 14</div>
+                                    <div class="text-[10px] text-slate-500 truncate">@mtsnegeri14jakarta</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-slate-900"></i>
+                        </a>
+
+                        <a href="https://www.instagram.com/mtsnegeri14jakarta/?hl=en" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2.5 rounded-xl bg-white hover:bg-pink-50 border border-slate-200/80 hover:border-pink-200 transition group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-instagram text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-xs font-extrabold text-slate-900 group-hover:text-pink-600">Instagram MTsN 14</div>
+                                    <div class="text-[10px] text-slate-500 truncate">@mtsnegeri14jakarta</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-pink-600"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kolom 2: Media Sosial OSIS / MPK MTsN 14 -->
+                <div class="rounded-2xl border-2 border-amber-400/50 bg-amber-50/40 p-4 space-y-3">
+                    <div class="flex items-center gap-2.5 pb-2 border-b border-amber-900/10">
+                        <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
+                            <i class="fa-solid fa-users-rays text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded-full">Tim Kreatif Siswa</span>
+                            <h4 class="text-sm font-extrabold text-slate-900 mt-0.5">OSIS &amp; MPK MTsN 14</h4>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">Konten kreatif siswa, dokumentasi event OSIS, video hiburan positif, dan SANVALAS STORY.</p>
+
+                    <div class="space-y-2 pt-1">
+                        <a href="https://www.youtube.com/@OSISMTsN14" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2.5 rounded-xl bg-white hover:bg-red-50 border border-slate-200/80 hover:border-red-200 transition group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-youtube text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-xs font-extrabold text-slate-900 group-hover:text-red-600">YouTube OSIS</div>
+                                    <div class="text-[10px] text-slate-500 truncate">@OSISMTsN14</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-red-600"></i>
+                        </a>
+
+                        <a href="https://www.tiktok.com/@osismpkmtsn14jkt" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200/80 transition group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-slate-950 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-tiktok text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-xs font-extrabold text-slate-900">TikTok OSIS MPK</div>
+                                    <div class="text-[10px] text-slate-500 truncate">@osismpkmtsn14jkt</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-slate-900"></i>
+                        </a>
+
+                        <a href="https://www.instagram.com/osismtsn14jkt/" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-2.5 rounded-xl bg-white hover:bg-pink-50 border border-slate-200/80 hover:border-pink-200 transition group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-instagram text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-xs font-extrabold text-slate-900 group-hover:text-pink-600">Instagram OSIS</div>
+                                    <div class="text-[10px] text-slate-500 truncate">@osismtsn14jkt</div>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-pink-600"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 pb-5 flex justify-end">
+                <button type="button" onclick="closeModal('allSocialMediaModal')" class="bg-emerald-900 hover:bg-emerald-950 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow">Tutup</button>
             </div>
         </div>
     </div>
@@ -1640,6 +1820,31 @@
                 aboutData: appState.aboutData,
                 categories: appState.categories
             }, { merge: true });
+        }
+
+        // Switch between OSIS MTsN 14 & MTsN 14 Jakarta in Sidebar
+        function switchSidebarSocialTab(tab) {
+            const osisBtn = document.getElementById('tabSidebarOsisBtn');
+            const mtsBtn = document.getElementById('tabSidebarMtsBtn');
+            const osisList = document.getElementById('sidebarSocialListOsis');
+            const mtsList = document.getElementById('sidebarSocialListMts');
+            if (!osisBtn || !mtsBtn || !osisList || !mtsList) return;
+
+            if (tab === 'osis') {
+                osisBtn.className = 'py-1.5 px-2 rounded-lg bg-emerald-900 text-white shadow-2xs transition';
+                mtsBtn.className = 'py-1.5 px-2 rounded-lg text-slate-600 hover:text-slate-900 transition';
+                osisList.classList.remove('hidden');
+                mtsList.classList.add('hidden');
+            } else {
+                mtsBtn.className = 'py-1.5 px-2 rounded-lg bg-emerald-900 text-white shadow-2xs transition';
+                osisBtn.className = 'py-1.5 px-2 rounded-lg text-slate-600 hover:text-slate-900 transition';
+                mtsList.classList.remove('hidden');
+                osisList.classList.add('hidden');
+            }
+        }
+
+        function openAllSocialMediaModal() {
+            openModal('allSocialMediaModal');
         }
 
         // Initialize Page
