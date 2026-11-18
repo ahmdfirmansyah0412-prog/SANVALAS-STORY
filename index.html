@@ -193,50 +193,51 @@
                     <i class="fa-solid fa-user-astronaut"></i> Mode Tim Kreatif
                 </span>
                 <span class="text-emerald-100 text-xs hidden md:inline">Tersambung Cloud Firestore: Semua perubahan langsung tersimpan online untuk semua pengunjung.</span>
-            </div>
-            <div class="flex flex-wrap items-center gap-2">
-                <button onclick="openAddArticleModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-plus"></i> Posting Konten Baru
-                </button>
-                <button onclick="openCategoryManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
-                    <i class="fa-solid fa-tags"></i> + Kategori
-                </button>
-                <button onclick="openPolaroidManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
-                    <i class="fa-solid fa-images"></i> Foto Atas & Background
-                </button>
-                <button onclick="openAboutEditorModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50">
-                    <i class="fa-solid fa-circle-info"></i> Edit Tentang Kami
-                </button>
-                <button onclick="openInboxModal()" class="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-inbox"></i> Kiriman Siswa (<span id="inboxCountBadge">0</span>)
-                </button>
-                <button onclick="openAccessGuideModal()" class="bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-600/50" title="Lihat Link Khusus Tim vs Link Pengunjung">
-                    <i class="fa-solid fa-link"></i> Link Akses
-                </button>
-                <button onclick="resetToDefaultData()" class="bg-white/10 hover:bg-rose-700 text-white/80 hover:text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition" title="Reset Tampilan Awal">
-                    <i class="fa-solid fa-rotate-left"></i>
-                </button>
-                <button onclick="logoutCreatorMode()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ml-1">
-                    <i class="fa-solid fa-right-from-bracket"></i> Keluar ke Mode Pengunjung
-                </button>
-            </div>
-        </div>
-    </div>
+            <!-- Brand Logo (MTsN 14 Paling Kiri + OSIS MTsN 14 di Kanannya) -->
+            <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda'))" class="flex items-center gap-2.5 group shrink-0">
+                <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-xl border border-white/15 shadow-xs">
+                    <!-- Logo 1 (Paling Kiri): MTsN 14 Jakarta Timur (Foto 5) -->
+                    <svg viewBox="0 0 100 110" class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-300 group-hover:scale-105" aria-label="Logo MTsN 14 Jakarta Timur">
+                        <!-- Perisai Biru & Kuning -->
+                        <path d="M50 5 C70 15, 88 18, 92 20 C93 58, 78 82, 50 94 C22 82, 7 58, 8 20 C12 18, 30 15, 50 5 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                        <!-- Teks MTs N 14 -->
+                        <text x="50" y="30" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="900" font-size="13.5">MTs N 14</text>
+                        <!-- Padi & Kapas -->
+                        <path d="M36 74 C21 66, 17 48, 26 33" fill="none" stroke="#eab308" stroke-width="3.2" stroke-linecap="round"/>
+                        <path d="M64 74 C79 66, 83 48, 74 33" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="4 3"/>
+                        <!-- Tugu Monas -->
+                        <polygon points="48,37 52,37 54,67 46,67" fill="#f8fafc"/>
+                        <polygon points="41,67 59,67 56,72 44,72" fill="#d97706"/>
+                        <polygon points="50,31 52.5,36 47.5,36" fill="#f59e0b"/>
+                        <!-- Kotak SMART -->
+                        <rect x="39" y="72" width="22" height="8" rx="1.5" fill="#fde047" stroke="#0f172a" stroke-width="1"/>
+                        <text x="50" y="78" text-anchor="middle" fill="#0f172a" font-family="sans-serif" font-weight="900" font-size="5">SMART</text>
+                        <!-- Pita Bawah -->
+                        <path d="M14 86 Q50 104 86 86 L82 96 Q50 110 18 96 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1.5"/>
+                        <text x="50" y="99" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="800" font-size="6.2">JAKARTA TIMUR</text>
+                    </svg>
 
-    <!-- ========================================== -->
-    <!-- NAVBAR -->
-    <!-- ========================================== -->
-    <header class="bg-sanvalas-900 text-white border-b border-white/10 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-            <!-- Brand Logo -->
-            <a href="#" class="flex items-center gap-3 group shrink-0">
-                <div class="w-9 h-9 flex items-center justify-center">
-                    <svg viewBox="0 0 64 64" class="w-9 h-9 fill-white transition-transform duration-300 group-hover:scale-105">
-                        <path d="M32 6 C36 13, 39 19, 32 28 C25 19, 28 13, 32 6 Z"/>
-                        <path d="M30 31 C20 23, 14 16, 16 11 C23 14, 28 21, 30 31 Z"/>
-                        <path d="M34 31 C44 23, 50 16, 48 11 C41 14, 36 21, 34 31 Z"/>
-                        <path d="M30 36 L30 56 C18 52, 8 43, 6 29 C15 31, 23 33, 30 36 Z"/>
-                        <path d="M34 36 L34 56 C46 52, 56 43, 58 29 C49 31, 41 33, 34 36 Z"/>
+                    <!-- Logo 2 (Kanannya): OSIS MTsN 14 (Foto 4) -->
+                    <svg viewBox="0 0 100 110" class="w-7 h-7 sm:w-8 sm:h-8 shrink-0 transition-transform duration-300 group-hover:scale-105" aria-label="Logo OSIS MTsN 14">
+                        <defs>
+                            <clipPath id="osisShieldClipNav">
+                                <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z"/>
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#osisShieldClipNav)">
+                            <rect x="0" y="0" width="100" height="110" fill="#ffffff"/>
+                            <polygon points="0,0 100,0 0,105" fill="#b91c1c"/>
+                        </g>
+                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#ffffff" stroke-width="4.5"/>
+                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+                        <!-- Sayap Biru & Pentagon Kemenag Hijau -->
+                        <path d="M22 36 Q35 46 50 48 Q65 46 78 36 Q72 56 50 64 Q28 56 22 36 Z" fill="#0284c7"/>
+                        <polygon points="50,33 65,44 59,61 41,61 35,44" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+                        <circle cx="50" cy="40" r="2.2" fill="#fde047"/>
+                        <rect x="44" y="45" width="12" height="8" rx="1" fill="#ffffff"/>
+                        <!-- Rantai & SMART -->
+                        <ellipse cx="50" cy="79" rx="14" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5"/>
+                        <text x="50" y="91" text-anchor="middle" fill="#0284c7" font-family="sans-serif" font-weight="900" font-size="8.5">SMART</text>
                     </svg>
                 </div>
                 <div class="leading-none">
@@ -245,15 +246,14 @@
                 </div>
             </a>
 
-            <!-- Navigation Links (Desktop) -->
-            <nav class="hidden lg:flex items-center gap-6 xl:gap-7 text-[13.5px] font-medium text-white/85">
-                <a href="#beranda" onclick="filterByNav('Semua', this)" class="nav-link text-white font-semibold relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-white after:rounded-full">Beranda</a>
-                <a href="#tentang" onclick="scrollToSection('tentang')" class="nav-link hover:text-white transition py-1">Tentang Kami</a>
-                <a href="#konten" onclick="filterByNav('Semua', this)" class="nav-link hover:text-white transition py-1">Konten</a>
-                <a href="#konten" onclick="filterByNav('Dokumentasi', this)" class="nav-link hover:text-white transition py-1">Dokumentasi</a>
-                <a href="#konten" onclick="filterByNav('Prestasi', this)" class="nav-link hover:text-white transition py-1">Prestasi</a>
-                <a href="#konten" onclick="filterByNav('Karya Siswa', this)" class="nav-link hover:text-white transition py-1">Karya Siswa</a>
-                <a href="#medsos" onclick="scrollToSection('medsos')" class="nav-link hover:text-white transition py-1">Kontak</a>
+            <!-- Navigation Links (Desktop - Tanpa Kontak & Garis Putih Dinamis Mengikuti Pilihan) -->
+            <nav id="desktopMainNav" class="hidden lg:flex items-center gap-6 xl:gap-7 text-[13.5px] font-medium text-white/85">
+                <a id="navLinkBeranda" href="#beranda" onclick="filterByNav('Semua', this)" class="nav-link nav-active text-white font-semibold relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2.5px] after:bg-white after:rounded-full">Beranda</a>
+                <a id="navLinkTentang" href="#tentang" onclick="setActiveNavIndicator(this); scrollToSection('tentang')" class="nav-link hover:text-white transition py-1">Tentang Kami</a>
+                <a id="navLinkKonten" href="#konten" onclick="filterByNav('Semua', this)" class="nav-link hover:text-white transition py-1">Konten</a>
+                <a id="navLinkDokumentasi" href="#konten" onclick="filterByNav('Dokumentasi', this)" class="nav-link hover:text-white transition py-1">Dokumentasi</a>
+                <a id="navLinkPrestasi" href="#konten" onclick="filterByNav('Prestasi', this)" class="nav-link hover:text-white transition py-1">Prestasi</a>
+                <a id="navLinkKarya" href="#konten" onclick="filterByNav('Karya Siswa', this)" class="nav-link hover:text-white transition py-1">Karya Siswa</a>
             </nav>
 
             <!-- Search Bar, Google Auth Profile & Mobile Menu Button -->
@@ -319,12 +319,12 @@
 
         <!-- Mobile Menu Dropdown -->
         <div id="mobileMenu" class="hidden lg:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-3 space-y-2 text-sm">
-            <a href="#beranda" onclick="filterByNav('Semua'); toggleMobileMenu()" class="block py-1.5 text-white font-semibold">Beranda</a>
-            <a href="#tentang" onclick="scrollToSection('tentang'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Tentang Kami</a>
-            <a href="#konten" onclick="filterByNav('Semua'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Semua Konten</a>
-            <a href="#konten" onclick="filterByNav('Dokumentasi'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Dokumentasi</a>
-            <a href="#konten" onclick="filterByNav('Prestasi'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Prestasi</a>
-            <a href="#konten" onclick="filterByNav('Karya Siswa'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Karya Siswa</a>
+            <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda')); toggleMobileMenu()" class="block py-1.5 text-white font-semibold">Beranda</a>
+            <a href="#tentang" onclick="setActiveNavIndicator(document.getElementById('navLinkTentang')); scrollToSection('tentang'); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Tentang Kami</a>
+            <a href="#konten" onclick="filterByNav('Semua', document.getElementById('navLinkKonten')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Semua Konten</a>
+            <a href="#konten" onclick="filterByNav('Dokumentasi', document.getElementById('navLinkDokumentasi')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Dokumentasi</a>
+            <a href="#konten" onclick="filterByNav('Prestasi', document.getElementById('navLinkPrestasi')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Prestasi</a>
+            <a href="#konten" onclick="filterByNav('Karya Siswa', document.getElementById('navLinkKarya')); toggleMobileMenu()" class="block py-1.5 text-white/80 hover:text-white">Karya Siswa</a>
         </div>
     </header>
 
@@ -532,50 +532,74 @@
                     </div>
                 </div>
 
-                <!-- Bottom Row inside Left Column: Kirim Karyamu! + Tentang Kami -->
-                <div id="tentang" class="grid grid-cols-1 md:grid-cols-12 gap-4 pt-1">
-                    <!-- CTA Banner: Kirim Karyamu! -->
-                    <div class="md:col-span-7 bg-[#143d30] text-white rounded-2xl p-5 sm:p-6 relative overflow-hidden shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/5 pointer-events-none"></div>
+                <!-- Bottom Row inside Left Column: Kirim Karyamu!, Kirim Prestasi!, & Tentang Kami -->
+                <div id="tentang" class="space-y-4 pt-1">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- CTA Banner 1: Kirim Karyamu! -->
+                        <div class="bg-[#143d30] text-white rounded-2xl p-5 sm:p-6 relative overflow-hidden shadow-sm flex flex-col justify-between gap-4">
+                            <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/5 pointer-events-none"></div>
 
-                        <div class="flex items-start sm:items-center gap-4 z-10">
-                            <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0 text-white">
-                                <i class="fa-solid fa-camera text-2xl"></i>
+                            <div class="flex items-start gap-3.5 z-10">
+                                <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0 text-white">
+                                    <i class="fa-solid fa-palette text-xl"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <h3 class="text-base sm:text-lg font-extrabold tracking-tight" data-edit-key="ctaTitle">Kirim Karyamu!</h3>
+                                    <p class="text-xs text-emerald-50/85 leading-relaxed" data-edit-key="ctaDesc">
+                                        Punya foto, video, tulisan, atau karya kreatif? Bagikan melalui SANVALAS STORY dan jadilah bagian dari cerita MTsN 14!
+                                    </p>
+                                </div>
                             </div>
-                            <div class="space-y-1">
-                                <h3 class="text-lg sm:text-xl font-extrabold tracking-tight" data-edit-key="ctaTitle">Kirim Karyamu!</h3>
-                                <p class="text-xs text-emerald-50/85 leading-relaxed max-w-md" data-edit-key="ctaDesc">
-                                    Punya foto, video, atau karya kreatif? Yuk, bagikan melalui SANVALAS STORY dan jadilah bagian dari cerita MTsN 14!
-                                </p>
+
+                            <div class="relative z-10 flex justify-end">
+                                <button type="button" onclick="openSubmitWorkModal(event)" class="btn-interactive bg-white hover:bg-emerald-50 text-slate-900 font-bold text-xs px-4 py-2.5 rounded-full shadow-md transition flex items-center gap-2 cursor-pointer">
+                                    <span data-edit-key="ctaBtn">Kirim Karya</span>
+                                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="relative shrink-0 z-10 self-end sm:self-center">
-                            <svg class="absolute -top-3.5 -right-2.5 w-6 h-6 text-white/80 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                <line x1="12" y1="2" x2="12" y2="6"/>
-                                <line x1="18" y1="5" x2="15" y2="8"/>
-                                <line x1="22" y1="11" x2="18" y2="11"/>
-                            </svg>
-                            <button type="button" onclick="openSubmitWorkModal(event)" class="btn-interactive bg-white hover:bg-emerald-50 text-slate-900 font-bold text-xs sm:text-sm px-4 py-2.5 rounded-full shadow-md transition flex items-center gap-2 cursor-pointer">
-                                <span data-edit-key="ctaBtn">Kirim Sekarang</span>
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </button>
+                        <!-- CTA Banner 2: Kirim Prestasi! (Langsung Kategori Prestasi) -->
+                        <div class="bg-gradient-to-br from-[#1b4d3c] to-[#0f3529] text-white rounded-2xl p-5 sm:p-6 relative overflow-hidden shadow-sm border border-amber-400/25 flex flex-col justify-between gap-4">
+                            <div class="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-amber-400/10 pointer-events-none"></div>
+
+                            <div class="flex items-start gap-3.5 z-10">
+                                <div class="w-12 h-12 rounded-2xl bg-amber-400/20 border border-amber-300/30 flex items-center justify-center shrink-0 text-amber-300">
+                                    <i class="fa-solid fa-trophy text-xl"></i>
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-base sm:text-lg font-extrabold tracking-tight">Kirim Prestasi!</h3>
+                                        <span class="text-[10px] font-extrabold uppercase bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">Prestasi</span>
+                                    </div>
+                                    <p class="text-xs text-emerald-50/85 leading-relaxed">
+                                        Baru meraih juara lomba akademik maupun non-akademik? Laporkan prestasimu untuk dipublikasikan di MTsN 14!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="relative z-10 flex justify-end">
+                                <button type="button" onclick="openSubmitPrestasiModal(event)" class="btn-interactive bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-full shadow-md transition flex items-center gap-2 cursor-pointer">
+                                    <span>Kirim Prestasi</span>
+                                    <i class="fa-solid fa-trophy text-xs"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Tentang Kami Card -->
-                    <div class="md:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-sm flex flex-col justify-between space-y-3 relative group">
+                    <div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative group">
                         <button type="button" onclick="openAboutEditorModal()" class="edit-only absolute top-3.5 right-3.5 bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-extrabold px-2.5 py-1 rounded-lg shadow flex items-center gap-1">
                             <i class="fa-solid fa-pen"></i> Edit Tentang Kami
                         </button>
-                        <div class="space-y-1.5">
+                        <div class="space-y-1 max-w-2xl">
                             <h3 id="aboutCardTitle" class="text-base font-extrabold text-slate-900" data-edit-key="aboutTitle">Tentang Kami</h3>
                             <p id="aboutCardShortDesc" class="text-xs text-slate-600 leading-relaxed" data-edit-key="aboutDesc">
                                 SANVALAS STORY adalah tim kreatif OSIS MTsN 14 yang berkomitmen menghadirkan konten berkualitas untuk seluruh siswa, guru, dan warga sekolah.
                             </p>
                         </div>
-                        <div class="flex items-center justify-between pt-1">
-                            <button type="button" onclick="openAboutModal(event)" class="btn-interactive inline-flex items-center gap-2 bg-emerald-900 hover:bg-emerald-950 text-white text-xs font-bold px-4 py-2 rounded-full transition cursor-pointer shadow-xs">
+                        <div class="shrink-0">
+                            <button type="button" onclick="openAboutModal(event)" class="btn-interactive inline-flex items-center gap-2 bg-emerald-900 hover:bg-emerald-950 text-white text-xs font-bold px-4 py-2.5 rounded-full transition cursor-pointer shadow-xs">
                                 <span>Selengkapnya</span>
                                 <i class="fa-solid fa-arrow-right text-[11px]"></i>
                             </button>
@@ -795,13 +819,31 @@
                 <div class="absolute -right-8 -bottom-10 w-40 h-40 rounded-full bg-white/10 pointer-events-none"></div>
                 <div class="flex items-start justify-between gap-4 relative z-10">
                     <div class="flex items-center gap-3.5">
-                        <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 flex items-center justify-center shadow-lg">
-                            <svg viewBox="0 0 64 64" class="w-7 h-7 fill-white">
-                                <path d="M32 6 C36 13, 39 19, 32 28 C25 19, 28 13, 32 6 Z"/>
-                                <path d="M30 31 C20 23, 14 16, 16 11 C23 14, 28 21, 30 31 Z"/>
-                                <path d="M34 31 C44 23, 50 16, 48 11 C41 14, 36 21, 34 31 Z"/>
-                                <path d="M30 36 L30 56 C18 52, 8 43, 6 29 C15 31, 23 33, 30 36 Z"/>
-                                <path d="M34 36 L34 56 C46 52, 56 43, 58 29 C49 31, 41 33, 34 36 Z"/>
+                        <div class="flex items-center gap-1.5 px-2.5 py-2 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 shadow-lg">
+                            <!-- Logo MTsN 14 Paling Kiri -->
+                            <svg viewBox="0 0 100 110" class="w-8 h-8 shrink-0">
+                                <path d="M50 5 C70 15, 88 18, 92 20 C93 58, 78 82, 50 94 C22 82, 7 58, 8 20 C12 18, 30 15, 50 5 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                                <text x="50" y="30" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="900" font-size="13.5">MTs N 14</text>
+                                <polygon points="48,37 52,37 54,67 46,67" fill="#f8fafc"/>
+                                <polygon points="41,67 59,67 56,72 44,72" fill="#d97706"/>
+                                <rect x="39" y="72" width="22" height="8" rx="1.5" fill="#fde047"/>
+                                <path d="M14 86 Q50 104 86 86 L82 96 Q50 110 18 96 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1.5"/>
+                            </svg>
+                            <!-- Logo OSIS MTsN 14 di Kanannya -->
+                            <svg viewBox="0 0 100 110" class="w-8 h-8 shrink-0">
+                                <defs>
+                                    <clipPath id="osisShieldClipAbout">
+                                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z"/>
+                                    </clipPath>
+                                </defs>
+                                <g clip-path="url(#osisShieldClipAbout)">
+                                    <rect x="0" y="0" width="100" height="110" fill="#ffffff"/>
+                                    <polygon points="0,0 100,0 0,105" fill="#b91c1c"/>
+                                </g>
+                                <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#ffffff" stroke-width="4.5"/>
+                                <path d="M22 36 Q35 46 50 48 Q65 46 78 36 Q72 56 50 64 Q28 56 22 36 Z" fill="#0284c7"/>
+                                <polygon points="50,33 65,44 59,61 41,61 35,44" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+                                <ellipse cx="50" cy="79" rx="14" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5"/>
                             </svg>
                         </div>
                         <div>
@@ -1415,6 +1457,67 @@
         </div>
     </div>
 
+    <!-- MODAL KIRIM PRESTASI SISWA (KATEGORI LANGSUNG PRESTASI) -->
+    <div id="submitPrestasiModal" onclick="if(event.target === this) closeModal('submitPrestasiModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900">Kirim Prestasi Siswa MTsN 14</h3>
+                        <p class="text-[11px] text-slate-500">Kategori otomatis tercatat sebagai <strong class="text-emerald-800">Prestasi</strong></p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('submitPrestasiModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="submitStudentPrestasi(event)" class="space-y-3 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nama Peraih Prestasi &amp; Kelas</label>
+                        <input id="presName" type="text" required placeholder="Contoh: Ahmad Fauzan - 9A" class="w-full rounded-xl border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Kategori</label>
+                        <div class="w-full rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 font-extrabold text-amber-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-trophy text-amber-600"></i>
+                            <span>Prestasi</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Judul Kejuaraan / Lomba &amp; Peringkat</label>
+                    <input id="presTitle" type="text" required placeholder="Contoh: Juara 1 Olimpiade Matematika Tingkat Provinsi" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:border-emerald-700">
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-700">Foto Piala / Sertifikat / Dokumentasi</span>
+                        <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1 rounded-lg cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-upload"></i> Pilih Foto
+                            <input type="file" accept="image/*" multiple class="hidden" onchange="handlePrestasiMultiFileUpload(event)">
+                        </label>
+                    </div>
+                    <input id="presImage" type="text" placeholder="Atau tempel link foto dokumentasi (opsional)..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                    <div id="presPhotosPreview" class="hidden grid grid-cols-4 gap-2 pt-1"></div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Detail Penyelenggara &amp; Cerita Singkat</label>
+                    <textarea id="presDesc" rows="3" required placeholder="Tuliskan penyelenggara lomba, tanggal pelaksanaan, dan kesan pesan..." class="w-full rounded-xl border border-slate-300 px-3.5 py-2 focus:outline-none focus:border-emerald-700"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('submitPrestasiModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
+                    <button type="submit" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-5 py-2 rounded-xl shadow flex items-center gap-1.5">
+                        <i class="fa-solid fa-trophy"></i>
+                        <span>Kirim Prestasi</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL KOTAK MASUK KIRIMAN SISWA & PANDUAN LINK -->
     <div id="inboxModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
@@ -1459,16 +1562,36 @@
     <footer class="bg-sanvalas-900 text-white border-t border-white/10 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2.5">
-                <svg viewBox="0 0 64 64" class="w-6 h-6 fill-white shrink-0">
-                    <path d="M32 6 C36 13, 39 19, 32 28 C25 19, 28 13, 32 6 Z"/>
-                    <path d="M30 31 C20 23, 14 16, 16 11 C23 14, 28 21, 30 31 Z"/>
-                    <path d="M34 31 C44 23, 50 16, 48 11 C41 14, 36 21, 34 31 Z"/>
-                    <path d="M30 36 L30 56 C18 52, 8 43, 6 29 C15 31, 23 33, 30 36 Z"/>
-                    <path d="M34 36 L34 56 C46 52, 56 43, 58 29 C49 31, 41 33, 34 36 Z"/>
-                </svg>
+                <div class="flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-xl border border-white/15">
+                    <!-- Logo MTsN 14 Paling Kiri -->
+                    <svg viewBox="0 0 100 110" class="w-6 h-6 shrink-0" aria-label="Logo MTsN 14 Jakarta Timur">
+                        <path d="M50 5 C70 15, 88 18, 92 20 C93 58, 78 82, 50 94 C22 82, 7 58, 8 20 C12 18, 30 15, 50 5 Z" fill="#0088ff" stroke="#fde047" stroke-width="4.5"/>
+                        <text x="50" y="30" text-anchor="middle" fill="#fde047" font-family="serif" font-weight="900" font-size="13.5">MTs N 14</text>
+                        <polygon points="48,37 52,37 54,67 46,67" fill="#f8fafc"/>
+                        <polygon points="41,67 59,67 56,72 44,72" fill="#d97706"/>
+                        <rect x="39" y="72" width="22" height="8" rx="1.5" fill="#fde047"/>
+                        <path d="M14 86 Q50 104 86 86 L82 96 Q50 110 18 96 Z" fill="#1d4ed8" stroke="#fde047" stroke-width="1.5"/>
+                    </svg>
+                    <!-- Logo OSIS MTsN 14 di Kanannya -->
+                    <svg viewBox="0 0 100 110" class="w-6 h-6 shrink-0" aria-label="Logo OSIS MTsN 14">
+                        <defs>
+                            <clipPath id="osisShieldClipFooter">
+                                <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z"/>
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#osisShieldClipFooter)">
+                            <rect x="0" y="0" width="100" height="110" fill="#ffffff"/>
+                            <polygon points="0,0 100,0 0,105" fill="#b91c1c"/>
+                        </g>
+                        <path d="M50 6 C72 18, 88 20, 92 22 C92 62, 76 86, 50 102 C24 86, 8 62, 8 22 C12 20, 28 18, 50 6 Z" fill="none" stroke="#ffffff" stroke-width="4.5"/>
+                        <path d="M22 36 Q35 46 50 48 Q65 46 78 36 Q72 56 50 64 Q28 56 22 36 Z" fill="#0284c7"/>
+                        <polygon points="50,33 65,44 59,61 41,61 35,44" fill="#15803d" stroke="#ffffff" stroke-width="1.5"/>
+                        <ellipse cx="50" cy="79" rx="14" ry="3.5" fill="none" stroke="#eab308" stroke-width="2.5"/>
+                    </svg>
+                </div>
                 <div class="leading-tight">
                     <div class="font-display font-bold tracking-wider text-xs uppercase">SANVALAS STORY</div>
-                    <div class="text-[10px] text-white/70">MTsN 14</div>
+                    <div class="text-[10px] text-white/70">MTsN 14 Jakarta Timur</div>
                 </div>
             </div>
 
@@ -1478,10 +1601,10 @@
 
             <div
                 onclick="handleSecretFooterClick()"
-                class="text-white/60 text-[11px] select-none cursor-default"
-                title="Hak Cipta SANVALAS STORY MTsN 14"
+                class="text-white/70 hover:text-white text-[11px] font-semibold select-none cursor-pointer transition"
+                title="Klik 3x untuk Akses Redaksi Tim Kreatif"
             >
-                &copy; 2025 SANVALAS STORY. All rights reserved.
+                &copy; 2026 SANVALAS STORY
             </div>
         </div>
     </footer>
@@ -1694,6 +1817,7 @@
         let cardSizeMode = 'large';
         let editorPhotosDraft = [];
         let studentSubPhotosDraft = [];
+        let studentPrestasiPhotosDraft = [];
 
         function getArticlePhotos(art) {
             if (Array.isArray(art.images) && art.images.length > 0) {
@@ -2129,10 +2253,14 @@
         function syncCategoryDropdowns() {
             const cats = getCategoriesList();
             const optionsHtml = cats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            const workOptionsHtml = cats
+                .filter(c => c.name.toLowerCase() !== 'prestasi')
+                .map(c => `<option value="${c.name}">${c.name}</option>`)
+                .join('');
             const editorSelect = document.getElementById('editArticleCategory');
             const subSelect = document.getElementById('subCat');
             if (editorSelect) editorSelect.innerHTML = optionsHtml;
-            if (subSelect) subSelect.innerHTML = optionsHtml;
+            if (subSelect) subSelect.innerHTML = workOptionsHtml || optionsHtml;
         }
 
         function openCategoryManagerModal() {
@@ -2860,6 +2988,16 @@
         }
 
         // Category Filter & Search
+        function setActiveNavIndicator(linkEl) {
+            const navLinks = document.querySelectorAll('#desktopMainNav .nav-link');
+            navLinks.forEach(el => {
+                el.className = 'nav-link hover:text-white transition py-1';
+            });
+            if (linkEl) {
+                linkEl.className = "nav-link nav-active text-white font-semibold relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2.5px] after:bg-white after:rounded-full";
+            }
+        }
+
         function setActiveCategory(cat) {
             activeCategory = cat;
             renderCategoriesBar();
@@ -2878,9 +3016,16 @@
             renderArticles();
         }
 
-        function filterByNav(cat) {
+        function filterByNav(cat, linkEl) {
+            if (linkEl) {
+                setActiveNavIndicator(linkEl);
+            }
             setActiveCategory(cat);
-            scrollToSection('konten');
+            if (linkEl && linkEl.id === 'navLinkBeranda') {
+                scrollToSection('beranda');
+            } else {
+                scrollToSection('konten');
+            }
         }
 
         function handleSearch(val) {
@@ -3128,6 +3273,73 @@
                 showToast('Karyamu berhasil dikirim ke Tim Kreatif SANVALAS STORY!');
             } catch (err) {
                 showToast('Gagal mengirim karya: ' + err.message);
+            }
+        }
+
+        // Kirim Prestasi Siswa (Kategori Otomatis Prestasi)
+        function openSubmitPrestasiModal(e) {
+            if (e) e.stopPropagation();
+            const user = getCurrentGoogleUser();
+            const nameInput = document.getElementById('presName');
+            if (user && nameInput && !nameInput.value) {
+                nameInput.value = `${user.name} (${user.email})`;
+            }
+            studentPrestasiPhotosDraft = [];
+            const previewEl = document.getElementById('presPhotosPreview');
+            if (previewEl) {
+                previewEl.innerHTML = '';
+                previewEl.classList.add('hidden');
+            }
+            openModal('submitPrestasiModal');
+        }
+
+        async function handlePrestasiMultiFileUpload(event) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+            const previewEl = document.getElementById('presPhotosPreview');
+            for (const file of files) {
+                const compressed = await compressImageFileToDataURL(file, 900, 0.78);
+                studentPrestasiPhotosDraft.push(compressed);
+                if (previewEl) {
+                    previewEl.classList.remove('hidden');
+                    previewEl.innerHTML = studentPrestasiPhotosDraft.map((img, i) => `
+                        <div class="relative aspect-square rounded-lg overflow-hidden border border-slate-300">
+                            <img src="${img}" class="w-full h-full object-cover">
+                            <span class="absolute bottom-0.5 right-1 bg-black/70 text-white text-[9px] px-1 rounded">#${i + 1}</span>
+                        </div>
+                    `).join('');
+                }
+            }
+            showToast(`${files.length} foto prestasi siap dikirim!`);
+        }
+
+        async function submitStudentPrestasi(e) {
+            e.preventDefault();
+            const customImg = document.getElementById('presImage') ? document.getElementById('presImage').value.trim() : '';
+            if (customImg) studentPrestasiPhotosDraft.unshift(customImg);
+            if (studentPrestasiPhotosDraft.length === 0) {
+                studentPrestasiPhotosDraft.push('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=900&q=80');
+            }
+            const subId = 'sub-' + Date.now();
+            const newSub = {
+                id: subId,
+                author: document.getElementById('presName').value.trim(),
+                title: document.getElementById('presTitle').value.trim(),
+                category: 'Prestasi',
+                image: studentPrestasiPhotosDraft[0],
+                images: [...studentPrestasiPhotosDraft],
+                desc: document.getElementById('presDesc').value.trim(),
+                createdAt: Date.now()
+            };
+
+            try {
+                await db.collection('sanvalas_inbox').doc(subId).set(newSub);
+                e.target.reset();
+                studentPrestasiPhotosDraft = [];
+                closeModal('submitPrestasiModal');
+                showToast('Data prestasimu berhasil dikirim ke Tim Kreatif SANVALAS STORY!');
+            } catch (err) {
+                showToast('Gagal mengirim prestasi: ' + err.message);
             }
         }
 
