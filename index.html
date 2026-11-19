@@ -221,6 +221,9 @@
                 <button onclick="openInboxModal()" class="bg-white/15 hover:bg-white/25 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1">
                     <i class="fa-solid fa-inbox"></i> Kiriman (<span id="inboxCountBadge">0</span>)
                 </button>
+                <button onclick="openTrashModal()" class="bg-rose-900/70 hover:bg-rose-800 text-rose-100 px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-rose-500/40" title="Sampah Postingan (Auto-hapus 30 hari)">
+                    <i class="fa-solid fa-trash-can"></i> Sampah (<span id="trashCountBadge">0</span>)
+                </button>
                 <button onclick="openAccessGuideModal()" class="bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50" title="Lihat Link Khusus Tim vs Link Pengunjung">
                     <i class="fa-solid fa-link"></i> Link
                 </button>
@@ -239,10 +242,8 @@
     <!-- ========================================== -->
     <header class="bg-sanvalas-900 text-white border-b border-white/10 sticky top-0 z-40 shadow-sm w-full">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
-            <!-- Brand Logo (MTsN 14 Paling Kiri + OSIS MTsN 14 di Kanannya) -->
             <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda'))" class="flex items-center gap-2 group shrink-0">
                 <div class="flex items-center gap-1 bg-white/10 px-1.5 py-1 rounded-xl border border-white/15 shadow-xs">
-                    <!-- Logo 1 (Paling Kiri): MTsN 14 Jakarta Timur -->
                     <div class="w-6 h-6 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
                         <img id="navLogoMtsImg" src="" alt="Logo MTsN 14 Jakarta Timur" class="hidden w-full h-full object-contain rounded-sm">
                         <svg id="navLogoMtsSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo MTsN 14 Jakarta Timur">
@@ -279,7 +280,6 @@
                         </svg>
                     </div>
 
-                    <!-- Logo 2 (Kanannya): OSIS MTsN 14 Jakarta Timur -->
                     <div class="w-6 h-6 sm:w-8 sm:h-8 shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
                         <img id="navLogoOsisImg" src="" alt="Logo OSIS MTsN 14" class="hidden w-full h-full object-contain rounded-sm">
                         <svg id="navLogoOsisSvg" viewBox="0 0 120 132" class="w-full h-full" aria-label="Logo OSIS MTsN 14">
@@ -325,7 +325,6 @@
                 </div>
             </a>
 
-            <!-- Navigation Links (Desktop) -->
             <nav id="desktopMainNav" class="hidden lg:flex items-center gap-6 xl:gap-7 text-[13.5px] font-medium text-white/85">
                 <a id="navLinkBeranda" href="#beranda" onclick="filterByNav('Semua', this)" class="nav-link nav-active text-white font-semibold relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2.5px] after:bg-white after:rounded-full">Beranda</a>
                 <a id="navLinkTentang" href="#tentang" onclick="setActiveNavIndicator(this); scrollToSection('tentang')" class="nav-link hover:text-white transition py-1">Tentang Kami</a>
@@ -335,7 +334,6 @@
                 <a id="navLinkKarya" href="#konten" onclick="filterByNav('Karya Siswa', this)" class="nav-link hover:text-white transition py-1">Karya Siswa</a>
             </nav>
 
-            <!-- Search Bar, Google Auth & Hamburger -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <div class="relative hidden sm:block">
                     <input
@@ -349,12 +347,10 @@
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-white/70 text-xs pointer-events-none"></i>
                 </div>
 
-                <!-- Mobile Search Toggle Button -->
                 <button type="button" onclick="toggleMobileSearchBar()" class="sm:hidden w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white" title="Cari Konten">
                     <i class="fa-solid fa-magnifying-glass text-xs"></i>
                 </button>
 
-                <!-- Google Login Button (When Not Logged In) -->
                 <button
                     id="navGoogleLoginBtn"
                     type="button"
@@ -371,7 +367,6 @@
                     <span class="hidden sm:inline">Sign in</span>
                 </button>
 
-                <!-- Logged-In Google User Pill -->
                 <div id="navGoogleUserPill" class="hidden items-center gap-1.5 bg-white/10 hover:bg-white/15 border border-white/20 rounded-full pl-1 pr-2 py-0.5 sm:py-1 text-xs shrink-0">
                     <img id="navUserAvatar" src="" alt="Avatar" class="w-6 h-6 rounded-full object-cover border border-white/40">
                     <span id="navUserName" class="font-bold text-white max-w-[85px] truncate hidden sm:inline"></span>
@@ -385,7 +380,6 @@
                     </button>
                 </div>
 
-                <!-- Quick Post Button ONLY visible when already logged in as Tim Kreatif -->
                 <button
                     type="button"
                     onclick="openAddArticleModal()"
@@ -401,7 +395,6 @@
             </div>
         </div>
 
-        <!-- Mobile Search Bar Dropdown -->
         <div id="mobileSearchBar" class="hidden sm:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-2.5">
             <div class="relative">
                 <input
@@ -416,7 +409,6 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
         <div id="mobileMenu" class="hidden lg:hidden bg-sanvalas-950 border-t border-white/10 px-4 py-3 space-y-1.5 text-sm">
             <a href="#beranda" onclick="filterByNav('Semua', document.getElementById('navLinkBeranda')); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white font-semibold">Beranda</a>
             <a href="#tentang" onclick="setActiveNavIndicator(document.getElementById('navLinkTentang')); scrollToSection('tentang'); toggleMobileMenu()" class="block py-1.5 px-2 rounded-lg hover:bg-white/10 text-white/85 hover:text-white">Tentang Kami</a>
@@ -445,7 +437,6 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-11">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-8 items-center">
 
-                <!-- Left Hero Text (6 Cols) -->
                 <div class="lg:col-span-6 space-y-2.5 sm:space-y-3">
                     <div class="inline-flex items-center gap-2 text-[11px] sm:text-sm tracking-[0.22em] uppercase text-emerald-100/90 font-medium">
                         <span>TIM KREATIF</span>
@@ -474,7 +465,6 @@
                     </div>
                 </div>
 
-                <!-- Right Hero Polaroid Collage & Doodles (6 Cols) -->
                 <div class="lg:col-span-6 relative min-h-[245px] sm:min-h-[300px] flex items-center justify-center lg:justify-start">
                     <div class="absolute -top-3 left-16 sm:left-24 z-10 text-[#09221a]/80 -rotate-12 pointer-events-none hidden sm:block">
                         <i class="fa-solid fa-camera text-4xl drop-shadow"></i>
@@ -490,7 +480,6 @@
                     </svg>
 
                     <div class="relative w-full max-w-[340px] sm:max-w-[440px] h-[235px] sm:h-[275px] mx-auto lg:mx-0 flex items-center justify-center">
-                        <!-- Left Polaroid -->
                         <div id="polaroidCardLeft" onclick="rotatePolaroidCarousel(-1)" class="polaroid-card w-28 sm:w-36 absolute left-2 sm:left-3 top-12 -rotate-[11deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
                             <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-emerald-950/30">
                                 <img id="polaroidImg1" src="" alt="Dokumentasi" class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
@@ -501,7 +490,6 @@
                             </div>
                         </div>
 
-                        <!-- Center Main Polaroid -->
                         <div id="polaroidCardCenter" class="polaroid-card w-40 sm:w-52 relative -top-2 -rotate-[4deg] z-20 group">
                             <div class="relative aspect-[4/3.7] overflow-hidden rounded-sm bg-emerald-950/30">
                                 <img id="polaroidImg2" src="" alt="MTsN 14" class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
@@ -518,7 +506,6 @@
                             </div>
                         </div>
 
-                        <!-- Right Polaroid -->
                         <div id="polaroidCardRight" onclick="rotatePolaroidCarousel(1)" class="polaroid-card w-28 sm:w-36 absolute right-2 sm:right-6 top-10 rotate-[9deg] z-10 group cursor-pointer" title="Klik untuk geser foto ini ke tengah">
                             <div class="relative aspect-[4/3.6] overflow-hidden rounded-sm bg-emerald-950/30">
                                 <img id="polaroidImg3" src="" alt="Siswa MTsN 14" class="w-full h-full object-cover opacity-0 transition-opacity duration-300">
@@ -815,23 +802,21 @@
     </main>
 
     <!-- ========================================== -->
-    <!-- MODAL 1: PEMBACA ARTIKEL + FULLSCREEN / LIGHTBOX + FULL PHOTO + SWIPE/SLIDE -->
+    <!-- MODAL 1: PEMBACA ARTIKEL + SINGLE-CLICK PHOTO ZOOM LIGHTBOX -->
     <!-- ========================================== -->
     <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-2.5 sm:p-5 transition-all">
         <div id="readerModalContainer" class="modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col transition-all duration-300">
-            <!-- Interactive Media Stage (Supports Touch Swipe, Full Photo View, & Fullscreen Expand) -->
             <div id="readerMediaStage" class="relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300">
                 <img id="readerAmbientBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none">
                 <div id="readerGradientMask" class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35 pointer-events-none z-10"></div>
 
-                <!-- Main Image (Always Full Photo with object-contain so nothing is cropped!) -->
+                <!-- Main Image: Single Click Opens Full-Screen Zoom Lightbox -->
                 <img
                     id="readerImg"
                     src=""
                     alt=""
-                    onclick="toggleReaderFullscreen()"
-                    class="relative z-10 w-full h-full object-contain cursor-zoom-in transition-all duration-300"
-                    title="Klik foto untuk Layar Penuh (Fullscreen)"
+                    style="object-position: center center;"
+                    class="relative z-10 w-full h-full object-cover cursor-zoom-in transition-all duration-300"
                     onerror="this.src='https://placehold.co/900x600/164636/ffffff?text=Sanvalas+Story'"
                 >
                 <video
@@ -848,7 +833,7 @@
                     class="hidden relative z-20 w-full h-full border-0 bg-white"
                 ></iframe>
 
-                <!-- Top Floating Controls: Slide Counter + External Link + Fullscreen Expand/Shrink + Close -->
+                <!-- Top Floating Controls: Slide Counter + External Link + Fullscreen Popup + Close -->
                 <div class="absolute top-3.5 inset-x-3.5 sm:top-4 sm:inset-x-4 z-30 flex items-center justify-between gap-2 pointer-events-none">
                     <div class="flex items-center gap-2 pointer-events-auto">
                         <span id="readerPhotoCounter" class="hidden bg-black/70 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
@@ -863,10 +848,10 @@
                             type="button"
                             onclick="toggleReaderFullscreen(event)"
                             class="h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-black/70 hover:bg-black/90 text-white text-xs font-bold flex items-center gap-1.5 border border-white/20 shadow-lg transition cursor-pointer"
-                            title="Perbesar Layar Penuh / Perkecil ke Pop-up"
+                            title="Perbesar Pop-up / Perkecil"
                         >
                             <i id="readerFullscreenIcon" class="fa-solid fa-expand text-xs sm:text-sm"></i>
-                            <span id="readerFullscreenLabel" class="hidden sm:inline">Layar Penuh</span>
+                            <span id="readerFullscreenLabel" class="hidden sm:inline">Perbesar</span>
                         </button>
                         <button type="button" onclick="closeModal('articleReaderModal')" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-rose-600 text-white flex items-center justify-center border border-white/20 shadow-lg transition cursor-pointer" title="Tutup">
                             <i class="fa-solid fa-xmark text-sm sm:text-base"></i>
@@ -904,7 +889,7 @@
             <!-- Multi-Media Thumbnail Strip -->
             <div id="readerThumbStrip" class="hidden shrink-0 bg-slate-900 border-b border-slate-800 px-4 sm:px-5 py-3 flex items-center justify-start sm:justify-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar"></div>
 
-            <!-- Article Details, Like Summary & Comments (Hidden automatically during Fullscreen Lightbox Mode) -->
+            <!-- Article Details, Like Summary & Comments -->
             <div id="readerContentBodyWrap" class="p-4 sm:p-7 space-y-4 sm:space-y-5 bg-white">
                 <div class="space-y-2">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
@@ -943,6 +928,57 @@
                     <div id="readerCommentsList" class="smooth-scroll-box space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FULL-SCREEN PHOTO ZOOM LIGHTBOX (MUNCUL SAAT FOTO DI-KLIK 1X) -->
+    <!-- ========================================== -->
+    <div id="photoLightboxModal" onclick="if(event.target === this || event.target.id === 'lightboxStage') closePhotoLightbox()" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[70] hidden flex-col justify-between select-none">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between px-4 py-3.5 text-white z-20">
+            <span id="lightboxCounter" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full border border-white/15">1 / 1</span>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="togglePhotoLightboxZoom(event)" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition" title="Zoom In / Out">
+                    <i id="lightboxZoomIcon" class="fa-solid fa-magnifying-glass-plus text-sm"></i>
+                </button>
+                <button type="button" onclick="closePhotoLightbox()" class="w-9 h-9 rounded-full bg-white/15 hover:bg-rose-600 text-white flex items-center justify-center transition" title="Tutup Tampilan Foto">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Center Full Photo Stage (Click photo to toggle Zoom 1x <-> 1.85x) -->
+        <div id="lightboxStage" class="relative flex-1 flex items-center justify-center overflow-auto p-2 sm:p-6">
+            <img
+                id="lightboxImg"
+                src=""
+                alt="Full Photo"
+                onclick="togglePhotoLightboxZoom(event)"
+                class="max-w-full max-h-[82vh] object-contain rounded-lg shadow-2xl transition-transform duration-300 cursor-zoom-in"
+            >
+
+            <button
+                id="lightboxPrevBtn"
+                type="button"
+                onclick="stepPhotoLightbox(-1, event)"
+                class="hidden absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl items-center justify-center transition"
+            >
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button
+                id="lightboxNextBtn"
+                type="button"
+                onclick="stepPhotoLightbox(1, event)"
+                class="hidden absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl items-center justify-center transition"
+            >
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Bottom Caption -->
+        <div class="px-4 py-3 text-center text-white/75 text-xs">
+            Ketuk foto untuk memperbesar (Zoom) &bull; Geser untuk pindah foto
         </div>
     </div>
 
@@ -1409,7 +1445,6 @@
             </div>
 
             <div class="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Kolom 1: Media Sosial Resmi MTsN 14 Jakarta -->
                 <div class="rounded-2xl border-2 border-emerald-800/20 bg-emerald-50/40 p-4 space-y-3">
                     <div class="flex items-center gap-2.5 pb-2.5 border-b border-emerald-900/10">
                         <div class="w-10 h-10 rounded-xl bg-emerald-950/90 border border-emerald-700/40 p-1 flex items-center justify-center shrink-0 shadow-xs">
@@ -1477,7 +1512,6 @@
                     </div>
                 </div>
 
-                <!-- Kolom 2: Media Sosial OSIS / MPK MTsN 14 -->
                 <div class="rounded-2xl border-2 border-amber-400/50 bg-amber-50/40 p-4 space-y-3">
                     <div class="flex items-center gap-2.5 pb-2.5 border-b border-amber-900/10">
                         <div class="w-10 h-10 rounded-xl bg-emerald-950/90 border border-amber-400/40 p-1 flex items-center justify-center shrink-0 shadow-xs">
@@ -1655,10 +1689,7 @@
                         <input id="editArticleImage" type="text" placeholder="Tempel link Instagram Reels, TikTok, YouTube, atau MP4..." class="flex-1 rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
                         <button type="button" onclick="addPhotoUrlToEditorList()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-3 py-2 rounded-xl shrink-0">+ Tambah Link</button>
                     </div>
-                    <p class="text-[10.5px] text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1.5 rounded-lg">
-                        <i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>
-                        <strong>Tips Thumbnail:</strong> Jika Anda meng-upload foto beserta link video IG/TikTok, foto yang di-upload akan otomatis dijadikan gambar sampul (thumbnail) di halaman depan!
-                    </p>
+
                     <div id="editorPhotosPreviewList" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1"></div>
                 </div>
                 <div>
@@ -1797,6 +1828,51 @@
         </div>
     </div>
 
+    <!-- MODAL KONFIRMASI HAPUS POSTINGAN (YA / CANCEL) -->
+    <div id="confirmDeletePostModal" onclick="if(event.target === this) closeModal('confirmDeletePostModal')" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-[60] hidden items-center justify-center p-4">
+        <div class="modal-card-pop bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 mx-auto flex items-center justify-center text-xl shadow-2xs">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <div class="space-y-1.5">
+                <h3 class="text-base font-extrabold text-slate-900">Hapus Postingan Ini?</h3>
+                <p id="confirmDeletePostTitle" class="text-xs font-bold text-slate-700 line-clamp-2 px-2"></p>
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    Postingan akan dipindahkan ke <strong class="text-slate-700">Sampah</strong> dan masih bisa dipulihkan kembali selama <strong class="text-rose-600">30 hari</strong> sebelum terhapus permanen otomatis.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <button type="button" onclick="closeModal('confirmDeletePostModal')" class="py-2.5 px-4 rounded-xl font-bold text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                    Cancel
+                </button>
+                <button type="button" id="confirmDeletePostYesBtn" onclick="confirmMoveArticleToTrash()" class="py-2.5 px-4 rounded-xl font-extrabold text-xs bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TEMPAT SAMPAH POSTINGAN (RESTORE & AUTO-DELETE 30 HARI) -->
+    <div id="trashModal" onclick="if(event.target === this) closeModal('trashModal')" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-3xl max-w-xl w-full max-h-[86vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-xs">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900">Sampah Postingan</h3>
+                        <p class="text-[11px] text-slate-500">Postingan di sampah otomatis terhapus permanen setelah <strong class="text-rose-600">30 hari</strong></p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('trashModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="trashListContainer" class="space-y-2.5 text-xs"></div>
+        </div>
+    </div>
+
     <div id="accessGuideModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-xs">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1896,7 +1972,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- APPLICATION LOGIC (FIREBASE + SMART COVER THUMBNAIL + FULLSCREEN LIGHTBOX + SWIPE) -->
+    <!-- APPLICATION LOGIC -->
     <!-- ========================================== -->
     <script>
         const firebaseConfig = {
@@ -1920,6 +1996,9 @@
         let currentGoogleUser = null;
         let isSettingsLoadedFromCloud = false;
         let isReaderFullscreen = false;
+        let isLightboxZoomed = false;
+        let activeLightboxPhotos = [];
+        let activeLightboxIndex = 0;
 
         document.addEventListener('click', (e) => {
             const targetBtn = e.target.closest('button, .cat-pill, a.nav-link');
@@ -2026,7 +2105,6 @@
             return isDirectVideoUrl(url) || Boolean(getSocialEmbedInfo(url));
         }
 
-        // Prioritaskan foto yang di-upload sebagai sampul/thumbnail utama di halaman depan!
         function getOrderedPostMedia(art) {
             const raw = Array.isArray(art.images) && art.images.length > 0
                 ? [...art.images]
@@ -2036,7 +2114,6 @@
             return [...photosOnly, ...videosOnly];
         }
 
-        // Upload Video File directly to Firebase Storage WITHOUT ANY FILE SIZE LIMIT
         async function uploadMediaFileToCloud(file, folder = 'uploads') {
             if (file.type.startsWith('video/')) {
                 try {
@@ -2223,26 +2300,24 @@
                 { name: 'Karya Siswa', icon: 'fa-solid fa-palette' }
             ],
             articles: [],
+            trash: [],
             inbox: []
         };
 
-        function loadCachedSettingsSync() {
-            try {
-                const raw = localStorage.getItem(SETTINGS_CACHE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    return {
-                        ...JSON.parse(JSON.stringify(defaultState)),
-                        ...parsed,
-                        hasCachedSettings: true
-                    };
-                }
-            } catch (e) {}
-            return {
-                ...JSON.parse(JSON.stringify(defaultState)),
-                hasCachedSettings: false
-            };
-        }
+        let appState = JSON.parse(JSON.stringify(defaultState));
+        appState.hasCachedSettings = false;
+
+        try {
+            const cachedRaw = localStorage.getItem(SETTINGS_CACHE_KEY);
+            if (cachedRaw) {
+                const parsed = JSON.parse(cachedRaw);
+                appState = {
+                    ...appState,
+                    ...parsed,
+                    hasCachedSettings: true
+                };
+            }
+        } catch (e) {}
 
         function persistSettingsCache() {
             try {
@@ -2255,24 +2330,126 @@
                     aboutData: appState.aboutData,
                     categories: appState.categories
                 }));
+                appState.hasCachedSettings = true;
             } catch (e) {}
         }
 
-        let appState = loadCachedSettingsSync();
+        function renderBrandLogosUI() {
+            const mtsUrl = (appState.logoMtsUrl || '').trim();
+            const osisUrl = (appState.logoOsisUrl || '').trim();
+
+            const mtsPairs = [
+                ['navLogoMtsImg', 'navLogoMtsSvg'],
+                ['aboutLogoMtsImg', 'aboutLogoMtsSvg'],
+                ['modalSocialLogoMtsImg', 'modalSocialLogoMtsSvg'],
+                ['footerLogoMtsImg', 'footerLogoMtsSvg']
+            ];
+            mtsPairs.forEach(([imgId, svgId]) => {
+                const imgEl = document.getElementById(imgId);
+                const svgEl = document.getElementById(svgId);
+                if (!imgEl || !svgEl) return;
+                if (mtsUrl) {
+                    imgEl.src = mtsUrl;
+                    imgEl.classList.remove('hidden');
+                    svgEl.classList.add('hidden');
+                } else {
+                    imgEl.classList.add('hidden');
+                    svgEl.classList.remove('hidden');
+                }
+            });
+
+            const osisPairs = [
+                ['navLogoOsisImg', 'navLogoOsisSvg'],
+                ['aboutLogoOsisImg', 'aboutLogoOsisSvg'],
+                ['modalSocialLogoOsisImg', 'modalSocialLogoOsisSvg'],
+                ['footerLogoOsisImg', 'footerLogoOsisSvg']
+            ];
+            osisPairs.forEach(([imgId, svgId]) => {
+                const imgEl = document.getElementById(imgId);
+                const svgEl = document.getElementById(svgId);
+                if (!imgEl || !svgEl) return;
+                if (osisUrl) {
+                    imgEl.src = osisUrl;
+                    imgEl.classList.remove('hidden');
+                    svgEl.classList.add('hidden');
+                } else {
+                    imgEl.classList.add('hidden');
+                    svgEl.classList.remove('hidden');
+                }
+            });
+        }
+
+        function openLogoManagerModal() {
+            const mtsInput = document.getElementById('inputLogoMtsUrl');
+            const osisInput = document.getElementById('inputLogoOsisUrl');
+            if (mtsInput) mtsInput.value = appState.logoMtsUrl || '';
+            if (osisInput) osisInput.value = appState.logoOsisUrl || '';
+            syncBrandLogoPreview('mts');
+            syncBrandLogoPreview('osis');
+            openModal('logoManagerModal');
+        }
+
+        function syncBrandLogoPreview(type) {
+            if (type === 'mts') {
+                const val = (document.getElementById('inputLogoMtsUrl').value || '').trim();
+                const prev = document.getElementById('previewLogoMtsModal');
+                if (prev) prev.src = val || 'https://placehold.co/100x100/0f3529/fde047?text=MTsN+14';
+            } else {
+                const val = (document.getElementById('inputLogoOsisUrl').value || '').trim();
+                const prev = document.getElementById('previewLogoOsisModal');
+                if (prev) prev.src = val || 'https://placehold.co/100x100/0f3529/ffffff?text=OSIS';
+            }
+        }
+
+        async function handleBrandLogoFileUpload(event, type) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const dataUrl = await compressImageFileToDataURL(file, 400, 0.85);
+            if (type === 'mts') {
+                document.getElementById('inputLogoMtsUrl').value = dataUrl;
+                syncBrandLogoPreview('mts');
+            } else {
+                document.getElementById('inputLogoOsisUrl').value = dataUrl;
+                syncBrandLogoPreview('osis');
+            }
+            showToast('Logo berhasil dimuat, klik Simpan Logo Online!');
+        }
+
+        async function saveCustomBrandLogos(e) {
+            e.preventDefault();
+            appState.logoMtsUrl = (document.getElementById('inputLogoMtsUrl').value || '').trim();
+            appState.logoOsisUrl = (document.getElementById('inputLogoOsisUrl').value || '').trim();
+            try {
+                await saveCloudSettings();
+                renderBrandLogosUI();
+                closeModal('logoManagerModal');
+                showToast('Logo resmi MTsN 14 & OSIS berhasil disimpan!');
+            } catch (err) {
+                showToast('Gagal menyimpan logo: ' + err.message);
+            }
+        }
+
         let currentMode = 'preview';
         let isCreatorAuthenticated = false;
         let activeCategory = 'Semua';
         let currentSearchQuery = '';
         let activeReadingArticleId = null;
         let activeReaderSlideIdx = 0;
+        let pendingDeleteArticleId = null;
+        const TRASH_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
         let cardSlideIndices = {};
         let cardSizeMode = 'large';
         let editorPhotosDraft = [];
+        let editorImagePosition = 'center center';
         let studentSubPhotosDraft = [];
         let studentPrestasiPhotosDraft = [];
 
         function getArticlePhotos(art) {
             return getOrderedPostMedia(art);
+        }
+
+        function getArticleImagePosition(art) {
+            return (art && art.imagePosition) ? art.imagePosition : 'center center';
         }
 
         function compressImageFileToDataURL(file, maxWidth = 1100, quality = 0.78) {
@@ -2300,108 +2477,152 @@
                 reader.readAsDataURL(file);
             });
         }
-
-        function renderBrandLogosUI() {
-            const mtsUrl = (appState.logoMtsUrl || '').trim();
-            const osisUrl = (appState.logoOsisUrl || '').trim();
-
-            const pairs = [
-                { imgId: 'navLogoMtsImg', svgId: 'navLogoMtsSvg', url: mtsUrl },
-                { imgId: 'navLogoOsisImg', svgId: 'navLogoOsisSvg', url: osisUrl },
-                { imgId: 'footerLogoMtsImg', svgId: 'footerLogoMtsSvg', url: mtsUrl },
-                { imgId: 'footerLogoOsisImg', svgId: 'footerLogoOsisSvg', url: osisUrl },
-                { imgId: 'aboutLogoMtsImg', svgId: 'aboutLogoMtsSvg', url: mtsUrl },
-                { imgId: 'aboutLogoOsisImg', svgId: 'aboutLogoOsisSvg', url: osisUrl },
-                { imgId: 'modalSocialLogoMtsImg', svgId: 'modalSocialLogoMtsSvg', url: mtsUrl },
-                { imgId: 'modalSocialLogoOsisImg', svgId: 'modalSocialLogoOsisSvg', url: osisUrl }
-            ];
-
-            pairs.forEach(item => {
-                const imgEl = document.getElementById(item.imgId);
-                const svgEl = document.getElementById(item.svgId);
-                if (!imgEl || !svgEl) return;
-
-                if (item.url) {
-                    imgEl.src = item.url;
-                    imgEl.classList.remove('hidden');
-                    svgEl.classList.add('hidden');
-                    imgEl.onerror = () => {
-                        imgEl.classList.add('hidden');
-                        svgEl.classList.remove('hidden');
-                    };
-                } else {
-                    imgEl.classList.add('hidden');
-                    svgEl.classList.remove('hidden');
-                }
-            });
-        }
-
-        function openLogoManagerModal() {
-            const mtsInput = document.getElementById('inputLogoMtsUrl');
-            const osisInput = document.getElementById('inputLogoOsisUrl');
-            if (mtsInput) mtsInput.value = appState.logoMtsUrl || '';
-            if (osisInput) osisInput.value = appState.logoOsisUrl || '';
-            syncBrandLogoPreview('mts');
-            syncBrandLogoPreview('osis');
-            openModal('logoManagerModal');
-        }
-
-        function syncBrandLogoPreview(which) {
-            const input = document.getElementById(which === 'mts' ? 'inputLogoMtsUrl' : 'inputLogoOsisUrl');
-            const prev = document.getElementById(which === 'mts' ? 'previewLogoMtsModal' : 'previewLogoOsisModal');
-            if (!input || !prev) return;
-            const val = input.value.trim();
-            prev.src = val || (which === 'mts'
-                ? 'https://placehold.co/100x100/0088ff/fde047?text=MTsN+14'
-                : 'https://placehold.co/100x100/b91c1c/ffffff?text=OSIS+14');
-        }
-
-        function handleBrandLogoFileUpload(event, which) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const maxDim = 240;
-                    let w = img.width;
-                    let h = img.height;
-                    if (w > maxDim || h > maxDim) {
-                        if (w > h) {
-                            h = Math.round((h * maxDim) / w);
-                            w = maxDim;
-                        } else {
-                            w = Math.round((w * maxDim) / h);
-                            h = maxDim;
-                        }
-                    }
-                    canvas.width = w;
-                    canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    const pngDataUrl = canvas.toDataURL('image/png');
-                    const inputId = which === 'mts' ? 'inputLogoMtsUrl' : 'inputLogoOsisUrl';
-                    document.getElementById(inputId).value = pngDataUrl;
-                    syncBrandLogoPreview(which);
-                    showToast(`Logo ${which === 'mts' ? 'MTsN 14' : 'OSIS MTsN 14'} siap disimpan!`);
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function saveCustomBrandLogos(e) {
-            e.preventDefault();
-            appState.logoMtsUrl = document.getElementById('inputLogoMtsUrl').value.trim();
-            appState.logoOsisUrl = document.getElementById('inputLogoOsisUrl').value.trim();
+// ... existing code ... -->
+        function logoutCreatorMode(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            isCreatorAuthenticated = false;
             try {
-                await saveCloudSettings();
-                renderBrandLogosUI();
-                closeModal('logoManagerModal');
-                showToast('Logo MTsN 14 & OSIS berhasil disimpan online!');
+                if (window.location.hash) window.location.hash = '';
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
+            } catch (err) {}
+            closeModal('articleEditorModal');
+            closeModal('inboxModal');
+            closeModal('trashModal');
+            closeModal('confirmDeletePostModal');
+            closeModal('accessGuideModal');
+            closeModal('polaroidManagerModal');
+            closeModal('logoManagerModal');
+            closeModal('categoryManagerModal');
+            setAppMode('preview');
+        }
+// ... existing code ... -->
+        function deleteArticle(id) {
+            const art = appState.articles.find(a => a.id === id);
+            if (!art) return;
+            pendingDeleteArticleId = id;
+            const titleEl = document.getElementById('confirmDeletePostTitle');
+            if (titleEl) titleEl.textContent = `"${art.title}"`;
+            openModal('confirmDeletePostModal');
+        }
+
+        async function confirmMoveArticleToTrash() {
+            const id = pendingDeleteArticleId;
+            if (!id) return;
+            const art = appState.articles.find(a => a.id === id);
+            if (!art) {
+                closeModal('confirmDeletePostModal');
+                return;
+            }
+
+            const yesBtn = document.getElementById('confirmDeletePostYesBtn');
+            if (yesBtn) {
+                yesBtn.disabled = true;
+                yesBtn.textContent = 'Memindahkan...';
+            }
+
+            try {
+                const trashPayload = {
+                    ...art,
+                    deletedAt: Date.now()
+                };
+                await db.collection('sanvalas_trash').doc(id).set(trashPayload);
+                await db.collection('sanvalas_articles').doc(id).delete();
+                pendingDeleteArticleId = null;
+                closeModal('confirmDeletePostModal');
+                showToast('Postingan dipindahkan ke Sampah (dapat dipulihkan dalam 30 hari)');
             } catch (err) {
-                showToast('Gagal menyimpan logo: ' + err.message);
+                showToast('Gagal menghapus postingan: ' + err.message);
+            } finally {
+                if (yesBtn) {
+                    yesBtn.disabled = false;
+                    yesBtn.textContent = 'Ya, Hapus';
+                }
+            }
+        }
+
+        function updateTrashBadge() {
+            const badge = document.getElementById('trashCountBadge');
+            if (badge) badge.textContent = appState.trash.length;
+        }
+
+        function openTrashModal() {
+            renderTrashListUI();
+            openModal('trashModal');
+        }
+
+        function renderTrashListUI() {
+            const container = document.getElementById('trashListContainer');
+            if (!container) return;
+            if (appState.trash.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 bg-slate-50 rounded-2xl border border-dashed border-slate-200 space-y-1.5">
+                        <div class="text-2xl text-slate-300"><i class="fa-regular fa-trash-can"></i></div>
+                        <div class="font-bold text-slate-600">Tempat sampah kosong</div>
+                        <p class="text-[11px] text-slate-400">Postingan yang dihapus akan tersimpan di sini selama 30 hari.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const now = Date.now();
+            container.innerHTML = appState.trash.map(item => {
+                const elapsed = now - (item.deletedAt || now);
+                const daysLeft = Math.max(1, Math.ceil((TRASH_RETENTION_MS - elapsed) / (24 * 60 * 60 * 1000)));
+                const thumbUrl = item.image || 'https://placehold.co/200x140/164636/ffffff?text=Post';
+                return `
+                    <div class="p-3 rounded-2xl border border-slate-200 bg-slate-50/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <img src="${thumbUrl}" alt="" class="w-16 h-12 rounded-xl object-cover bg-slate-200 border border-slate-200 shrink-0" onerror="this.src='https://placehold.co/200x140/164636/ffffff?text=Post'">
+                            <div class="min-w-0 space-y-0.5">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="text-[10px] font-extrabold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded-full">${item.category || 'Konten'}</span>
+                                    <span class="text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
+                                        <i class="fa-regular fa-clock mr-0.5"></i> Sisa ${daysLeft} hari
+                                    </span>
+                                </div>
+                                <div class="font-extrabold text-slate-900 truncate">${item.title}</div>
+                                <div class="text-[10px] text-slate-400">Dihapus: ${new Date(item.deletedAt || now).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
+                            <button type="button" onclick="restoreArticleFromTrash('${item.id}')" class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-2xs flex items-center gap-1 transition">
+                                <i class="fa-solid fa-rotate-left"></i> Pulihkan
+                            </button>
+                            <button type="button" onclick="permanentDeleteFromTrash('${item.id}')" class="bg-rose-100 hover:bg-rose-600 text-rose-700 hover:text-white text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition" title="Hapus Permanen Sekarang">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function restoreArticleFromTrash(id) {
+            const item = appState.trash.find(t => t.id === id);
+            if (!item) return;
+            const restoredPayload = { ...item };
+            delete restoredPayload.deletedAt;
+
+            try {
+                await db.collection('sanvalas_articles').doc(id).set(restoredPayload);
+                await db.collection('sanvalas_trash').doc(id).delete();
+                showToast('Postingan berhasil dipulihkan ke halaman utama!');
+            } catch (err) {
+                showToast('Gagal memulihkan postingan: ' + err.message);
+            }
+        }
+
+        async function permanentDeleteFromTrash(id) {
+            try {
+                await db.collection('sanvalas_trash').doc(id).delete();
+                showToast('Postingan dihapus permanen');
+            } catch (err) {
+                showToast('Gagal menghapus permanen: ' + err.message);
             }
         }
 
@@ -2501,6 +2722,27 @@
             }, (error) => {
                 console.warn('Firestore inbox error:', error);
             });
+
+            db.collection('sanvalas_trash').orderBy('deletedAt', 'desc').onSnapshot((snapshot) => {
+                const now = Date.now();
+                const validTrash = [];
+                snapshot.docs.forEach(doc => {
+                    const data = { ...doc.data(), id: doc.id };
+                    const deletedAt = data.deletedAt || now;
+                    if (now - deletedAt >= TRASH_RETENTION_MS) {
+                        db.collection('sanvalas_trash').doc(doc.id).delete().catch(() => {});
+                    } else {
+                        validTrash.push(data);
+                    }
+                });
+                appState.trash = validTrash;
+                updateTrashBadge();
+                if (!document.getElementById('trashModal').classList.contains('hidden')) {
+                    renderTrashListUI();
+                }
+            }, (error) => {
+                console.warn('Firestore trash error:', error);
+            });
         }
 
         function saveCloudSettings() {
@@ -2554,6 +2796,9 @@
             setupReaderTouchSwipe();
         });
 
+        // ==========================================
+        // SHARE POST MODAL & URL PARAM HANDLERS
+        // ==========================================
         let hasCheckedSharedUrl = false;
         function checkSharedPostUrlParam() {
             if (hasCheckedSharedUrl) return;
@@ -2607,13 +2852,97 @@
             showToast('Link postingan berhasil disalin!');
         }
 
+        // ==========================================
+        // ADD / EDIT ARTICLE MODAL (AUTO-FIT PHOTO)
+        // ==========================================
+        function openAddArticleModal() {
+            syncCategoryDropdowns();
+            document.getElementById('editorModalTitle').textContent = 'Posting Konten Baru';
+            document.getElementById('editArticleId').value = '';
+            document.getElementById('editArticleTitle').value = '';
+            const cats = getCategoriesList();
+            document.getElementById('editArticleCategory').value = cats[0] ? cats[0].name : 'Edukasi';
+            document.getElementById('editArticleDate').value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('editArticleImage').value = '';
+            document.getElementById('editArticleBody').value = '';
+            editorPhotosDraft = [];
+            editorImagePosition = 'center center';
+            renderEditorPhotosPreview();
+            openModal('articleEditorModal');
+        }
+
+        function openEditArticleModal(id) {
+            const art = appState.articles.find(a => a.id === id);
+            if (!art) return;
+            syncCategoryDropdowns();
+            document.getElementById('editorModalTitle').textContent = 'Edit Postingan Konten';
+            document.getElementById('editArticleId').value = art.id;
+            document.getElementById('editArticleTitle').value = art.title;
+            document.getElementById('editArticleCategory').value = art.category;
+            document.getElementById('editArticleDate').value = art.date;
+            document.getElementById('editArticleImage').value = '';
+            document.getElementById('editArticleBody').value = art.body || '';
+            editorPhotosDraft = [...getArticlePhotos(art)];
+            editorImagePosition = 'center center';
+            renderEditorPhotosPreview();
+            openModal('articleEditorModal');
+        }
+
+        function renderMediaPreviewItemHtml(url, idx, removeFnName, focusPos = 'center center') {
+            const ytThumb = getYouTubeThumbnailUrl(url);
+            const sInfo = getSocialEmbedInfo(url);
+            const isDirectVid = isDirectVideoUrl(url);
+            const isVid = isDirectVid || Boolean(sInfo);
+
+            let mediaEl = `<img src="${url}" style="object-position: ${focusPos};" class="w-full h-full object-cover transition-all duration-200" alt="Media ${idx + 1}">`;
+            if (ytThumb) {
+                mediaEl = `<img src="${ytThumb}" style="object-position: ${focusPos};" class="w-full h-full object-cover" alt="YouTube ${idx + 1}">`;
+            } else if (sInfo) {
+                mediaEl = `<div class="w-full h-full bg-slate-900 flex flex-col items-center justify-center text-white p-2 text-center"><i class="${sInfo.icon} text-lg mb-1"></i><span class="text-[9px] font-extrabold">${sInfo.platform}</span></div>`;
+            } else if (isDirectVid) {
+                mediaEl = `<video src="${url}#t=0.5" muted playsinline style="object-position: ${focusPos};" class="w-full h-full object-cover bg-black"></video>`;
+            }
+
+            return `
+                <div class="relative group rounded-xl overflow-hidden border border-slate-300 aspect-video bg-slate-900">
+                    ${mediaEl}
+                    <span class="absolute bottom-1 left-1 bg-black/75 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                        ${idx === 0 && !isVid ? 'COVER' : '#' + (idx + 1)}
+                    </span>
+                    ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded">${sInfo ? sInfo.platform.toUpperCase() : 'VIDEO'}</span>` : ''}
+                    ${removeFnName ? `
+                        <button type="button" onclick="${removeFnName}(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700" title="Hapus media ini">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function sortDraftMediaCoverFirst(list) {
+            const photos = list.filter(u => !isAnyVideoMedia(u));
+            const videos = list.filter(u => isAnyVideoMedia(u));
+            return [...photos, ...videos];
+        }
+
+        function renderEditorPhotosPreview() {
+            const box = document.getElementById('editorPhotosPreviewList');
+            if (!box) return;
+            editorPhotosDraft = sortDraftMediaCoverFirst(editorPhotosDraft);
+            if (editorPhotosDraft.length === 0) {
+                box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-slate-400">Belum ada foto atau video dipilih. Upload foto sampul atau tempel link video.</div>`;
+                return;
+            }
+            box.innerHTML = editorPhotosDraft.map((url, idx) => renderMediaPreviewItemHtml(url, idx, 'removeEditorPhotoAt', 'center center')).join('');
+        }
+
+        // ==========================================
+        // HERO POLAROIDS, ABOUT & CATEGORIES
+        // ==========================================
         let polaroidOrder = [0, 1, 2];
         let polaroidSlideshowTimer = null;
 
-        function renderHeroPolaroids(forceShow = false) {
-            if (!forceShow && !isSettingsLoadedFromCloud && !appState.hasCachedSettings) {
-                return;
-            }
+        function renderHeroPolaroids(reveal = false) {
             const p = Array.isArray(appState.polaroids) && appState.polaroids.length === 3
                 ? appState.polaroids
                 : defaultState.polaroids;
@@ -2625,21 +2954,23 @@
 
             if (bgImg) {
                 bgImg.src = appState.heroBg || defaultState.heroBg;
-                bgImg.classList.remove('opacity-0');
-                bgImg.classList.add('opacity-40');
+                if (reveal) {
+                    bgImg.classList.remove('opacity-0');
+                    bgImg.classList.add('opacity-40');
+                }
             }
-            if (img1) {
-                img1.src = p[polaroidOrder[0]];
-                img1.classList.remove('opacity-0');
-            }
-            if (img2) {
-                img2.src = p[polaroidOrder[1]];
-                img2.classList.remove('opacity-0');
-            }
-            if (img3) {
-                img3.src = p[polaroidOrder[2]];
-                img3.classList.remove('opacity-0');
-            }
+            [
+                [img1, p[polaroidOrder[0]]],
+                [img2, p[polaroidOrder[1]]],
+                [img3, p[polaroidOrder[2]]]
+            ].forEach(([el, srcUrl]) => {
+                if (!el) return;
+                el.src = srcUrl;
+                if (reveal) {
+                    el.classList.remove('opacity-0');
+                    el.classList.add('opacity-100');
+                }
+            });
             if (cap) cap.textContent = appState.polaroidCaption || 'MTsN 14';
         }
 
@@ -2802,6 +3133,7 @@
             };
             try {
                 await saveCloudSettings();
+                renderAboutSectionUI();
                 closeModal('aboutEditorModal');
                 showToast('Konten "Tentang Kami" tersimpan online!');
             } catch (err) {
@@ -2907,6 +3239,56 @@
             showToast(`Kategori "${removed.name}" dihapus`);
         }
 
+        function setActiveNavIndicator(targetEl) {
+            const navLinks = document.querySelectorAll('#desktopMainNav .nav-link');
+            const activeClasses = ['nav-active', 'text-white', 'font-semibold', 'relative', "after:content-['']", 'after:absolute', 'after:bottom-0', 'after:left-0', 'after:w-full', 'after:h-[2.5px]', 'after:bg-white', 'after:rounded-full'];
+            navLinks.forEach(link => {
+                link.classList.remove(...activeClasses);
+            });
+            if (targetEl) {
+                targetEl.classList.add(...activeClasses);
+            }
+        }
+
+        function setActiveCategory(cat) {
+            activeCategory = cat;
+            renderCategoriesBar();
+
+            const resetBtn = document.getElementById('resetCategoryBtn');
+            const badge = document.getElementById('activeFilterBadge');
+
+            if (cat === 'Semua') {
+                resetBtn.classList.add('hidden');
+                badge.classList.add('hidden');
+            } else {
+                resetBtn.classList.remove('hidden');
+                badge.textContent = `Kategori: ${cat}`;
+                badge.classList.remove('hidden');
+            }
+            renderArticles();
+        }
+
+        function filterByNav(cat, navEl) {
+            if (navEl) {
+                setActiveNavIndicator(navEl);
+            } else {
+                const mapByCat = {
+                    'Semua': 'navLinkKonten',
+                    'Dokumentasi': 'navLinkDokumentasi',
+                    'Prestasi': 'navLinkPrestasi',
+                    'Karya Siswa': 'navLinkKarya'
+                };
+                const found = document.getElementById(mapByCat[cat] || 'navLinkBeranda');
+                if (found) setActiveNavIndicator(found);
+            }
+            setActiveCategory(cat);
+            if (navEl && navEl.id === 'navLinkBeranda') {
+                scrollToSection('beranda');
+            } else {
+                scrollToSection('konten');
+            }
+        }
+
         function checkSecretUrlAccess() {
             const hash = (window.location.hash || '').toLowerCase();
             const params = new URLSearchParams(window.location.search);
@@ -2981,27 +3363,6 @@
             setAppMode('edit');
         }
 
-        function logoutCreatorMode(e) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            isCreatorAuthenticated = false;
-            try {
-                if (window.location.hash) window.location.hash = '';
-                if (window.history && window.history.replaceState) {
-                    window.history.replaceState(null, '', window.location.pathname + window.location.search);
-                }
-            } catch (err) {}
-            closeModal('articleEditorModal');
-            closeModal('inboxModal');
-            closeModal('accessGuideModal');
-            closeModal('polaroidManagerModal');
-            closeModal('logoManagerModal');
-            closeModal('categoryManagerModal');
-            setAppMode('preview');
-        }
-
         function setAppMode(mode) {
             currentMode = mode;
             const isCreator = mode === 'edit';
@@ -3015,6 +3376,52 @@
             renderArticles();
         }
 
+        function handleSearch(val) {
+            const trimmed = val.trim();
+            if (trimmed.toLowerCase() === '/redaksi' || trimmed.toLowerCase() === '/admin') {
+                const deskInput = document.getElementById('searchInput');
+                const mobInput = document.getElementById('mobileSearchInput');
+                if (deskInput) deskInput.value = '';
+                if (mobInput) mobInput.value = '';
+                currentSearchQuery = '';
+                renderArticles();
+                openCreatorLoginModal();
+                return;
+            }
+            currentSearchQuery = trimmed;
+            renderArticles();
+        }
+
+        function handleSearchKeydown(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.trim().toLowerCase();
+                if (val === '/redaksi' || val === '/admin' || val === '#redaksi') {
+                    e.preventDefault();
+                    e.target.value = '';
+                    currentSearchQuery = '';
+                    openCreatorLoginModal();
+                }
+            }
+        }
+
+        function openAccessGuideModal() {
+            const baseUrl = window.location.href.split('#')[0].split('?')[0];
+            document.getElementById('publicUrlDisplay').value = baseUrl;
+            document.getElementById('creatorUrlDisplay').value = baseUrl + '#redaksi';
+            openModal('accessGuideModal');
+        }
+
+        function copyUrlFromInput(inputId, msg) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            input.select();
+            document.execCommand('copy');
+            showToast(msg);
+        }
+
+        // ==========================================
+        // CARD GRID & MULTI-MEDIA SLIDE RENDERING
+        // ==========================================
         function setCardSizeMode(sizeMode) {
             cardSizeMode = sizeMode;
             const largeBtn = document.getElementById('viewSizeLargeBtn');
@@ -3031,6 +3438,92 @@
                 grid.className = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4';
             }
             renderArticles();
+        }
+
+        function buildCardMediaHtml(art, mediaUrl, slideIdx) {
+            const ytThumb = getYouTubeThumbnailUrl(mediaUrl);
+            const sInfo = getSocialEmbedInfo(mediaUrl);
+            const isDirectVid = isDirectVideoUrl(mediaUrl);
+            const focusPos = getArticleImagePosition(art);
+
+            if (ytThumb) {
+                return `
+                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer group/vid">
+                        <img src="${ytThumb}" alt="${art.title}" style="object-position: ${focusPos};" class="w-full h-full object-cover group-hover:scale-[1.03] transition duration-500">
+                        <div class="absolute inset-0 bg-black/25 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-red-600/95 text-white flex items-center justify-center shadow-xl ring-4 ring-white/25 group-hover/vid:scale-110 transition">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (sInfo && sInfo.embedUrl) {
+                return `
+                    <div class="relative w-full h-full bg-white overflow-hidden">
+                        <iframe
+                            src="${sInfo.embedUrl}"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                            class="w-full h-full border-0 pointer-events-none"
+                        ></iframe>
+                        <div
+                            onclick="openArticleReader('${art.id}', ${slideIdx})"
+                            class="absolute inset-0 z-10 cursor-pointer bg-transparent hover:bg-black/10 transition flex items-center justify-center"
+                            title="Ketuk untuk memutar video ${sInfo.platform}"
+                        >
+                            <span class="opacity-0 group-hover:opacity-100 transition bg-black/75 backdrop-blur-xs text-white text-xs font-extrabold px-3.5 py-2 rounded-full shadow-lg flex items-center gap-1.5">
+                                <i class="${sInfo.icon}"></i> Putar Video ${sInfo.platform}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (sInfo && sInfo.externalOnly) {
+                return `
+                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="w-full h-full bg-gradient-to-br ${sInfo.gradient} flex flex-col items-center justify-center text-white p-4 text-center cursor-pointer relative overflow-hidden">
+                        <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 flex items-center justify-center mb-2 shadow-lg">
+                            <i class="${sInfo.icon} text-2xl"></i>
+                        </div>
+                        <div class="text-xs font-extrabold line-clamp-1 max-w-[85%]">${art.title}</div>
+                        <div class="text-[11px] text-white/85 mt-0.5 font-medium truncate max-w-[85%]">${mediaUrl}</div>
+                    </div>
+                `;
+            }
+
+            if (isDirectVid) {
+                return `
+                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full bg-black cursor-pointer group/vid">
+                        <video
+                            src="${mediaUrl}#t=0.5"
+                            muted
+                            playsinline
+                            preload="metadata"
+                            style="object-position: ${focusPos};"
+                            class="w-full h-full object-cover"
+                        ></video>
+                        <div class="absolute inset-0 bg-black/25 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-emerald-800/95 text-white flex items-center justify-center shadow-xl ring-4 ring-white/25 group-hover/vid:scale-110 transition">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <img
+                    onclick="openArticleReader('${art.id}', ${slideIdx})"
+                    src="${mediaUrl}"
+                    alt="${art.title}"
+                    style="object-position: ${focusPos};"
+                    class="w-full h-full object-cover cursor-pointer group-hover:scale-[1.03] transition duration-500"
+                    onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
+                >
+            `;
         }
 
         function stepCardSlide(event, articleId, delta) {
@@ -3061,12 +3554,15 @@
             const safeIdx = ((targetIdx % photos.length) + photos.length) % photos.length;
             cardSlideIndices[articleId] = safeIdx;
 
-            const mediaWrap = document.getElementById(`cardSlideMediaWrap-${articleId}`);
+            const mediaSlot = document.getElementById(`cardMediaSlot-${articleId}`);
             const counterEl = document.getElementById(`cardSlideCounter-${articleId}`);
             const dotsEl = document.getElementById(`cardSlideDots-${articleId}`);
 
-            if (mediaWrap) {
-                mediaWrap.innerHTML = renderCardMediaHtml(art, photos[safeIdx], safeIdx);
+            if (mediaSlot) {
+                mediaSlot.classList.remove('slide-fade-anim');
+                void mediaSlot.offsetWidth;
+                mediaSlot.innerHTML = buildCardMediaHtml(art, photos[safeIdx], safeIdx);
+                mediaSlot.classList.add('slide-fade-anim');
             }
             if (counterEl) {
                 counterEl.innerHTML = `<i class="fa-regular fa-images"></i> ${safeIdx + 1}/${photos.length}`;
@@ -3083,60 +3579,9 @@
             }
         }
 
-        function renderCardMediaHtml(art, mediaUrl, slideIdx) {
-            const ytThumb = getYouTubeThumbnailUrl(mediaUrl);
-            if (ytThumb) {
-                return `
-                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer slide-fade-anim">
-                        <img src="${ytThumb}" alt="${art.title}" class="w-full h-full object-cover object-center group-hover:scale-[1.03] transition duration-500">
-                        <div class="absolute inset-0 flex items-center justify-center bg-black/25">
-                            <span class="w-12 h-12 rounded-full bg-red-600/95 text-white flex items-center justify-center shadow-lg ring-4 ring-white/25">
-                                <i class="fa-solid fa-play text-base ml-0.5"></i>
-                            </span>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (isDirectVideoUrl(mediaUrl)) {
-                return `
-                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer bg-black slide-fade-anim">
-                        <video src="${mediaUrl}#t=0.5" muted preload="metadata" playsinline class="w-full h-full object-cover object-center"></video>
-                        <div class="absolute inset-0 flex items-center justify-center bg-black/25">
-                            <span class="w-12 h-12 rounded-full bg-emerald-800/95 text-white flex items-center justify-center shadow-lg ring-4 ring-white/25">
-                                <i class="fa-solid fa-play text-base ml-0.5"></i>
-                            </span>
-                        </div>
-                    </div>
-                `;
-            }
-
-            const socialInfo = getSocialEmbedInfo(mediaUrl);
-            if (socialInfo && socialInfo.platform !== 'YouTube') {
-                return `
-                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer bg-sanvalas-900 flex flex-col items-center justify-center text-white p-4 text-center slide-fade-anim">
-                        <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-md mb-2 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-play text-lg ml-0.5 text-amber-300"></i>
-                        </div>
-                        <div class="text-xs font-extrabold tracking-wide line-clamp-1 px-2">${art.title}</div>
-                        <div class="text-[11px] text-emerald-200/90 mt-0.5">Ketuk untuk memutar video</div>
-                    </div>
-                `;
-            }
-
-            return `
-                <img
-                    onclick="openArticleReader('${art.id}', ${slideIdx})"
-                    src="${mediaUrl}"
-                    alt="${art.title}"
-                    class="w-full h-full object-cover object-center cursor-pointer group-hover:scale-[1.03] transition duration-500 slide-fade-anim"
-                    onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
-                >
-            `;
-        }
-
         function renderArticles() {
             const grid = document.getElementById('articlesGrid');
+            if (!grid) return;
             const filtered = appState.articles.filter(art => {
                 const matchCat = activeCategory === 'Semua' || art.category.toLowerCase() === activeCategory.toLowerCase();
                 const matchSearch = !currentSearchQuery ||
@@ -3161,7 +3606,7 @@
                 const likedByMe = isArticleLikedByCurrentGoogleUser(art);
                 const photos = getArticlePhotos(art);
                 const photoCount = photos.length;
-                const hasAnyVideo = photos.some(u => isAnyVideoMedia(u));
+                const hasAnyVid = photos.some(u => isAnyVideoMedia(u));
                 const isLarge = cardSizeMode === 'large';
                 const currentSlideIdx = Math.min(cardSlideIndices[art.id] || 0, photoCount - 1);
 
@@ -3180,8 +3625,8 @@
 
                     <div>
                         <div class="relative aspect-[16/10] w-full bg-slate-900 overflow-hidden select-none">
-                            <div id="cardSlideMediaWrap-${art.id}" class="w-full h-full">
-                                ${renderCardMediaHtml(art, photos[currentSlideIdx], currentSlideIdx)}
+                            <div id="cardMediaSlot-${art.id}" class="w-full h-full">
+                                ${buildCardMediaHtml(art, photos[currentSlideIdx], currentSlideIdx)}
                             </div>
 
                             <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/65 via-black/20 to-transparent pointer-events-none"></div>
@@ -3190,7 +3635,11 @@
                                 <span class="bg-white/95 backdrop-blur-xs text-slate-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm">
                                     ${art.category}
                                 </span>
-                                ${hasAnyVideo ? `<span class="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1"><i class="fa-solid fa-video text-[9px]"></i> Video</span>` : ''}
+                                ${hasAnyVid ? `
+                                    <span onclick="openArticleReader('${art.id}', ${photos.findIndex(u => isAnyVideoMedia(u))})" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1 cursor-pointer">
+                                        <i class="fa-solid fa-video"></i> Video
+                                    </span>
+                                ` : ''}
                             </div>
 
                             ${photoCount > 1 ? `
@@ -3267,7 +3716,7 @@
         }
 
         // ==========================================
-        // READER MODAL + FULLSCREEN LIGHTBOX + TOUCH SWIPE
+        // ARTICLE READER, FULLSCREEN POPUP, SINGLE-CLICK LIGHTBOX & LIKES/COMMENTS
         // ==========================================
         function openArticleReader(id, initialSlideIdx = 0) {
             const art = appState.articles.find(a => a.id === id);
@@ -3275,10 +3724,12 @@
             activeReadingArticleId = id;
             activeReaderSlideIdx = typeof initialSlideIdx === 'number' ? initialSlideIdx : 0;
             setReaderFullscreenState(false);
+
             document.getElementById('readerCategory').textContent = art.category;
             document.getElementById('readerDate').innerHTML = `<i class="fa-regular fa-calendar"></i> ${art.date}`;
             document.getElementById('readerTitle').textContent = art.title;
             document.getElementById('readerBody').textContent = art.body || art.title;
+
             renderReaderGallerySlide(art);
             updateReaderLikeButtonUI(art);
             renderCommentGoogleBanner();
@@ -3286,41 +3737,33 @@
             openModal('articleReaderModal');
         }
 
-        function setReaderFullscreenState(enable) {
-            isReaderFullscreen = Boolean(enable);
-            const modalBackdrop = document.getElementById('articleReaderModal');
-            const modalContainer = document.getElementById('readerModalContainer');
-            const mediaStage = document.getElementById('readerMediaStage');
-            const bodyWrap = document.getElementById('readerContentBodyWrap');
-            const fsIcon = document.getElementById('readerFullscreenIcon');
-            const fsLabel = document.getElementById('readerFullscreenLabel');
+        function setReaderFullscreenState(fullscreen) {
+            isReaderFullscreen = fullscreen;
+            const modalOverlay = document.getElementById('articleReaderModal');
+            const container = document.getElementById('readerModalContainer');
+            const stage = document.getElementById('readerMediaStage');
+            const icon = document.getElementById('readerFullscreenIcon');
+            const label = document.getElementById('readerFullscreenLabel');
+            if (!modalOverlay || !container || !stage) return;
 
-            if (!modalBackdrop || !modalContainer || !mediaStage) return;
-
-            if (isReaderFullscreen) {
-                modalBackdrop.className = 'fixed inset-0 bg-black z-50 flex items-center justify-center p-0 transition-all';
-                modalContainer.className = 'bg-black w-screen h-screen max-w-none max-h-none rounded-none overflow-hidden flex flex-col justify-between transition-all duration-300';
-                mediaStage.className = 'relative bg-black flex-1 w-full h-full overflow-hidden select-none group flex items-center justify-center';
-                if (bodyWrap) bodyWrap.classList.add('hidden');
-                if (fsIcon) fsIcon.className = 'fa-solid fa-compress text-xs sm:text-sm';
-                if (fsLabel) fsLabel.textContent = 'Perkecil';
+            if (fullscreen) {
+                modalOverlay.classList.remove('p-2.5', 'sm:p-5');
+                modalOverlay.classList.add('p-0');
+                container.classList.remove('max-w-4xl', 'max-h-[92vh]', 'rounded-2xl', 'sm:rounded-3xl', 'border');
+                container.classList.add('max-w-none', 'w-screen', 'h-screen', 'max-h-screen', 'rounded-none', 'border-0');
+                stage.classList.remove('h-72', 'sm:h-[480px]');
+                stage.classList.add('h-[62vh]', 'sm:h-[75vh]');
+                if (icon) icon.className = 'fa-solid fa-compress text-xs sm:text-sm';
+                if (label) label.textContent = 'Perkecil';
             } else {
-                modalBackdrop.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2.5 sm:p-5 transition-all';
-                modalContainer.className = 'modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col transition-all duration-300';
-                if (bodyWrap) bodyWrap.classList.remove('hidden');
-                if (fsIcon) fsIcon.className = 'fa-solid fa-expand text-xs sm:text-sm';
-                if (fsLabel) fsLabel.textContent = 'Layar Penuh';
-
-                const art = appState.articles.find(a => a.id === activeReadingArticleId);
-                if (art) {
-                    const photos = getArticlePhotos(art);
-                    const sInfo = getSocialEmbedInfo(photos[activeReaderSlideIdx]);
-                    if (sInfo && sInfo.isTall) {
-                        mediaStage.className = 'relative bg-slate-950 h-[440px] sm:h-[540px] shrink-0 overflow-hidden select-none group transition-all duration-300';
-                    } else {
-                        mediaStage.className = 'relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300';
-                    }
-                }
+                modalOverlay.classList.add('p-2.5', 'sm:p-5');
+                modalOverlay.classList.remove('p-0');
+                container.classList.add('max-w-4xl', 'max-h-[92vh]', 'rounded-2xl', 'sm:rounded-3xl', 'border');
+                container.classList.remove('max-w-none', 'w-screen', 'h-screen', 'max-h-screen', 'rounded-none', 'border-0');
+                stage.classList.add('h-72', 'sm:h-[480px]');
+                stage.classList.remove('h-[62vh]', 'sm:h-[75vh]');
+                if (icon) icon.className = 'fa-solid fa-expand text-xs sm:text-sm';
+                if (label) label.textContent = 'Perbesar';
             }
         }
 
@@ -3332,49 +3775,22 @@
             setReaderFullscreenState(!isReaderFullscreen);
         }
 
-        function setupReaderTouchSwipe() {
-            const stage = document.getElementById('readerMediaStage');
-            if (!stage) return;
-            let touchStartX = 0;
-            let touchStartY = 0;
-
-            stage.addEventListener('touchstart', (e) => {
-                if (e.touches.length === 1) {
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                }
-            }, { passive: true });
-
-            stage.addEventListener('touchend', (e) => {
-                if (!touchStartX || e.changedTouches.length === 0) return;
-                const diffX = e.changedTouches[0].clientX - touchStartX;
-                const diffY = e.changedTouches[0].clientY - touchStartY;
-                if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
-                    if (diffX < 0) {
-                        stepReaderGallery(1);
-                    } else {
-                        stepReaderGallery(-1);
-                    }
-                }
-                touchStartX = 0;
-                touchStartY = 0;
-            }, { passive: true });
-        }
-
         function renderReaderGallerySlide(art) {
             const photos = getArticlePhotos(art);
             if (activeReaderSlideIdx >= photos.length) activeReaderSlideIdx = 0;
             if (activeReaderSlideIdx < 0) activeReaderSlideIdx = photos.length - 1;
 
             const currentUrl = photos[activeReaderSlideIdx];
-            const mediaStage = document.getElementById('readerMediaStage');
+            const focusPos = getArticleImagePosition(art);
             const readerImg = document.getElementById('readerImg');
             const readerVideo = document.getElementById('readerVideo');
             const readerIframe = document.getElementById('readerIframe');
             const ambientBg = document.getElementById('readerAmbientBg');
             const gradientMask = document.getElementById('readerGradientMask');
-            const bottomOverlay = document.getElementById('readerBottomOverlay');
-            const extLinkBtn = document.getElementById('readerOpenExternalLink');
+            const extLink = document.getElementById('readerOpenExternalLink');
+
+            const sInfo = getSocialEmbedInfo(currentUrl);
+            const isDirectVid = isDirectVideoUrl(currentUrl);
 
             if (readerVideo) {
                 readerVideo.pause();
@@ -3388,56 +3804,39 @@
             if (readerImg) {
                 readerImg.classList.add('hidden');
             }
-            if (extLinkBtn) {
-                extLinkBtn.classList.add('hidden');
-                extLinkBtn.classList.remove('inline-flex');
+            if (extLink) {
+                extLink.classList.add('hidden');
+                extLink.classList.remove('inline-flex');
             }
 
-            const socialInfo = getSocialEmbedInfo(currentUrl);
-            const isDirectVid = isDirectVideoUrl(currentUrl);
-
-            if (mediaStage && !isReaderFullscreen) {
-                if (socialInfo && socialInfo.isTall) {
-                    mediaStage.className = 'relative bg-slate-950 h-[440px] sm:h-[540px] shrink-0 overflow-hidden select-none group transition-all duration-300';
-                } else {
-                    mediaStage.className = 'relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+            if (sInfo) {
+                if (extLink) {
+                    extLink.href = currentUrl;
+                    extLink.classList.remove('hidden');
+                    extLink.classList.add('inline-flex');
                 }
-            }
-
-            if (socialInfo && socialInfo.embedUrl && readerIframe) {
-                readerIframe.src = socialInfo.embedUrl;
-                readerIframe.classList.remove('hidden');
-                if (ambientBg) ambientBg.src = getYouTubeThumbnailUrl(currentUrl) || '';
+                if (sInfo.embedUrl && readerIframe) {
+                    readerIframe.src = sInfo.embedUrl;
+                    readerIframe.classList.remove('hidden');
+                } else if (readerImg) {
+                    readerImg.src = getYouTubeThumbnailUrl(currentUrl) || 'https://placehold.co/900x600/0f3529/ffffff?text=Buka+Video+Asli';
+                    readerImg.style.objectPosition = focusPos;
+                    readerImg.classList.remove('hidden');
+                }
                 if (gradientMask) gradientMask.classList.add('hidden');
-                if (bottomOverlay) bottomOverlay.classList.add('hidden');
-                if (extLinkBtn) {
-                    extLinkBtn.href = currentUrl;
-                    extLinkBtn.classList.remove('hidden');
-                    extLinkBtn.classList.add('inline-flex');
-                }
-            } else if (socialInfo && socialInfo.externalOnly && readerImg) {
-                readerImg.src = `https://placehold.co/900x600/0f3529/ffffff?text=Video+${encodeURIComponent(socialInfo.platform)}`;
-                readerImg.classList.remove('hidden');
-                if (gradientMask) gradientMask.classList.remove('hidden');
-                if (bottomOverlay) bottomOverlay.classList.remove('hidden');
-                if (extLinkBtn) {
-                    extLinkBtn.href = currentUrl;
-                    extLinkBtn.classList.remove('hidden');
-                    extLinkBtn.classList.add('inline-flex');
-                }
             } else if (isDirectVid && readerVideo) {
                 readerVideo.src = currentUrl;
                 readerVideo.classList.remove('hidden');
                 if (gradientMask) gradientMask.classList.add('hidden');
-                if (bottomOverlay) bottomOverlay.classList.add('hidden');
             } else if (readerImg) {
                 readerImg.classList.remove('hidden', 'slide-fade-anim');
                 void readerImg.offsetWidth;
                 readerImg.src = currentUrl;
+                readerImg.style.objectPosition = focusPos;
                 readerImg.classList.add('slide-fade-anim');
-                if (ambientBg) ambientBg.src = currentUrl;
+                readerImg.onclick = () => openPhotoLightbox(currentUrl);
                 if (gradientMask) gradientMask.classList.remove('hidden');
-                if (bottomOverlay) bottomOverlay.classList.remove('hidden');
+                if (ambientBg) ambientBg.src = currentUrl;
             }
 
             const prevBtn = document.getElementById('readerPrevBtn');
@@ -3469,24 +3868,17 @@
                 thumbStrip.classList.remove('hidden');
                 thumbStrip.innerHTML = photos.map((url, idx) => {
                     const ytThumb = getYouTubeThumbnailUrl(url);
-                    const sInfo = getSocialEmbedInfo(url);
-                    const isVid = isDirectVideoUrl(url) || Boolean(sInfo);
-                    let thumbHtml = `<img src="${url}" class="w-full h-full object-cover" alt="Slide ${idx + 1}">`;
-                    if (ytThumb) {
-                        thumbHtml = `<img src="${ytThumb}" class="w-full h-full object-cover" alt="YouTube ${idx + 1}">`;
-                    } else if (sInfo) {
-                        thumbHtml = `<div class="w-full h-full bg-gradient-to-br ${sInfo.gradient} flex items-center justify-center text-white"><i class="${sInfo.icon} text-xl"></i></div>`;
-                    } else if (isDirectVideoUrl(url)) {
-                        thumbHtml = `<div class="w-full h-full bg-slate-800 flex items-center justify-center text-amber-400"><i class="fa-solid fa-film text-xl"></i></div>`;
-                    }
+                    const si = getSocialEmbedInfo(url);
+                    const isVid = isAnyVideoMedia(url);
+                    const thumbSrc = ytThumb || (!isVid ? url : 'https://placehold.co/240x140/0f3529/fde047?text=VIDEO');
                     return `
                         <button
                             type="button"
                             onclick="selectReaderGalleryIndex(${idx}, event)"
-                            class="relative w-24 sm:w-32 h-14 sm:h-18 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 cursor-pointer ${idx === activeReaderSlideIdx ? 'border-amber-400 ring-2 ring-amber-400/40 scale-[1.03] opacity-100 shadow-md' : 'border-white/15 opacity-60 hover:opacity-95'}"
+                            class="relative w-24 sm:w-32 h-14 sm:h-18 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 cursor-pointer ${idx === activeReaderSlideIdx ? 'border-amber-400 ring-2 ring-amber-400/40 scale-[1.03] opacity-100 shadow-md' : 'border-white/15 opacity-65 hover:opacity-95'}"
                         >
-                            ${thumbHtml}
-                            ${isVid ? `<span class="absolute top-1 left-1.5 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded">${sInfo ? sInfo.platform.toUpperCase() : 'VIDEO'}</span>` : ''}
+                            <img src="${thumbSrc}" style="object-position: ${focusPos};" class="w-full h-full object-cover" alt="Slide ${idx + 1}">
+                            ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded">${si ? si.platform : 'Video'}</span>` : ''}
                             <span class="absolute bottom-1 right-1.5 bg-black/75 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow">${idx + 1}</span>
                         </button>
                     `;
@@ -3524,7 +3916,134 @@
             renderReaderGallerySlide(art);
         }
 
+        function setupReaderTouchSwipe() {
+            const stage = document.getElementById('readerMediaStage');
+            const lbStage = document.getElementById('lightboxStage');
+            if (stage) {
+                let startX = 0;
+                stage.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) startX = e.touches[0].clientX;
+                }, { passive: true });
+                stage.addEventListener('touchend', (e) => {
+                    if (e.changedTouches.length === 1) {
+                        const diff = e.changedTouches[0].clientX - startX;
+                        if (Math.abs(diff) > 45) {
+                            stepReaderGallery(diff < 0 ? 1 : -1);
+                        }
+                    }
+                }, { passive: true });
+            }
+            if (lbStage) {
+                let startX = 0;
+                lbStage.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) startX = e.touches[0].clientX;
+                }, { passive: true });
+                lbStage.addEventListener('touchend', (e) => {
+                    if (e.changedTouches.length === 1 && !isLightboxZoomed) {
+                        const diff = e.changedTouches[0].clientX - startX;
+                        if (Math.abs(diff) > 45) {
+                            stepPhotoLightbox(diff < 0 ? 1 : -1);
+                        }
+                    }
+                }, { passive: true });
+            }
+        }
+
+        function openPhotoLightbox(clickedUrl) {
+            const art = activeReadingArticleId ? appState.articles.find(a => a.id === activeReadingArticleId) : null;
+            const photosOnly = art
+                ? getArticlePhotos(art).filter(u => !isAnyVideoMedia(u))
+                : [clickedUrl];
+            activeLightboxPhotos = photosOnly.length > 0 ? photosOnly : [clickedUrl];
+            const foundIdx = activeLightboxPhotos.indexOf(clickedUrl);
+            activeLightboxIndex = foundIdx >= 0 ? foundIdx : 0;
+            isLightboxZoomed = false;
+
+            renderPhotoLightboxSlide();
+            const modal = document.getElementById('photoLightboxModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closePhotoLightbox() {
+            isLightboxZoomed = false;
+            const modal = document.getElementById('photoLightboxModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function renderPhotoLightboxSlide() {
+            const total = activeLightboxPhotos.length;
+            if (total === 0) return;
+            if (activeLightboxIndex >= total) activeLightboxIndex = 0;
+            if (activeLightboxIndex < 0) activeLightboxIndex = total - 1;
+
+            const img = document.getElementById('lightboxImg');
+            const counter = document.getElementById('lightboxCounter');
+            const prevBtn = document.getElementById('lightboxPrevBtn');
+            const nextBtn = document.getElementById('lightboxNextBtn');
+            const zoomIcon = document.getElementById('lightboxZoomIcon');
+
+            isLightboxZoomed = false;
+            if (img) {
+                img.src = activeLightboxPhotos[activeLightboxIndex];
+                img.style.transform = 'scale(1)';
+                img.classList.remove('cursor-zoom-out');
+                img.classList.add('cursor-zoom-in');
+            }
+            if (zoomIcon) zoomIcon.className = 'fa-solid fa-magnifying-glass-plus text-sm';
+            if (counter) counter.textContent = `${activeLightboxIndex + 1} / ${total}`;
+
+            if (total > 1) {
+                prevBtn.classList.remove('hidden');
+                prevBtn.classList.add('flex');
+                nextBtn.classList.remove('hidden');
+                nextBtn.classList.add('flex');
+            } else {
+                prevBtn.classList.add('hidden');
+                prevBtn.classList.remove('flex');
+                nextBtn.classList.add('hidden');
+                nextBtn.classList.remove('flex');
+            }
+        }
+
+        function togglePhotoLightboxZoom(event) {
+            if (event) event.stopPropagation();
+            const img = document.getElementById('lightboxImg');
+            const zoomIcon = document.getElementById('lightboxZoomIcon');
+            if (!img) return;
+            isLightboxZoomed = !isLightboxZoomed;
+            if (isLightboxZoomed) {
+                img.style.transform = 'scale(1.85)';
+                img.classList.remove('cursor-zoom-in');
+                img.classList.add('cursor-zoom-out');
+                if (zoomIcon) zoomIcon.className = 'fa-solid fa-magnifying-glass-minus text-sm';
+            } else {
+                img.style.transform = 'scale(1)';
+                img.classList.remove('cursor-zoom-out');
+                img.classList.add('cursor-zoom-in');
+                if (zoomIcon) zoomIcon.className = 'fa-solid fa-magnifying-glass-plus text-sm';
+            }
+        }
+
+        function stepPhotoLightbox(delta, event) {
+            if (event) event.stopPropagation();
+            activeLightboxIndex += delta;
+            renderPhotoLightboxSlide();
+        }
+
         document.addEventListener('keydown', (e) => {
+            const lbModal = document.getElementById('photoLightboxModal');
+            if (lbModal && !lbModal.classList.contains('hidden')) {
+                if (e.key === 'ArrowLeft') stepPhotoLightbox(-1);
+                else if (e.key === 'ArrowRight') stepPhotoLightbox(1);
+                else if (e.key === 'Escape') closePhotoLightbox();
+                return;
+            }
             const modal = document.getElementById('articleReaderModal');
             if (!modal || modal.classList.contains('hidden')) return;
             if (e.key === 'ArrowLeft') stepReaderGallery(-1);
@@ -3557,17 +4076,20 @@
                 const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
                 if (likedUsers.length > 0) {
                     likedByBox.classList.remove('hidden');
-                    const previewAvatars = likedUsers.slice(0, 3).map(u => `
-                        <img src="${u.avatar}" class="w-5 h-5 rounded-full object-cover ring-2 ring-white shrink-0" alt="${u.name}">
-                    `).join('');
-                    const firstPersonName = likedUsers[0].name;
-                    const summaryLabel = likedUsers.length === 1
-                        ? `Disukai oleh <strong class="text-slate-900">${firstPersonName}</strong>`
-                        : `Disukai oleh <strong class="text-slate-900">${firstPersonName}</strong> dan <strong class="text-slate-900">${likedUsers.length - 1} lainnya</strong>`;
+                    const previewSlice = likedUsers.slice(0, 3);
+                    const firstPerson = likedUsers[0];
+                    const othersCount = likedUsers.length - 1;
+                    const summaryText = othersCount > 0
+                        ? `Disukai oleh <strong class="text-slate-900">${firstPerson.name}</strong> dan <strong class="text-slate-900">${othersCount} lainnya</strong>`
+                        : `Disukai oleh <strong class="text-slate-900">${firstPerson.name}</strong>`;
 
                     likedByAvatars.innerHTML = `
-                        <div class="flex -space-x-1.5 shrink-0">${previewAvatars}</div>
-                        <span class="text-[11px] text-slate-600 truncate">${summaryLabel}</span>
+                        <div class="flex -space-x-1.5 shrink-0">
+                            ${previewSlice.map(u => `
+                                <img src="${u.avatar}" class="w-5 h-5 rounded-full object-cover ring-2 ring-white bg-slate-200" alt="${u.name}">
+                            `).join('')}
+                        </div>
+                        <span class="text-[11px] text-slate-600 truncate">${summaryText}</span>
                     `;
                 } else {
                     likedByBox.classList.add('hidden');
@@ -3579,26 +4101,23 @@
             if (!activeReadingArticleId) return;
             const art = appState.articles.find(a => a.id === activeReadingArticleId);
             if (!art) return;
-
             const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
             const countEl = document.getElementById('likedUsersModalCount');
             const listEl = document.getElementById('likedUsersModalList');
             if (countEl) countEl.textContent = likedUsers.length;
             if (listEl) {
-                if (likedUsers.length === 0) {
-                    listEl.innerHTML = `<div class="text-center py-6 text-xs text-slate-400">Belum ada yang menyukai postingan ini.</div>`;
-                } else {
-                    listEl.innerHTML = likedUsers.map(u => `
-                        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
-                            <img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0" alt="${u.name}">
+                listEl.innerHTML = likedUsers.length === 0
+                    ? `<div class="text-center py-6 text-xs text-slate-400">Belum ada yang menyukai postingan ini.</div>`
+                    : likedUsers.map(u => `
+                        <div class="flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition">
+                            <img src="${u.avatar}" alt="${u.name}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0">
                             <div class="min-w-0 flex-1">
                                 <div class="text-xs font-extrabold text-slate-900 truncate">${u.name}</div>
-                                <div class="text-[11px] text-slate-400 truncate">${u.email || 'Akun Google Terverifikasi'}</div>
+                                <div class="text-[11px] text-slate-400 truncate">${u.email || 'Pengguna Google'}</div>
                             </div>
-                            <i class="fa-solid fa-heart text-rose-500 text-xs shrink-0"></i>
+                            <i class="fa-solid fa-heart text-rose-500 text-xs"></i>
                         </div>
                     `).join('');
-                }
             }
             openModal('likedUsersModal');
         }
@@ -3662,23 +4181,23 @@
             }
 
             listEl.innerHTML = comments.map(c => `
-                <div class="bg-white border border-slate-200/80 rounded-xl p-3 flex items-start justify-between gap-3 shadow-2xs">
-                    <div class="flex items-start gap-2.5">
+                <div class="bg-white border border-slate-200/80 rounded-xl p-3 flex items-start justify-between gap-2.5 shadow-2xs">
+                    <div class="flex items-start gap-2.5 min-w-0 flex-1">
                         ${c.avatar
                             ? `<img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover shrink-0 border border-slate-200" alt="${c.author}">`
                             : `<div class="w-8 h-8 rounded-full bg-emerald-900/10 text-emerald-900 font-extrabold text-xs flex items-center justify-center shrink-0">${(c.author || 'S').charAt(0).toUpperCase()}</div>`
                         }
-                        <div class="space-y-0.5">
+                        <div class="space-y-1 min-w-0 flex-1">
                             <div class="flex flex-wrap items-center gap-1.5">
-                                <span class="text-xs font-extrabold text-slate-900">${c.author}</span>
-                                ${c.email ? `<span class="text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/60 px-2 py-0.2 rounded-full"><i class="fa-brands fa-google text-[9px] mr-1"></i>${c.email}</span>` : ''}
+                                <span class="text-xs font-extrabold text-slate-900 truncate max-w-[160px] sm:max-w-none">${c.author}</span>
                                 <span class="text-[10px] text-slate-400">&bull; ${c.time || 'Baru saja'}</span>
                             </div>
-                            <p class="text-xs text-slate-700 leading-relaxed">${c.text}</p>
+                            ${c.email ? `<div class="inline-flex items-center gap-1 max-w-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/60 px-2 py-0.5 rounded-full"><i class="fa-brands fa-google text-[9px] shrink-0"></i><span class="truncate">${c.email}</span></div>` : ''}
+                            <p class="text-xs text-slate-700 leading-relaxed break-words pt-0.5">${c.text}</p>
                         </div>
                     </div>
                     ${currentMode === 'edit' ? `
-                        <button type="button" onclick="deleteComment('${art.id}', '${c.id}')" class="text-rose-500 hover:text-rose-700 text-xs px-2 py-1 rounded hover:bg-rose-50 transition" title="Hapus Komentar">
+                        <button type="button" onclick="deleteComment('${art.id}', '${c.id}')" class="text-rose-500 hover:text-rose-700 text-xs px-2 py-1 rounded hover:bg-rose-50 transition shrink-0" title="Hapus Komentar">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     ` : ''}
@@ -3811,180 +4330,6 @@
             }
         }
 
-        function setActiveNavIndicator(linkEl) {
-            const navLinks = document.querySelectorAll('#desktopMainNav .nav-link');
-            navLinks.forEach(el => {
-                el.className = 'nav-link hover:text-white transition py-1';
-            });
-            if (linkEl) {
-                linkEl.className = "nav-link nav-active text-white font-semibold relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2.5px] after:bg-white after:rounded-full";
-            }
-        }
-
-        function setActiveCategory(cat) {
-            activeCategory = cat;
-            renderCategoriesBar();
-
-            const resetBtn = document.getElementById('resetCategoryBtn');
-            const badge = document.getElementById('activeFilterBadge');
-
-            if (cat === 'Semua') {
-                resetBtn.classList.add('hidden');
-                badge.classList.add('hidden');
-            } else {
-                resetBtn.classList.remove('hidden');
-                badge.textContent = `Kategori: ${cat}`;
-                badge.classList.remove('hidden');
-            }
-            renderArticles();
-        }
-
-        function filterByNav(cat, linkEl) {
-            if (linkEl) {
-                setActiveNavIndicator(linkEl);
-            }
-            setActiveCategory(cat);
-            if (linkEl && linkEl.id === 'navLinkBeranda') {
-                scrollToSection('beranda');
-            } else {
-                scrollToSection('konten');
-            }
-        }
-
-        function handleSearch(val) {
-            const trimmed = val.trim();
-            if (trimmed.toLowerCase() === '/redaksi' || trimmed.toLowerCase() === '/admin') {
-                const deskIn = document.getElementById('searchInput');
-                const mobIn = document.getElementById('mobileSearchInput');
-                if (deskIn) deskIn.value = '';
-                if (mobIn) mobIn.value = '';
-                currentSearchQuery = '';
-                renderArticles();
-                openCreatorLoginModal();
-                return;
-            }
-            currentSearchQuery = trimmed;
-            renderArticles();
-        }
-
-        function handleSearchKeydown(e) {
-            if (e.key === 'Enter') {
-                const val = e.target.value.trim().toLowerCase();
-                if (val === '/redaksi' || val === '/admin' || val === '#redaksi') {
-                    e.preventDefault();
-                    e.target.value = '';
-                    currentSearchQuery = '';
-                    openCreatorLoginModal();
-                }
-            }
-        }
-
-        async function deleteArticle(id) {
-            try {
-                await db.collection('sanvalas_articles').doc(id).delete();
-                showToast('Postingan telah dihapus dari database online');
-            } catch (err) {
-                showToast('Gagal menghapus postingan: ' + err.message);
-            }
-        }
-
-        function openAccessGuideModal() {
-            const baseUrl = window.location.href.split('#')[0].split('?')[0];
-            document.getElementById('publicUrlDisplay').value = baseUrl;
-            document.getElementById('creatorUrlDisplay').value = baseUrl + '#redaksi';
-            openModal('accessGuideModal');
-        }
-
-        function copyUrlFromInput(inputId, msg) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
-            input.select();
-            document.execCommand('copy');
-            showToast(msg);
-        }
-
-        // ==========================================
-        // ADD / EDIT ARTICLE MODAL (PHOTO COVER PRIORITY + VIDEO)
-        // ==========================================
-        function openAddArticleModal() {
-            syncCategoryDropdowns();
-            document.getElementById('editorModalTitle').textContent = 'Posting Konten Baru';
-            document.getElementById('editArticleId').value = '';
-            document.getElementById('editArticleTitle').value = '';
-            const cats = getCategoriesList();
-            document.getElementById('editArticleCategory').value = cats[0] ? cats[0].name : 'Edukasi';
-            document.getElementById('editArticleDate').value = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-            document.getElementById('editArticleImage').value = '';
-            document.getElementById('editArticleBody').value = '';
-            editorPhotosDraft = [];
-            renderEditorPhotosPreview();
-            openModal('articleEditorModal');
-        }
-
-        function openEditArticleModal(id) {
-            const art = appState.articles.find(a => a.id === id);
-            if (!art) return;
-            syncCategoryDropdowns();
-            document.getElementById('editorModalTitle').textContent = 'Edit Postingan Konten';
-            document.getElementById('editArticleId').value = art.id;
-            document.getElementById('editArticleTitle').value = art.title;
-            document.getElementById('editArticleCategory').value = art.category;
-            document.getElementById('editArticleDate').value = art.date;
-            document.getElementById('editArticleImage').value = '';
-            document.getElementById('editArticleBody').value = art.body || '';
-            editorPhotosDraft = [...getArticlePhotos(art)];
-            renderEditorPhotosPreview();
-            openModal('articleEditorModal');
-        }
-
-        function renderMediaPreviewItemHtml(url, idx, removeFnName) {
-            const ytThumb = getYouTubeThumbnailUrl(url);
-            const sInfo = getSocialEmbedInfo(url);
-            const isDirectVid = isDirectVideoUrl(url);
-            const isVid = isDirectVid || Boolean(sInfo);
-
-            let mediaEl = `<img src="${url}" class="w-full h-full object-cover" alt="Media ${idx + 1}">`;
-            if (ytThumb) {
-                mediaEl = `<img src="${ytThumb}" class="w-full h-full object-cover" alt="YouTube ${idx + 1}">`;
-            } else if (sInfo) {
-                mediaEl = `<div class="w-full h-full bg-gradient-to-br ${sInfo.gradient} flex flex-col items-center justify-center text-white p-2 text-center"><i class="${sInfo.icon} text-lg mb-1"></i><span class="text-[9px] font-extrabold">${sInfo.platform}</span></div>`;
-            } else if (isDirectVid) {
-                mediaEl = `<video src="${url}#t=0.5" muted playsinline class="w-full h-full object-cover bg-black"></video>`;
-            }
-
-            return `
-                <div class="relative group rounded-xl overflow-hidden border border-slate-300 aspect-video bg-slate-900">
-                    ${mediaEl}
-                    <span class="absolute bottom-1 left-1 bg-black/75 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-                        ${idx === 0 && !isVid ? 'COVER' : '#' + (idx + 1)}
-                    </span>
-                    ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded">${sInfo ? sInfo.platform.toUpperCase() : 'VIDEO'}</span>` : ''}
-                    ${removeFnName ? `
-                        <button type="button" onclick="${removeFnName}(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700" title="Hapus media ini">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        function sortDraftMediaCoverFirst(list) {
-            const photos = list.filter(u => !isAnyVideoMedia(u));
-            const videos = list.filter(u => isAnyVideoMedia(u));
-            return [...photos, ...videos];
-        }
-
-        function renderEditorPhotosPreview() {
-            const box = document.getElementById('editorPhotosPreviewList');
-            if (!box) return;
-            editorPhotosDraft = sortDraftMediaCoverFirst(editorPhotosDraft);
-            if (editorPhotosDraft.length === 0) {
-                box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-slate-400">Belum ada foto atau video dipilih. Upload foto sampul atau tempel link video.</div>`;
-                return;
-            }
-            box.innerHTML = editorPhotosDraft.map((url, idx) => renderMediaPreviewItemHtml(url, idx, 'removeEditorPhotoAt')).join('');
-        }
-
         function addPhotoUrlToEditorList() {
             const input = document.getElementById('editArticleImage');
             const url = input.value.trim();
@@ -4063,6 +4408,7 @@
                 createdAt: existing && existing.createdAt ? existing.createdAt : Date.now(),
                 image: editorPhotosDraft[0],
                 images: [...editorPhotosDraft],
+                imagePosition: editorImagePosition || 'center center',
                 likes: existing ? (existing.likes || 0) : 0,
                 likedByUsers: existing && Array.isArray(existing.likedByUsers) ? existing.likedByUsers : [],
                 commentsList: existing && Array.isArray(existing.commentsList) ? existing.commentsList : [],
@@ -4351,6 +4697,7 @@
             const el = document.getElementById(id);
             if (!el) return;
             if (id === 'articleReaderModal') {
+                closePhotoLightbox();
                 setReaderFullscreenState(false);
                 const vid = document.getElementById('readerVideo');
                 const ifr = document.getElementById('readerIframe');
@@ -4399,4 +4746,4 @@
         }
     </script>
 </body>
-                    </html>
+</html>
