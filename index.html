@@ -335,7 +335,7 @@
                 <a id="navLinkKarya" href="#konten" onclick="filterByNav('Karya Siswa', this)" class="nav-link hover:text-white transition py-1">Karya Siswa</a>
             </nav>
 
-            <!-- Search Bar (Desktop Only - Mobile inside Dropdown), Google Auth & Hamburger -->
+            <!-- Search Bar, Google Auth & Hamburger -->
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <div class="relative hidden sm:block">
                     <input
@@ -428,7 +428,7 @@
     </header>
 
     <!-- ========================================== -->
-    <!-- HERO SECTION (NO FLASH OF OLD DEFAULT PHOTOS ON REFRESH) -->
+    <!-- HERO SECTION -->
     <!-- ========================================== -->
     <section id="beranda" class="relative bg-sanvalas-900 text-white overflow-hidden w-full">
         <div class="absolute inset-0 z-0 bg-sanvalas-950">
@@ -815,20 +815,23 @@
     </main>
 
     <!-- ========================================== -->
-    <!-- MODAL 1: PEMBACA ARTIKEL + SLIDER MULTI-FOTO & VIDEO + KOMENTAR -->
+    <!-- MODAL 1: PEMBACA ARTIKEL + FULLSCREEN / LIGHTBOX + FULL PHOTO + SWIPE/SLIDE -->
     <!-- ========================================== -->
-    <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-2.5 sm:p-5">
-        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col">
-            <div class="relative bg-slate-950 h-64 sm:h-[430px] shrink-0 overflow-hidden select-none group">
-                <img id="readerAmbientBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-45 scale-110 pointer-events-none">
+    <div id="articleReaderModal" onclick="if(event.target === this) closeModal('articleReaderModal')" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-2.5 sm:p-5 transition-all">
+        <div id="readerModalContainer" class="modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col transition-all duration-300">
+            <!-- Interactive Media Stage (Supports Touch Swipe, Full Photo View, & Fullscreen Expand) -->
+            <div id="readerMediaStage" class="relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300">
+                <img id="readerAmbientBg" src="" alt="" class="absolute inset-0 w-full h-full object-cover blur-2xl opacity-35 scale-110 pointer-events-none">
                 <div id="readerGradientMask" class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/35 pointer-events-none z-10"></div>
 
-                <!-- Media Stage: Image / Native Video / YouTube Embed -->
+                <!-- Main Image (Always Full Photo with object-contain so nothing is cropped!) -->
                 <img
                     id="readerImg"
                     src=""
                     alt=""
-                    class="relative z-10 w-full h-full object-contain sm:object-cover transition-all duration-300"
+                    onclick="toggleReaderFullscreen()"
+                    class="relative z-10 w-full h-full object-contain cursor-zoom-in transition-all duration-300"
+                    title="Klik foto untuk Layar Penuh (Fullscreen)"
                     onerror="this.src='https://placehold.co/900x600/164636/ffffff?text=Sanvalas+Story'"
                 >
                 <video
@@ -840,23 +843,43 @@
                 <iframe
                     id="readerIframe"
                     src=""
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowfullscreen
-                    class="hidden relative z-20 w-full h-full border-0 bg-black"
+                    class="hidden relative z-20 w-full h-full border-0 bg-white"
                 ></iframe>
 
-                <div class="absolute top-3.5 inset-x-3.5 sm:top-4 sm:inset-x-4 z-30 flex items-center justify-between pointer-events-none">
-                    <span id="readerPhotoCounter" class="hidden pointer-events-auto bg-black/65 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
-                    <button type="button" onclick="closeModal('articleReaderModal')" class="pointer-events-auto ml-auto w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-black/85 text-white flex items-center justify-center border border-white/15 shadow-lg transition">
-                        <i class="fa-solid fa-xmark text-sm sm:text-base"></i>
-                    </button>
+                <!-- Top Floating Controls: Slide Counter + External Link + Fullscreen Expand/Shrink + Close -->
+                <div class="absolute top-3.5 inset-x-3.5 sm:top-4 sm:inset-x-4 z-30 flex items-center justify-between gap-2 pointer-events-none">
+                    <div class="flex items-center gap-2 pointer-events-auto">
+                        <span id="readerPhotoCounter" class="hidden bg-black/70 backdrop-blur-md text-white text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-full border border-white/15 shadow-lg"></span>
+                        <a id="readerOpenExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden bg-white/95 hover:bg-white text-slate-900 text-[11px] font-extrabold px-3 py-1.5 rounded-full shadow-lg items-center gap-1.5 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            <span>Buka Asli</span>
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-2 pointer-events-auto ml-auto">
+                        <button
+                            id="readerFullscreenBtn"
+                            type="button"
+                            onclick="toggleReaderFullscreen(event)"
+                            class="h-9 sm:h-10 px-3 sm:px-3.5 rounded-full bg-black/70 hover:bg-black/90 text-white text-xs font-bold flex items-center gap-1.5 border border-white/20 shadow-lg transition cursor-pointer"
+                            title="Perbesar Layar Penuh / Perkecil ke Pop-up"
+                        >
+                            <i id="readerFullscreenIcon" class="fa-solid fa-expand text-xs sm:text-sm"></i>
+                            <span id="readerFullscreenLabel" class="hidden sm:inline">Layar Penuh</span>
+                        </button>
+                        <button type="button" onclick="closeModal('articleReaderModal')" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-rose-600 text-white flex items-center justify-center border border-white/20 shadow-lg transition cursor-pointer" title="Tutup">
+                            <i class="fa-solid fa-xmark text-sm sm:text-base"></i>
+                        </button>
+                    </div>
                 </div>
 
+                <!-- Prev / Next Navigation Arrows -->
                 <button
                     id="readerPrevBtn"
                     type="button"
                     onclick="stepReaderGallery(-1, event)"
-                    class="hidden absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
+                    class="hidden absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
                     title="Slide Sebelumnya"
                 >
                     <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
@@ -865,21 +888,24 @@
                     id="readerNextBtn"
                     type="button"
                     onclick="stepReaderGallery(1, event)"
-                    class="hidden absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
+                    class="hidden absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-xl border border-slate-200 items-center justify-center cursor-pointer transition hover:scale-105"
                     title="Slide Berikutnya"
                 >
                     <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
                 </button>
 
+                <!-- Bottom Category & Slide Dots -->
                 <div id="readerBottomOverlay" class="absolute bottom-3.5 inset-x-4 sm:bottom-4 sm:inset-x-5 z-30 flex items-center justify-between gap-2 pointer-events-none">
                     <span id="readerCategory" class="pointer-events-auto bg-[#eaede6] text-slate-900 text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-md"></span>
-                    <div id="readerDotsContainer" class="pointer-events-auto flex items-center gap-1.5 sm:gap-2 bg-black/55 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border border-white/15"></div>
+                    <div id="readerDotsContainer" class="pointer-events-auto flex items-center gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border border-white/15"></div>
                 </div>
             </div>
 
+            <!-- Multi-Media Thumbnail Strip -->
             <div id="readerThumbStrip" class="hidden shrink-0 bg-slate-900 border-b border-slate-800 px-4 sm:px-5 py-3 flex items-center justify-start sm:justify-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar"></div>
 
-            <div class="p-4 sm:p-7 space-y-4 sm:space-y-5">
+            <!-- Article Details, Like Summary & Comments (Hidden automatically during Fullscreen Lightbox Mode) -->
+            <div id="readerContentBodyWrap" class="p-4 sm:p-7 space-y-4 sm:space-y-5 bg-white">
                 <div class="space-y-2">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
                         <span id="readerDate"></span>
@@ -1592,7 +1618,7 @@
         </div>
     </div>
 
-    <!-- MODAL EDITOR POSTINGAN (TIM KREATIF - SUPPORT FOTO & VIDEO) -->
+    <!-- MODAL EDITOR POSTINGAN (TIM KREATIF) -->
     <div id="articleEditorModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1619,17 +1645,20 @@
                 </div>
                 <div class="space-y-2.5 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                     <div class="flex flex-wrap items-center justify-between gap-2">
-                        <label class="font-extrabold text-slate-800">Galeri Foto &amp; Video Postingan</label>
+                        <label class="font-extrabold text-slate-800">Foto Cover &amp; Video (Upload Foto jadi Thumbnail Utama)</label>
                         <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5 shadow-2xs">
                             <i class="fa-solid fa-photo-film"></i> Upload Foto / Video
-                            <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handleMultiFileUploadToEditor(event)">
+                            <input type="file" accept="image/*,video/*" multiple class="hidden" onchange="handleMultiFileUploadToEditor(event)">
                         </label>
                     </div>
                     <div class="flex gap-2">
-                        <input id="editArticleImage" type="text" placeholder="Tempel link URL Foto / Video MP4 / YouTube..." class="flex-1 rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
-                        <button type="button" onclick="addPhotoUrlToEditorList()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-3 py-2 rounded-xl shrink-0">+ Tambah URL</button>
+                        <input id="editArticleImage" type="text" placeholder="Tempel link Instagram Reels, TikTok, YouTube, atau MP4..." class="flex-1 rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                        <button type="button" onclick="addPhotoUrlToEditorList()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold px-3 py-2 rounded-xl shrink-0">+ Tambah Link</button>
                     </div>
-                    <p class="text-[10px] text-slate-500">Mendukung upload file foto &amp; video langsung dari HP/Laptop (MP4/WebM) maupun link YouTube.</p>
+                    <p class="text-[10.5px] text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1.5 rounded-lg">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>
+                        <strong>Tips Thumbnail:</strong> Jika Anda meng-upload foto beserta link video IG/TikTok, foto yang di-upload akan otomatis dijadikan gambar sampul (thumbnail) di halaman depan!
+                    </p>
                     <div id="editorPhotosPreviewList" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1"></div>
                 </div>
                 <div>
@@ -1644,13 +1673,13 @@
         </div>
     </div>
 
-    <!-- MODAL KIRIM KARYA SISWA (SUPPORT FOTO & VIDEO) -->
+    <!-- MODAL KIRIM KARYA SISWA -->
     <div id="submitWorkModal" onclick="if(event.target === this) closeModal('submitWorkModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-900">Kirim Karyamu ke SANVALAS STORY</h3>
-                    <p class="text-[11px] text-slate-500">Karya foto/video terbaik akan diterbitkan di halaman utama MTsN 14</p>
+                    <p class="text-[11px] text-slate-500">Kirim link Instagram, TikTok, YouTube, atau upload file foto/video langsung</p>
                 </div>
                 <button type="button" onclick="closeModal('submitWorkModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
@@ -1673,13 +1702,13 @@
                 </div>
                 <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-bold text-slate-700">Foto / Video Karya</span>
+                        <span class="font-bold text-slate-700">Link Video (IG/TikTok/YT) atau Upload File</span>
                         <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
                             <i class="fa-solid fa-photo-film"></i> Pilih Foto / Video
-                            <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handleStudentMultiFileUpload(event)">
+                            <input type="file" accept="image/*,video/*" multiple class="hidden" onchange="handleStudentMultiFileUpload(event)">
                         </label>
                     </div>
-                    <input id="subImage" type="text" placeholder="Atau tempel link foto / video YouTube / MP4..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                    <input id="subImage" type="text" placeholder="Tempel link video Instagram, TikTok, YouTube, atau Google Drive..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
                     <div id="subPhotosPreview" class="hidden grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1"></div>
                 </div>
                 <div>
@@ -1694,7 +1723,7 @@
         </div>
     </div>
 
-    <!-- MODAL KIRIM PRESTASI SISWA (SUPPORT FOTO & VIDEO, KATEGORI LANGSUNG PRESTASI) -->
+    <!-- MODAL KIRIM PRESTASI SISWA -->
     <div id="submitPrestasiModal" onclick="if(event.target === this) closeModal('submitPrestasiModal')" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1731,13 +1760,13 @@
                 </div>
                 <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                     <div class="flex items-center justify-between gap-2">
-                        <span class="font-bold text-slate-700">Foto / Video Dokumentasi Prestasi</span>
+                        <span class="font-bold text-slate-700">Link Video (IG/TikTok/YT) atau Upload File</span>
                         <label class="bg-emerald-800 hover:bg-emerald-900 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg cursor-pointer flex items-center gap-1.5">
                             <i class="fa-solid fa-photo-film"></i> Pilih Foto / Video
-                            <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handlePrestasiMultiFileUpload(event)">
+                            <input type="file" accept="image/*,video/*" multiple class="hidden" onchange="handlePrestasiMultiFileUpload(event)">
                         </label>
                     </div>
-                    <input id="presImage" type="text" placeholder="Atau tempel link foto / video dokumentasi..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
+                    <input id="presImage" type="text" placeholder="Tempel link dokumentasi Instagram, TikTok, YouTube, atau foto..." class="w-full rounded-xl bg-white border border-slate-300 px-3 py-2 focus:outline-none focus:border-emerald-700">
                     <div id="presPhotosPreview" class="hidden grid grid-cols-3 sm:grid-cols-4 gap-2 pt-1"></div>
                 </div>
                 <div>
@@ -1867,10 +1896,9 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- APPLICATION LOGIC (FIREBASE CLOUD FIRESTORE + STORAGE + VIDEO SUPPORT) -->
+    <!-- APPLICATION LOGIC (FIREBASE + SMART COVER THUMBNAIL + FULLSCREEN LIGHTBOX + SWIPE) -->
     <!-- ========================================== -->
     <script>
-        // 1. KONFIGURASI FIREBASE MILIKMU (SANVALAS STORY)
         const firebaseConfig = {
             apiKey: "AIzaSyCzPm0VDOOgRq-T6U5R9KwTvisB1nlhnQE",
             authDomain: "sanvalas-story.firebaseapp.com",
@@ -1891,6 +1919,7 @@
         let pendingAfterLoginAction = null;
         let currentGoogleUser = null;
         let isSettingsLoadedFromCloud = false;
+        let isReaderFullscreen = false;
 
         document.addEventListener('click', (e) => {
             const targetBtn = e.target.closest('button, .cat-pill, a.nav-link');
@@ -1932,7 +1961,7 @@
         }
 
         // ==========================================
-        // MEDIA TYPE DETECTION (IMAGE vs VIDEO vs YOUTUBE)
+        // UNIVERSAL MEDIA DETECTOR (INSTAGRAM, TIKTOK, YOUTUBE, GOOGLE DRIVE, MP4)
         // ==========================================
         function getYouTubeEmbedUrl(url) {
             if (!url || typeof url !== 'string') return null;
@@ -1948,39 +1977,82 @@
             return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
         }
 
+        function getInstagramEmbedUrl(url) {
+            if (!url || typeof url !== 'string') return null;
+            const match = url.match(/instagram\.com\/(?:p|reel|reels|tv)\/([a-zA-Z0-9_-]+)/i);
+            return match ? `https://www.instagram.com/p/${match[1]}/embed/` : null;
+        }
+
+        function getTikTokEmbedUrl(url) {
+            if (!url || typeof url !== 'string') return null;
+            const match = url.match(/tiktok\.com\/(?:@[^\/]+\/video\/|v\/|embed\/v2\/)(\d+)/i);
+            return match ? `https://www.tiktok.com/embed/v2/${match[1]}` : null;
+        }
+
+        function getGoogleDriveEmbedUrl(url) {
+            if (!url || typeof url !== 'string') return null;
+            const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
+            return match ? `https://drive.google.com/file/d/${match[1]}/preview` : null;
+        }
+
+        function getSocialEmbedInfo(url) {
+            const yt = getYouTubeEmbedUrl(url);
+            if (yt) return { platform: 'YouTube', embedUrl: yt, icon: 'fa-brands fa-youtube', badgeBg: 'bg-red-600 text-white', gradient: 'from-red-700 via-red-600 to-rose-800', isTall: false };
+
+            const ig = getInstagramEmbedUrl(url);
+            if (ig) return { platform: 'Instagram', embedUrl: ig, icon: 'fa-brands fa-instagram', badgeBg: 'bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white', gradient: 'from-purple-700 via-pink-600 to-amber-500', isTall: true };
+
+            const tt = getTikTokEmbedUrl(url);
+            if (tt) return { platform: 'TikTok', embedUrl: tt, icon: 'fa-brands fa-tiktok', badgeBg: 'bg-slate-950 text-white', gradient: 'from-slate-950 via-slate-800 to-cyan-900', isTall: true };
+
+            const gd = getGoogleDriveEmbedUrl(url);
+            if (gd) return { platform: 'Google Drive', embedUrl: gd, icon: 'fa-brands fa-google-drive', badgeBg: 'bg-sky-600 text-white', gradient: 'from-sky-800 via-blue-700 to-emerald-800', isTall: false };
+
+            if (url && typeof url === 'string' && /vt\.tiktok\.com|vm\.tiktok\.com/i.test(url)) {
+                return { platform: 'TikTok', embedUrl: null, externalOnly: true, icon: 'fa-brands fa-tiktok', badgeBg: 'bg-slate-950 text-white', gradient: 'from-slate-950 via-slate-800 to-cyan-900', isTall: false };
+            }
+
+            return null;
+        }
+
         function isDirectVideoUrl(url) {
             if (!url || typeof url !== 'string') return false;
             if (url.startsWith('data:video/')) return true;
             const clean = url.split('?')[0].split('#')[0].toLowerCase();
-            return /\.(mp4|webm|mov|ogg|m4v)$/.test(clean) || url.includes('%2Fvideos%2F');
+            return /\.(mp4|webm|mov|ogg|m4v|avi|mkv)$/.test(clean) || url.includes('%2Fvideos%2F') || url.includes('sanvalas_');
         }
 
         function isAnyVideoMedia(url) {
-            return isDirectVideoUrl(url) || Boolean(getYouTubeEmbedUrl(url));
+            return isDirectVideoUrl(url) || Boolean(getSocialEmbedInfo(url));
         }
 
-        // Upload Video File directly to Firebase Storage (or small fallback)
+        // Prioritaskan foto yang di-upload sebagai sampul/thumbnail utama di halaman depan!
+        function getOrderedPostMedia(art) {
+            const raw = Array.isArray(art.images) && art.images.length > 0
+                ? [...art.images]
+                : (art.image ? [art.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story']);
+            const photosOnly = raw.filter(u => !isAnyVideoMedia(u));
+            const videosOnly = raw.filter(u => isAnyVideoMedia(u));
+            return [...photosOnly, ...videosOnly];
+        }
+
+        // Upload Video File directly to Firebase Storage WITHOUT ANY FILE SIZE LIMIT
         async function uploadMediaFileToCloud(file, folder = 'uploads') {
             if (file.type.startsWith('video/')) {
-                const maxMb = 45;
-                if (file.size > maxMb * 1024 * 1024) {
-                    throw new Error(`Ukuran video maksimal ${maxMb}MB.`);
-                }
                 try {
                     const safeName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
                     const storageRef = storage.ref().child(`sanvalas_${folder}/${safeName}`);
                     const snap = await storageRef.put(file);
                     return await snap.ref.getDownloadURL();
                 } catch (storageErr) {
-                    // Fallback jika Storage Rules belum dibuka & file kecil (< 700KB)
-                    if (file.size <= 700 * 1024) {
+                    if (file.size <= 750 * 1024) {
                         return await new Promise((resolve) => {
                             const r = new FileReader();
                             r.onload = ev => resolve(ev.target.result);
                             r.readAsDataURL(file);
                         });
                     }
-                    throw new Error('Aktifkan Firebase Storage di console.firebase.google.com atau tempel link YouTube/MP4.');
+                    throw new Error('Aktifkan Firebase Storage di console.firebase.google.com atau tempel link video IG / TikTok / YouTube.');
                 }
             } else {
                 return await compressImageFileToDataURL(file, 1000, 0.78);
@@ -2200,10 +2272,7 @@
         let studentPrestasiPhotosDraft = [];
 
         function getArticlePhotos(art) {
-            if (Array.isArray(art.images) && art.images.length > 0) {
-                return art.images;
-            }
-            return art.image ? [art.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'];
+            return getOrderedPostMedia(art);
         }
 
         function compressImageFileToDataURL(file, maxWidth = 1100, quality = 0.78) {
@@ -2394,14 +2463,12 @@
             db.collection('sanvalas_articles').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
                 appState.articles = snapshot.docs.map(doc => {
                     const a = doc.data();
-                    const imgs = Array.isArray(a.images) && a.images.length > 0
-                        ? a.images
-                        : (a.image ? [a.image] : ['https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story']);
+                    const orderedImgs = getOrderedPostMedia(a);
                     return {
                         ...a,
                         id: doc.id,
-                        image: imgs[0],
-                        images: imgs,
+                        image: orderedImgs[0],
+                        images: orderedImgs,
                         commentsList: Array.isArray(a.commentsList) ? a.commentsList : [],
                         likedByUsers: Array.isArray(a.likedByUsers) ? a.likedByUsers : []
                     };
@@ -2484,6 +2551,7 @@
             syncCategoryDropdowns();
             initCloudFirestoreSync();
             checkSecretUrlAccess();
+            setupReaderTouchSwipe();
         });
 
         let hasCheckedSharedUrl = false;
@@ -3029,6 +3097,7 @@
                     </div>
                 `;
             }
+
             if (isDirectVideoUrl(mediaUrl)) {
                 return `
                     <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer bg-black slide-fade-anim">
@@ -3041,6 +3110,20 @@
                     </div>
                 `;
             }
+
+            const socialInfo = getSocialEmbedInfo(mediaUrl);
+            if (socialInfo && socialInfo.platform !== 'YouTube') {
+                return `
+                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer bg-sanvalas-900 flex flex-col items-center justify-center text-white p-4 text-center slide-fade-anim">
+                        <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-md mb-2 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-play text-lg ml-0.5 text-amber-300"></i>
+                        </div>
+                        <div class="text-xs font-extrabold tracking-wide line-clamp-1 px-2">${art.title}</div>
+                        <div class="text-[11px] text-emerald-200/90 mt-0.5">Ketuk untuk memutar video</div>
+                    </div>
+                `;
+            }
+
             return `
                 <img
                     onclick="openArticleReader('${art.id}', ${slideIdx})"
@@ -3183,11 +3266,15 @@
             `}).join('');
         }
 
+        // ==========================================
+        // READER MODAL + FULLSCREEN LIGHTBOX + TOUCH SWIPE
+        // ==========================================
         function openArticleReader(id, initialSlideIdx = 0) {
             const art = appState.articles.find(a => a.id === id);
             if (!art) return;
             activeReadingArticleId = id;
             activeReaderSlideIdx = typeof initialSlideIdx === 'number' ? initialSlideIdx : 0;
+            setReaderFullscreenState(false);
             document.getElementById('readerCategory').textContent = art.category;
             document.getElementById('readerDate').innerHTML = `<i class="fa-regular fa-calendar"></i> ${art.date}`;
             document.getElementById('readerTitle').textContent = art.title;
@@ -3199,20 +3286,96 @@
             openModal('articleReaderModal');
         }
 
+        function setReaderFullscreenState(enable) {
+            isReaderFullscreen = Boolean(enable);
+            const modalBackdrop = document.getElementById('articleReaderModal');
+            const modalContainer = document.getElementById('readerModalContainer');
+            const mediaStage = document.getElementById('readerMediaStage');
+            const bodyWrap = document.getElementById('readerContentBodyWrap');
+            const fsIcon = document.getElementById('readerFullscreenIcon');
+            const fsLabel = document.getElementById('readerFullscreenLabel');
+
+            if (!modalBackdrop || !modalContainer || !mediaStage) return;
+
+            if (isReaderFullscreen) {
+                modalBackdrop.className = 'fixed inset-0 bg-black z-50 flex items-center justify-center p-0 transition-all';
+                modalContainer.className = 'bg-black w-screen h-screen max-w-none max-h-none rounded-none overflow-hidden flex flex-col justify-between transition-all duration-300';
+                mediaStage.className = 'relative bg-black flex-1 w-full h-full overflow-hidden select-none group flex items-center justify-center';
+                if (bodyWrap) bodyWrap.classList.add('hidden');
+                if (fsIcon) fsIcon.className = 'fa-solid fa-compress text-xs sm:text-sm';
+                if (fsLabel) fsLabel.textContent = 'Perkecil';
+            } else {
+                modalBackdrop.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-2.5 sm:p-5 transition-all';
+                modalContainer.className = 'modal-card-pop smooth-scroll-box bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200/80 flex flex-col transition-all duration-300';
+                if (bodyWrap) bodyWrap.classList.remove('hidden');
+                if (fsIcon) fsIcon.className = 'fa-solid fa-expand text-xs sm:text-sm';
+                if (fsLabel) fsLabel.textContent = 'Layar Penuh';
+
+                const art = appState.articles.find(a => a.id === activeReadingArticleId);
+                if (art) {
+                    const photos = getArticlePhotos(art);
+                    const sInfo = getSocialEmbedInfo(photos[activeReaderSlideIdx]);
+                    if (sInfo && sInfo.isTall) {
+                        mediaStage.className = 'relative bg-slate-950 h-[440px] sm:h-[540px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                    } else {
+                        mediaStage.className = 'relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                    }
+                }
+            }
+        }
+
+        function toggleReaderFullscreen(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            setReaderFullscreenState(!isReaderFullscreen);
+        }
+
+        function setupReaderTouchSwipe() {
+            const stage = document.getElementById('readerMediaStage');
+            if (!stage) return;
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            stage.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            stage.addEventListener('touchend', (e) => {
+                if (!touchStartX || e.changedTouches.length === 0) return;
+                const diffX = e.changedTouches[0].clientX - touchStartX;
+                const diffY = e.changedTouches[0].clientY - touchStartY;
+                if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX < 0) {
+                        stepReaderGallery(1);
+                    } else {
+                        stepReaderGallery(-1);
+                    }
+                }
+                touchStartX = 0;
+                touchStartY = 0;
+            }, { passive: true });
+        }
+
         function renderReaderGallerySlide(art) {
             const photos = getArticlePhotos(art);
             if (activeReaderSlideIdx >= photos.length) activeReaderSlideIdx = 0;
             if (activeReaderSlideIdx < 0) activeReaderSlideIdx = photos.length - 1;
 
             const currentUrl = photos[activeReaderSlideIdx];
+            const mediaStage = document.getElementById('readerMediaStage');
             const readerImg = document.getElementById('readerImg');
             const readerVideo = document.getElementById('readerVideo');
             const readerIframe = document.getElementById('readerIframe');
             const ambientBg = document.getElementById('readerAmbientBg');
             const gradientMask = document.getElementById('readerGradientMask');
             const bottomOverlay = document.getElementById('readerBottomOverlay');
+            const extLinkBtn = document.getElementById('readerOpenExternalLink');
 
-            // Reset semua media player terlebih dahulu
             if (readerVideo) {
                 readerVideo.pause();
                 readerVideo.src = '';
@@ -3225,16 +3388,43 @@
             if (readerImg) {
                 readerImg.classList.add('hidden');
             }
+            if (extLinkBtn) {
+                extLinkBtn.classList.add('hidden');
+                extLinkBtn.classList.remove('inline-flex');
+            }
 
-            const ytEmbed = getYouTubeEmbedUrl(currentUrl);
+            const socialInfo = getSocialEmbedInfo(currentUrl);
             const isDirectVid = isDirectVideoUrl(currentUrl);
 
-            if (ytEmbed && readerIframe) {
-                readerIframe.src = ytEmbed;
+            if (mediaStage && !isReaderFullscreen) {
+                if (socialInfo && socialInfo.isTall) {
+                    mediaStage.className = 'relative bg-slate-950 h-[440px] sm:h-[540px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                } else {
+                    mediaStage.className = 'relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                }
+            }
+
+            if (socialInfo && socialInfo.embedUrl && readerIframe) {
+                readerIframe.src = socialInfo.embedUrl;
                 readerIframe.classList.remove('hidden');
                 if (ambientBg) ambientBg.src = getYouTubeThumbnailUrl(currentUrl) || '';
                 if (gradientMask) gradientMask.classList.add('hidden');
                 if (bottomOverlay) bottomOverlay.classList.add('hidden');
+                if (extLinkBtn) {
+                    extLinkBtn.href = currentUrl;
+                    extLinkBtn.classList.remove('hidden');
+                    extLinkBtn.classList.add('inline-flex');
+                }
+            } else if (socialInfo && socialInfo.externalOnly && readerImg) {
+                readerImg.src = `https://placehold.co/900x600/0f3529/ffffff?text=Video+${encodeURIComponent(socialInfo.platform)}`;
+                readerImg.classList.remove('hidden');
+                if (gradientMask) gradientMask.classList.remove('hidden');
+                if (bottomOverlay) bottomOverlay.classList.remove('hidden');
+                if (extLinkBtn) {
+                    extLinkBtn.href = currentUrl;
+                    extLinkBtn.classList.remove('hidden');
+                    extLinkBtn.classList.add('inline-flex');
+                }
             } else if (isDirectVid && readerVideo) {
                 readerVideo.src = currentUrl;
                 readerVideo.classList.remove('hidden');
@@ -3262,7 +3452,7 @@
                 nextBtn.classList.remove('hidden');
                 nextBtn.classList.add('flex');
                 counterEl.classList.remove('hidden');
-                counterEl.innerHTML = `<i class="fa-regular fa-images mr-1"></i> Slide ${activeReaderSlideIdx + 1} dari ${photos.length}`;
+                counterEl.innerHTML = `<i class="fa-regular fa-images mr-1"></i> ${activeReaderSlideIdx + 1} / ${photos.length}`;
 
                 if (dotsContainer) {
                     dotsContainer.classList.remove('hidden');
@@ -3279,12 +3469,16 @@
                 thumbStrip.classList.remove('hidden');
                 thumbStrip.innerHTML = photos.map((url, idx) => {
                     const ytThumb = getYouTubeThumbnailUrl(url);
-                    const isVid = isDirectVideoUrl(url) || Boolean(ytThumb);
-                    const thumbHtml = ytThumb
-                        ? `<img src="${ytThumb}" class="w-full h-full object-cover" alt="Video ${idx + 1}">`
-                        : isDirectVideoUrl(url)
-                            ? `<div class="w-full h-full bg-slate-800 flex items-center justify-center text-amber-400"><i class="fa-solid fa-film text-xl"></i></div>`
-                            : `<img src="${url}" class="w-full h-full object-cover" alt="Slide ${idx + 1}">`;
+                    const sInfo = getSocialEmbedInfo(url);
+                    const isVid = isDirectVideoUrl(url) || Boolean(sInfo);
+                    let thumbHtml = `<img src="${url}" class="w-full h-full object-cover" alt="Slide ${idx + 1}">`;
+                    if (ytThumb) {
+                        thumbHtml = `<img src="${ytThumb}" class="w-full h-full object-cover" alt="YouTube ${idx + 1}">`;
+                    } else if (sInfo) {
+                        thumbHtml = `<div class="w-full h-full bg-gradient-to-br ${sInfo.gradient} flex items-center justify-center text-white"><i class="${sInfo.icon} text-xl"></i></div>`;
+                    } else if (isDirectVideoUrl(url)) {
+                        thumbHtml = `<div class="w-full h-full bg-slate-800 flex items-center justify-center text-amber-400"><i class="fa-solid fa-film text-xl"></i></div>`;
+                    }
                     return `
                         <button
                             type="button"
@@ -3292,7 +3486,7 @@
                             class="relative w-24 sm:w-32 h-14 sm:h-18 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 cursor-pointer ${idx === activeReaderSlideIdx ? 'border-amber-400 ring-2 ring-amber-400/40 scale-[1.03] opacity-100 shadow-md' : 'border-white/15 opacity-60 hover:opacity-95'}"
                         >
                             ${thumbHtml}
-                            ${isVid ? `<span class="absolute top-1 left-1.5 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded">VIDEO</span>` : ''}
+                            ${isVid ? `<span class="absolute top-1 left-1.5 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded">${sInfo ? sInfo.platform.toUpperCase() : 'VIDEO'}</span>` : ''}
                             <span class="absolute bottom-1 right-1.5 bg-black/75 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow">${idx + 1}</span>
                         </button>
                     `;
@@ -3335,7 +3529,13 @@
             if (!modal || modal.classList.contains('hidden')) return;
             if (e.key === 'ArrowLeft') stepReaderGallery(-1);
             else if (e.key === 'ArrowRight') stepReaderGallery(1);
-            else if (e.key === 'Escape') closeModal('articleReaderModal');
+            else if (e.key === 'Escape') {
+                if (isReaderFullscreen) {
+                    setReaderFullscreenState(false);
+                } else {
+                    closeModal('articleReaderModal');
+                }
+            }
         });
 
         function updateReaderLikeButtonUI(art) {
@@ -3704,7 +3904,7 @@
         }
 
         // ==========================================
-        // ADD / EDIT ARTICLE MODAL (MULTI PHOTO & VIDEO)
+        // ADD / EDIT ARTICLE MODAL (PHOTO COVER PRIORITY + VIDEO)
         // ==========================================
         function openAddArticleModal() {
             syncCategoryDropdowns();
@@ -3739,12 +3939,15 @@
 
         function renderMediaPreviewItemHtml(url, idx, removeFnName) {
             const ytThumb = getYouTubeThumbnailUrl(url);
+            const sInfo = getSocialEmbedInfo(url);
             const isDirectVid = isDirectVideoUrl(url);
-            const isVid = isDirectVid || Boolean(ytThumb);
+            const isVid = isDirectVid || Boolean(sInfo);
 
             let mediaEl = `<img src="${url}" class="w-full h-full object-cover" alt="Media ${idx + 1}">`;
             if (ytThumb) {
                 mediaEl = `<img src="${ytThumb}" class="w-full h-full object-cover" alt="YouTube ${idx + 1}">`;
+            } else if (sInfo) {
+                mediaEl = `<div class="w-full h-full bg-gradient-to-br ${sInfo.gradient} flex flex-col items-center justify-center text-white p-2 text-center"><i class="${sInfo.icon} text-lg mb-1"></i><span class="text-[9px] font-extrabold">${sInfo.platform}</span></div>`;
             } else if (isDirectVid) {
                 mediaEl = `<video src="${url}#t=0.5" muted playsinline class="w-full h-full object-cover bg-black"></video>`;
             }
@@ -3753,9 +3956,9 @@
                 <div class="relative group rounded-xl overflow-hidden border border-slate-300 aspect-video bg-slate-900">
                     ${mediaEl}
                     <span class="absolute bottom-1 left-1 bg-black/75 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-                        #${idx + 1}
+                        ${idx === 0 && !isVid ? 'COVER' : '#' + (idx + 1)}
                     </span>
-                    ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded"><i class="fa-solid fa-video mr-0.5"></i>VIDEO</span>` : ''}
+                    ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded">${sInfo ? sInfo.platform.toUpperCase() : 'VIDEO'}</span>` : ''}
                     ${removeFnName ? `
                         <button type="button" onclick="${removeFnName}(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center shadow hover:bg-rose-700" title="Hapus media ini">
                             <i class="fa-solid fa-xmark"></i>
@@ -3765,11 +3968,18 @@
             `;
         }
 
+        function sortDraftMediaCoverFirst(list) {
+            const photos = list.filter(u => !isAnyVideoMedia(u));
+            const videos = list.filter(u => isAnyVideoMedia(u));
+            return [...photos, ...videos];
+        }
+
         function renderEditorPhotosPreview() {
             const box = document.getElementById('editorPhotosPreviewList');
             if (!box) return;
+            editorPhotosDraft = sortDraftMediaCoverFirst(editorPhotosDraft);
             if (editorPhotosDraft.length === 0) {
-                box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-slate-400">Belum ada foto atau video dipilih. Klik Upload Foto / Video atau tempel link URL.</div>`;
+                box.innerHTML = `<div class="col-span-full text-center py-4 text-xs text-slate-400">Belum ada foto atau video dipilih. Upload foto sampul atau tempel link video.</div>`;
                 return;
             }
             box.innerHTML = editorPhotosDraft.map((url, idx) => renderMediaPreviewItemHtml(url, idx, 'removeEditorPhotoAt')).join('');
@@ -3785,7 +3995,8 @@
             editorPhotosDraft.push(url);
             input.value = '';
             renderEditorPhotosPreview();
-            showToast(`Media ke-${editorPhotosDraft.length} ditambahkan!`);
+            const sInfo = getSocialEmbedInfo(url);
+            showToast(sInfo ? `Video ${sInfo.platform} ditambahkan!` : `Media ditambahkan!`);
         }
 
         function removeEditorPhotoAt(idx) {
@@ -3837,6 +4048,8 @@
             if (pendingUrl) {
                 editorPhotosDraft.push(pendingUrl);
             }
+            editorPhotosDraft = sortDraftMediaCoverFirst(editorPhotosDraft);
+
             if (editorPhotosDraft.length === 0) {
                 editorPhotosDraft.push('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80');
             }
@@ -3905,6 +4118,7 @@
                     }
                     const uploadedUrl = await uploadMediaFileToCloud(file, 'submissions');
                     studentSubPhotosDraft.push(uploadedUrl);
+                    studentSubPhotosDraft = sortDraftMediaCoverFirst(studentSubPhotosDraft);
                     if (previewEl) {
                         previewEl.classList.remove('hidden');
                         previewEl.innerHTML = studentSubPhotosDraft.map((itemUrl, i) => renderMediaPreviewItemHtml(itemUrl, i, null)).join('');
@@ -3925,7 +4139,8 @@
         async function submitStudentWork(e) {
             e.preventDefault();
             const customImg = document.getElementById('subImage') ? document.getElementById('subImage').value.trim() : '';
-            if (customImg) studentSubPhotosDraft.unshift(customImg);
+            if (customImg) studentSubPhotosDraft.push(customImg);
+            studentSubPhotosDraft = sortDraftMediaCoverFirst(studentSubPhotosDraft);
             if (studentSubPhotosDraft.length === 0) {
                 studentSubPhotosDraft.push('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80');
             }
@@ -3987,6 +4202,7 @@
                     }
                     const uploadedUrl = await uploadMediaFileToCloud(file, 'prestasi');
                     studentPrestasiPhotosDraft.push(uploadedUrl);
+                    studentPrestasiPhotosDraft = sortDraftMediaCoverFirst(studentPrestasiPhotosDraft);
                     if (previewEl) {
                         previewEl.classList.remove('hidden');
                         previewEl.innerHTML = studentPrestasiPhotosDraft.map((itemUrl, i) => renderMediaPreviewItemHtml(itemUrl, i, null)).join('');
@@ -4007,7 +4223,8 @@
         async function submitStudentPrestasi(e) {
             e.preventDefault();
             const customImg = document.getElementById('presImage') ? document.getElementById('presImage').value.trim() : '';
-            if (customImg) studentPrestasiPhotosDraft.unshift(customImg);
+            if (customImg) studentPrestasiPhotosDraft.push(customImg);
+            studentPrestasiPhotosDraft = sortDraftMediaCoverFirst(studentPrestasiPhotosDraft);
             if (studentPrestasiPhotosDraft.length === 0) {
                 studentPrestasiPhotosDraft.push('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=900&q=80');
             }
@@ -4076,9 +4293,10 @@
         async function approveSubmission(subId) {
             const item = appState.inbox.find(s => s.id === subId);
             if (!item) return;
-            const imgs = Array.isArray(item.images) && item.images.length > 0
+            const rawImgs = Array.isArray(item.images) && item.images.length > 0
                 ? item.images
                 : [item.image || 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80'];
+            const imgs = sortDraftMediaCoverFirst(rawImgs);
             const artId = 'art-' + Date.now();
 
             try {
@@ -4133,6 +4351,7 @@
             const el = document.getElementById(id);
             if (!el) return;
             if (id === 'articleReaderModal') {
+                setReaderFullscreenState(false);
                 const vid = document.getElementById('readerVideo');
                 const ifr = document.getElementById('readerIframe');
                 if (vid) {
@@ -4180,4 +4399,4 @@
         }
     </script>
 </body>
-</html>
+                    </html>
