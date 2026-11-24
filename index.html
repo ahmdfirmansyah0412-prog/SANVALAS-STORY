@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SANVALAS STORY - Tim Kreatif & Publikasi OSIS MTsN 14</title>
-    <meta name="description" content="Tim kreatif & Publikasi OSIS yang mengelola konten edukatif, informatif, dokumentasi kegiatan, prestasi, serta karya siswa MTsN 14 Jakarta Timur.">
+    <title>SANVALAS STORY - Tim Kreatif OSIS MTsN 14</title>
+    <meta name="description" content="Tim kreatif OSIS yang mengelola konten edukatif, informatif, dokumentasi kegiatan, prestasi, serta karya siswa MTsN 14 Jakarta Timur.">
 
     <!-- Favicon & Ikon Tab Browser (Langsung tampil logo MTsN 14 tanpa ikon default GitHub) -->
     <link id="dynamicFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 132'%3E%3Cpath d='M60 6 C82 17, 102 21, 108 23 C109 68, 92 96, 60 110 C28 96, 11 68, 12 23 C18 21, 38 17, 60 6 Z' fill='%230088ff' stroke='%23fde047' stroke-width='5'/%3E%3Ctext x='60' y='35' text-anchor='middle' fill='%23fde047' font-family='Georgia,serif' font-weight='900' font-size='17'%3EMTsN 14%3C/text%3E%3Cpolygon points='58,44 62,44 64,79 56,79' fill='%23f1f5f9'/%3E%3Cpolygon points='48,79 72,79 68,84 52,84' fill='%23d97706'/%3E%3Cpath d='M60 35 C62 38, 62 41, 60 42 C58 41, 58 38, 60 35 Z' fill='%23f59e0b'/%3E%3Crect x='46' y='85' width='28' height='11' rx='2' fill='%23fde047'/%3E%3Ctext x='60' y='93' text-anchor='middle' fill='%2314532d' font-family='sans-serif' font-weight='900' font-size='6.5'%3ESMART%3C/text%3E%3Cpath d='M21 101 Q60 120 99 101 L95 113 Q60 130 25 113 Z' fill='%231e40af' stroke='%23fde047' stroke-width='1.5'/%3E%3Ctext x='60' y='116' text-anchor='middle' fill='%23fde047' font-family='Georgia,serif' font-weight='900' font-size='7.3'%3EJAKARTA TIMUR%3C/text%3E%3C/svg%3E">
@@ -15,7 +15,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SANVALAS STORY MTsN 14">
     <meta property="og:url" content="https://sanvalas-story.vercel.app/">
-    <meta property="og:title" content="SANVALAS STORY - Tim Kreatif & Publikasi OSIS MTsN 14">
+    <meta property="og:title" content="SANVALAS STORY - Tim Kreatif OSIS MTsN 14">
     <meta property="og:description" content="Kreatif • Informatif • Positif — Dokumentasi kegiatan, prestasi siswa, dan karya kreatif MTsN 14 Jakarta Timur.">
     <meta property="og:image" content="https://sanvalas-story.vercel.app/preview-logo.png">
     <meta property="og:image:width" content="1200">
@@ -23,7 +23,7 @@
 
     <!-- Preview Link Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SANVALAS STORY - Tim Kreatif & Publikasi OSIS MTsN 14">
+    <meta name="twitter:title" content="SANVALAS STORY - Tim Kreatif OSIS MTsN 14">
     <meta name="twitter:description" content="Kreatif • Informatif • Positif — Dokumentasi kegiatan, prestasi siswa, dan karya kreatif MTsN 14 Jakarta Timur.">
     <meta name="twitter:image" content="https://sanvalas-story.vercel.app/preview-logo.png">
 
@@ -236,7 +236,7 @@
                     <i class="fa-solid fa-shield-halved text-amber-300"></i> Upload Logo
                 </button>
                 <button onclick="openPolaroidManagerModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50">
-                    <i class="fa-solid fa-images"></i> Foto Atas &amp; BG
+                    <i class="fa-solid fa-images"></i> Teks, Foto Atas &amp; BG
                 </button>
                 <button onclick="openAboutEditorModal()" class="bg-emerald-800 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-emerald-600/50">
                     <i class="fa-solid fa-circle-info"></i> Tentang Kami
@@ -443,7 +443,7 @@
     </header>
 
     <!-- ========================================== -->
-    <!-- HERO SECTION -->
+    <!-- HERO SECTION (TERSAMBUNG KE FIREBASE FIRESTORE) -->
     <!-- ========================================== -->
     <section id="beranda" class="relative bg-sanvalas-900 text-white overflow-hidden w-full">
         <div class="absolute inset-0 z-0 bg-sanvalas-950">
@@ -460,31 +460,34 @@
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-11">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-8 items-center">
 
-                <div class="lg:col-span-6 space-y-2.5 sm:space-y-3">
-                    <div class="inline-flex items-center gap-2 text-[11px] sm:text-sm tracking-[0.22em] uppercase text-emerald-100/90 font-medium">
-                        <span>TIM KREATIF</span>
-                        <span class="font-bold text-white">OSIS</span>
-                        <span class="text-white/40">|</span>
-                        <span>MTsN 14</span>
+                <div class="lg:col-span-6 space-y-2.5 sm:space-y-3 relative group">
+                    <div id="heroBadgeDisplay" class="inline-flex items-center gap-2 text-[11px] sm:text-sm tracking-[0.22em] uppercase text-emerald-100/90 font-medium">
+                        TIM KREATIF OSIS | MTsN 14
                     </div>
 
                     <h1 class="font-display font-black text-3xl sm:text-5xl xl:text-[54px] leading-[0.98] tracking-tight text-white drop-shadow-sm uppercase">
-                        <span class="block">SANVALAS</span>
-                        <span class="block">STORY</span>
+                        <span id="heroTitle1Display" class="block">SANVALAS</span>
+                        <span id="heroTitle2Display" class="block">STORY</span>
                     </h1>
 
-                    <p class="text-white/90 text-xs sm:text-[13.5px] leading-relaxed max-w-xl font-normal pt-1">
+                    <p id="heroDescDisplay" class="text-white/90 text-xs sm:text-[13.5px] leading-relaxed max-w-xl font-normal pt-1 whitespace-pre-line">
                         Tim kreatif OSIS yang membuat dan mengelola konten edukatif, informatif, dan hiburan positif untuk media sosial sekolah, sekaligus mendokumentasikan kegiatan, mempublikasikan prestasi siswa, serta menampilkan karya dan kreativitas siswa MTsN 14.
                     </p>
 
                     <div class="pt-1.5 inline-block relative">
-                        <p class="font-hand text-2xl sm:text-[28px] text-white tracking-wide">
+                        <p id="heroTaglineDisplay" class="font-hand text-2xl sm:text-[28px] text-white tracking-wide">
                             Kreatif &nbsp;•&nbsp; Informatif &nbsp;•&nbsp; Positif
                         </p>
                         <svg viewBox="0 0 280 18" class="w-56 sm:w-64 h-4 -mt-1 text-white/85 stroke-current fill-none" stroke-width="2.2" stroke-linecap="round">
                             <path d="M4 13 Q 140 2, 274 9" />
                             <path d="M55 15 Q 170 7, 245 12" stroke-width="1.2" opacity="0.7" />
                         </svg>
+                    </div>
+
+                    <div class="edit-only pt-1">
+                        <button type="button" onclick="openPolaroidManagerModal('text')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-extrabold px-3 py-1.5 rounded-full shadow flex items-center gap-1.5">
+                            <i class="fa-solid fa-pen"></i> Edit Teks Banner Utama
+                        </button>
                     </div>
                 </div>
 
@@ -540,7 +543,7 @@
                         </div>
 
                         <button type="button" onclick="openPolaroidManagerModal()" class="edit-only absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] sm:text-xs font-extrabold px-3.5 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white whitespace-nowrap">
-                            <i class="fa-solid fa-camera"></i> Ganti Background &amp; 3 Foto
+                            <i class="fa-solid fa-camera"></i> Ganti Teks, BG &amp; 3 Foto
                         </button>
 
                         <button id="polaroidPlayBtn" type="button" onclick="togglePolaroidSlideshow()" class="absolute bottom-2 right-3 sm:right-10 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-emerald-800/90 hover:bg-emerald-700 text-white flex items-center justify-center shadow-lg ring-4 ring-white/20 transition hover:scale-110 cursor-pointer" title="Putar / Geser Otomatis Foto Profil">
@@ -550,7 +553,7 @@
 
                     <div class="hidden xl:block absolute -right-2 top-1/2 -translate-y-1/2 -rotate-6 z-20 text-left max-w-[165px]">
                         <div class="text-white/70 text-xs mb-0.5">✦</div>
-                        <p class="font-hand text-[23px] leading-[1.12] text-white drop-shadow">
+                        <p id="heroSideQuoteDisplay" class="font-hand text-[23px] leading-[1.12] text-white drop-shadow">
                             Satu Konten Banyak Cerita Untuk MTsN 14
                         </p>
                         <svg viewBox="0 0 140 14" class="w-28 h-3 mt-1 text-white/80 stroke-current fill-none" stroke-width="2" stroke-linecap="round">
@@ -703,7 +706,7 @@
                         <div class="space-y-1 max-w-2xl">
                             <h3 id="aboutCardTitle" class="text-base font-extrabold text-slate-900" data-edit-key="aboutTitle">Tentang Kami</h3>
                             <p id="aboutCardShortDesc" class="text-xs text-slate-600 leading-relaxed" data-edit-key="aboutDesc">
-                                SANVALAS STORY adalah tim kreatif & Publikasi OSIS MTsN 14 yang berkomitmen menghadirkan konten berkualitas untuk seluruh siswa, guru, dan warga sekolah.
+                                SANVALAS STORY adalah tim kreatif OSIS MTsN 14 yang berkomitmen menghadirkan konten berkualitas untuk seluruh siswa, guru, dan warga sekolah.
                             </p>
                         </div>
                         <div class="shrink-0">
@@ -1186,18 +1189,18 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 9: GANTI BACKGROUND BELAKANG & 3 FOTO POLAROID ATAS -->
+    <!-- MODAL 9: GANTI TEKS BANNER, BACKGROUND BELAKANG & 3 FOTO POLAROID ATAS -->
     <!-- ========================================== -->
     <div id="polaroidManagerModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
-        <div class="modal-card-pop bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
+        <div class="modal-card-pop smooth-scroll-box bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div class="flex items-center gap-2.5">
                     <div class="w-9 h-9 rounded-xl bg-emerald-900 text-amber-300 flex items-center justify-center">
                         <i class="fa-solid fa-images"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-extrabold text-slate-900">Ganti Background Belakang &amp; 3 Foto Atas</h3>
-                        <p class="text-[11px] text-slate-500">Perubahan langsung tersimpan online untuk semua pengunjung</p>
+                        <h3 class="text-base font-extrabold text-slate-900">Edit Teks Banner, Background &amp; 3 Foto Atas</h3>
+                        <p class="text-[11px] text-slate-500">Tersambung langsung ke Cloud Firestore (<code class="text-emerald-800">sanvalas_meta/settings</code>)</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModal('polaroidManagerModal')" class="w-8 h-8 rounded-full hover:bg-slate-100 text-slate-500 flex items-center justify-center">
@@ -1206,6 +1209,41 @@
             </div>
 
             <form onsubmit="savePolaroidImages(event)" class="space-y-4 text-xs sm:text-sm">
+                <!-- BAGIAN EDIT TEKS BANNER UTAMA (HERO) -->
+                <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 space-y-2.5 text-xs">
+                    <div class="font-extrabold text-emerald-950 flex items-center gap-1.5">
+                        <i class="fa-solid fa-font text-emerald-700"></i> Teks Banner Utama (Sisi Kiri Atas)
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Teks Kecil Atas (<code class="text-[10px] text-slate-500">heroBadge</code>)</label>
+                        <input id="inputHeroBadge" type="text" placeholder="TIM KREATIF OSIS | MTsN 14" class="w-full rounded-xl bg-white border border-slate-300 px-3 py-1.5 focus:outline-none focus:border-emerald-700">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Judul Baris 1 (<code class="text-[10px] text-slate-500">heroTitle1</code>)</label>
+                            <input id="inputHeroTitle1" type="text" placeholder="SANVALAS" class="w-full rounded-xl bg-white border border-slate-300 px-3 py-1.5 font-bold focus:outline-none focus:border-emerald-700">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Judul Baris 2 (<code class="text-[10px] text-slate-500">heroTitle2</code>)</label>
+                            <input id="inputHeroTitle2" type="text" placeholder="STORY" class="w-full rounded-xl bg-white border border-slate-300 px-3 py-1.5 font-bold focus:outline-none focus:border-emerald-700">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Paragraf Deskripsi (<code class="text-[10px] text-slate-500">heroDesc</code>)</label>
+                        <textarea id="inputHeroDesc" rows="3" class="w-full rounded-xl bg-white border border-slate-300 px-3 py-1.5 focus:outline-none focus:border-emerald-700"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Slogan Tulisan Tangan (<code class="text-[10px] text-slate-500">heroTagline</code>)</label>
+                            <input id="inputHeroTagline" type="text" placeholder="Kreatif • Informatif • Positif" class="w-full rounded-xl bg-white border border-slate-300 px-3 py-1.5 focus:outline-none focus:border-emerald-700">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Catatan Kanan (<code class="text-[10px] text-slate-500">heroSideQuote</code>)</label>
+                            <input id="inputHeroSideQuote" type="text" placeholder="Satu Konten Banyak Cerita Untuk MTsN 14" class="w-full rounded-xl bg-white border border-slate-300 px-3 py-1.5 focus:outline-none focus:border-emerald-700">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-extrabold text-slate-900 flex items-center gap-1.5">
@@ -1271,7 +1309,7 @@
                     <button type="button" onclick="closeModal('polaroidManagerModal')" class="px-4 py-2 rounded-xl font-bold text-slate-600 hover:bg-slate-100">Batal</button>
                     <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-5 py-2 rounded-xl shadow flex items-center gap-1.5">
                         <i class="fa-solid fa-check"></i>
-                        <span>Simpan 3 Foto Atas</span>
+                        <span>Simpan Perubahan</span>
                     </button>
                 </div>
             </form>
@@ -2297,6 +2335,12 @@
         // DEFAULT DATA & ZERO-FLASH CACHE + CLOUD FIRESTORE SYNC
         // ==========================================
         const defaultState = {
+            heroBadge: 'TIM KREATIF OSIS | MTsN 14',
+            heroTitle1: 'SANVALAS',
+            heroTitle2: 'STORY',
+            heroDesc: 'Tim kreatif OSIS yang membuat dan mengelola konten edukatif, informatif, dan hiburan positif untuk media sosial sekolah, sekaligus mendokumentasikan kegiatan, mempublikasikan prestasi siswa, serta menampilkan karya dan kreativitas siswa MTsN 14.',
+            heroTagline: 'Kreatif • Informatif • Positif',
+            heroSideQuote: 'Satu Konten Banyak Cerita Untuk MTsN 14',
             heroBg: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=80',
             logoMtsUrl: '',
             logoOsisUrl: '',
@@ -2345,6 +2389,12 @@
         function persistSettingsCache() {
             try {
                 localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify({
+                    heroBadge: appState.heroBadge,
+                    heroTitle1: appState.heroTitle1,
+                    heroTitle2: appState.heroTitle2,
+                    heroDesc: appState.heroDesc,
+                    heroTagline: appState.heroTagline,
+                    heroSideQuote: appState.heroSideQuote,
                     heroBg: appState.heroBg,
                     logoMtsUrl: appState.logoMtsUrl || '',
                     logoOsisUrl: appState.logoOsisUrl || '',
@@ -2355,6 +2405,22 @@
                 }));
                 appState.hasCachedSettings = true;
             } catch (e) {}
+        }
+
+        function renderHeroTextUI() {
+            const badgeEl = document.getElementById('heroBadgeDisplay');
+            const title1El = document.getElementById('heroTitle1Display');
+            const title2El = document.getElementById('heroTitle2Display');
+            const descEl = document.getElementById('heroDescDisplay');
+            const tagEl = document.getElementById('heroTaglineDisplay');
+            const sideEl = document.getElementById('heroSideQuoteDisplay');
+
+            if (badgeEl) badgeEl.textContent = appState.heroBadge || defaultState.heroBadge;
+            if (title1El) title1El.textContent = appState.heroTitle1 || defaultState.heroTitle1;
+            if (title2El) title2El.textContent = appState.heroTitle2 || defaultState.heroTitle2;
+            if (descEl) descEl.textContent = appState.heroDesc || defaultState.heroDesc;
+            if (tagEl) tagEl.textContent = appState.heroTagline || defaultState.heroTagline;
+            if (sideEl) sideEl.textContent = appState.heroSideQuote || defaultState.heroSideQuote;
         }
 
         function renderBrandLogosUI() {
@@ -2510,7 +2576,7 @@
                 reader.readAsDataURL(file);
             });
         }
-// ... existing code ... -->
+
         function logoutCreatorMode(e) {
             if (e) {
                 e.preventDefault();
@@ -2533,7 +2599,7 @@
             closeModal('categoryManagerModal');
             setAppMode('preview');
         }
-// ... existing code ... -->
+
         function deleteArticle(id) {
             const art = appState.articles.find(a => a.id === id);
             if (!art) return;
@@ -2676,6 +2742,12 @@
                 isSettingsLoadedFromCloud = true;
                 if (docSnap.exists) {
                     const data = docSnap.data();
+                    appState.heroBadge = data.heroBadge || defaultState.heroBadge;
+                    appState.heroTitle1 = data.heroTitle1 || defaultState.heroTitle1;
+                    appState.heroTitle2 = data.heroTitle2 || defaultState.heroTitle2;
+                    appState.heroDesc = data.heroDesc || defaultState.heroDesc;
+                    appState.heroTagline = data.heroTagline || defaultState.heroTagline;
+                    appState.heroSideQuote = data.heroSideQuote || defaultState.heroSideQuote;
                     appState.heroBg = data.heroBg || defaultState.heroBg;
                     appState.logoMtsUrl = data.logoMtsUrl || '';
                     appState.logoOsisUrl = data.logoOsisUrl || '';
@@ -2687,6 +2759,12 @@
                 } else {
                     persistSettingsCache();
                     db.collection('sanvalas_meta').doc('settings').set({
+                        heroBadge: appState.heroBadge,
+                        heroTitle1: appState.heroTitle1,
+                        heroTitle2: appState.heroTitle2,
+                        heroDesc: appState.heroDesc,
+                        heroTagline: appState.heroTagline,
+                        heroSideQuote: appState.heroSideQuote,
                         heroBg: appState.heroBg,
                         logoMtsUrl: appState.logoMtsUrl,
                         logoOsisUrl: appState.logoOsisUrl,
@@ -2696,6 +2774,7 @@
                         categories: appState.categories
                     }, { merge: true }).catch(err => console.warn('Init settings err:', err));
                 }
+                renderHeroTextUI();
                 renderBrandLogosUI();
                 renderHeroPolaroids(true);
                 renderAboutSectionUI();
@@ -2707,6 +2786,7 @@
             }, (error) => {
                 console.error('Firestore settings error:', error);
                 isSettingsLoadedFromCloud = true;
+                renderHeroTextUI();
                 renderBrandLogosUI();
                 renderHeroPolaroids(true);
                 renderAboutSectionUI();
@@ -2781,6 +2861,12 @@
         function saveCloudSettings() {
             persistSettingsCache();
             return db.collection('sanvalas_meta').doc('settings').set({
+                heroBadge: appState.heroBadge || defaultState.heroBadge,
+                heroTitle1: appState.heroTitle1 || defaultState.heroTitle1,
+                heroTitle2: appState.heroTitle2 || defaultState.heroTitle2,
+                heroDesc: appState.heroDesc || defaultState.heroDesc,
+                heroTagline: appState.heroTagline || defaultState.heroTagline,
+                heroSideQuote: appState.heroSideQuote || defaultState.heroSideQuote,
                 heroBg: appState.heroBg,
                 logoMtsUrl: appState.logoMtsUrl || '',
                 logoOsisUrl: appState.logoOsisUrl || '',
@@ -2817,6 +2903,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             updateGoogleNavbarUI();
+            renderHeroTextUI();
             renderBrandLogosUI();
             if (appState.hasCachedSettings) {
                 renderHeroPolaroids(true);
@@ -2970,7 +3057,7 @@
         }
 
         // ==========================================
-        // HERO POLAROIDS, ABOUT & CATEGORIES
+        // HERO POLAROIDS, HERO TEXT, ABOUT & CATEGORIES
         // ==========================================
         let polaroidOrder = [0, 1, 2];
         let polaroidSlideshowTimer = null;
@@ -3046,10 +3133,25 @@
             }
         }
 
-        function openPolaroidManagerModal(focusIndex = null) {
+        function openPolaroidManagerModal(focusTarget = null) {
             const p = Array.isArray(appState.polaroids) && appState.polaroids.length === 3
                 ? appState.polaroids
                 : defaultState.polaroids;
+
+            const badgeInput = document.getElementById('inputHeroBadge');
+            const t1Input = document.getElementById('inputHeroTitle1');
+            const t2Input = document.getElementById('inputHeroTitle2');
+            const descInput = document.getElementById('inputHeroDesc');
+            const tagInput = document.getElementById('inputHeroTagline');
+            const sideInput = document.getElementById('inputHeroSideQuote');
+
+            if (badgeInput) badgeInput.value = appState.heroBadge || defaultState.heroBadge;
+            if (t1Input) t1Input.value = appState.heroTitle1 || defaultState.heroTitle1;
+            if (t2Input) t2Input.value = appState.heroTitle2 || defaultState.heroTitle2;
+            if (descInput) descInput.value = appState.heroDesc || defaultState.heroDesc;
+            if (tagInput) tagInput.value = appState.heroTagline || defaultState.heroTagline;
+            if (sideInput) sideInput.value = appState.heroSideQuote || defaultState.heroSideQuote;
+
             const heroBgUrl = appState.heroBg || defaultState.heroBg;
             const bgInput = document.getElementById('inputHeroBgUrl');
             const bgPrev = document.getElementById('previewHeroBgModal');
@@ -3066,9 +3168,13 @@
             if (capInput) capInput.value = appState.polaroidCaption || 'MTsN 14';
 
             openModal('polaroidManagerModal');
-            if (focusIndex !== null) {
+            if (focusTarget === 'text') {
                 setTimeout(() => {
-                    const el = document.getElementById(`inputPolaroidUrl${focusIndex}`);
+                    if (t1Input) t1Input.focus();
+                }, 80);
+            } else if (typeof focusTarget === 'number') {
+                setTimeout(() => {
+                    const el = document.getElementById(`inputPolaroidUrl${focusTarget}`);
                     if (el) el.focus();
                 }, 80);
             }
@@ -3106,6 +3212,13 @@
 
         async function savePolaroidImages(e) {
             e.preventDefault();
+            appState.heroBadge = document.getElementById('inputHeroBadge').value.trim() || defaultState.heroBadge;
+            appState.heroTitle1 = document.getElementById('inputHeroTitle1').value.trim() || defaultState.heroTitle1;
+            appState.heroTitle2 = document.getElementById('inputHeroTitle2').value.trim() || defaultState.heroTitle2;
+            appState.heroDesc = document.getElementById('inputHeroDesc').value.trim() || defaultState.heroDesc;
+            appState.heroTagline = document.getElementById('inputHeroTagline').value.trim() || defaultState.heroTagline;
+            appState.heroSideQuote = document.getElementById('inputHeroSideQuote').value.trim() || defaultState.heroSideQuote;
+
             const newHeroBg = document.getElementById('inputHeroBgUrl').value.trim() || defaultState.heroBg;
             const newPolaroids = [0, 1, 2].map(i => {
                 const v = document.getElementById(`inputPolaroidUrl${i}`).value.trim();
@@ -3118,9 +3231,10 @@
 
             try {
                 await saveCloudSettings();
+                renderHeroTextUI();
                 renderHeroPolaroids(true);
                 closeModal('polaroidManagerModal');
-                showToast('Background & 3 Foto atas tersimpan online!');
+                showToast('Teks Banner, Background & 3 Foto atas tersimpan online!');
             } catch (err) {
                 showToast('Gagal menyimpan ke cloud: ' + err.message);
             }
@@ -4700,7 +4814,13 @@
         }
 
         async function resetToDefaultData() {
-            if (!confirm('Reset tampilan Tentang Kami & Kategori ke bawaan awal?')) return;
+            if (!confirm('Reset tampilan Teks Banner, Tentang Kami & Kategori ke bawaan awal?')) return;
+            appState.heroBadge = defaultState.heroBadge;
+            appState.heroTitle1 = defaultState.heroTitle1;
+            appState.heroTitle2 = defaultState.heroTitle2;
+            appState.heroDesc = defaultState.heroDesc;
+            appState.heroTagline = defaultState.heroTagline;
+            appState.heroSideQuote = defaultState.heroSideQuote;
             appState.heroBg = defaultState.heroBg;
             appState.logoMtsUrl = '';
             appState.logoOsisUrl = '';
@@ -4709,6 +4829,7 @@
             appState.aboutData = { ...defaultState.aboutData };
             appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
             await saveCloudSettings();
+            renderHeroTextUI();
             renderBrandLogosUI();
             renderHeroPolaroids(true);
             showToast('Pengaturan tampilan berhasil dikembalikan ke awal');
