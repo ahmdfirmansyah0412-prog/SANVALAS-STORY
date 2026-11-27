@@ -1,13 +1,3 @@
-/**
- * Letakkan file ini di dalam folder: api/share.js
- *
- * File ini membedakan Preview Website Utama (/) dengan Preview Postingan (/p/:postId).
- * Saat bot WhatsApp / Telegram / X membuka /p/art-xxxx, server mengirimkan HTML dengan
- * og:title, og:description, dan og:image milik postingan tersebut.
- * Saat pengunjung manusia membuka linknya, browser langsung diarahkan ke halaman utama
- * dan otomatis membuka pop-up postingan tersebut.
- */
-
 const FIREBASE_PROJECT_ID = 'sanvalas-story';
 
 function escapeHtml(str) {
@@ -25,8 +15,11 @@ function getYouTubeThumb(url) {
   return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
 }
 
-export default async function handler(req, res) {
-  const { post } = req.query;
+module.exports = async function handler(req, res) {
+  // Bersihkan ID postingan jika ada garis miring di akhir
+  const rawPost = Array.isArray(req.query.post) ? req.query.post[0] : (req.query.post || '');
+  const post = rawPost.replace(/^\/+|\/+$/g, '').trim();
+
   const protocol = req.headers['x-forwarded-proto'] || 'https';
   const host = req.headers.host || 'sanvalas-story.vercel.app';
   const origin = `${protocol}://${host}`;
@@ -80,7 +73,7 @@ export default async function handler(req, res) {
       }
     }
   } catch (err) {
-    // Fallback tetap menggunakan default meta jika gagal fetch
+    // Tetap gunakan fallback default jika gagal fetch
   }
 
   const safeTitle = escapeHtml(ogTitle);
@@ -118,4 +111,4 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   return res.status(200).send(html);
-}
+};
