@@ -2924,7 +2924,11 @@
             if (hasCheckedSharedUrl) return;
             try {
                 const params = new URLSearchParams(window.location.search);
-                const postId = params.get('post');
+                let postId = params.get('post');
+                // Dukungan URL bersih /p/art-xxxx
+                if (!postId && window.location.pathname.startsWith('/p/')) {
+                    postId = decodeURIComponent(window.location.pathname.replace(/^\/p\//, '').split('/')[0]);
+                }
                 if (postId && appState.articles.some(a => a.id === postId)) {
                     hasCheckedSharedUrl = true;
                     openArticleReader(postId);
@@ -2940,8 +2944,9 @@
             const art = appState.articles.find(a => a.id === articleId);
             if (!art) return;
 
-            const baseUrl = window.location.href.split('#')[0].split('?')[0];
-            const shareUrl = `${baseUrl}?post=${encodeURIComponent(art.id)}`;
+            const originUrl = window.location.origin;
+            // Gunakan jalur khusus /p/{id} agar terpisah dari preview beranda utama & langsung dibaca WhatsApp
+            const shareUrl = `${originUrl}/p/${encodeURIComponent(art.id)}`;
             const shareText = `${art.title} - SANVALAS STORY MTsN 14`;
 
             const subEl = document.getElementById('sharePostModalSubtitle');
@@ -2952,7 +2957,7 @@
 
             if (subEl) subEl.textContent = art.title;
             if (inputEl) inputEl.value = shareUrl;
-            if (waEl) waEl.href = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+            if (waEl) waEl.href = `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
             if (tgEl) tgEl.href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
             if (twEl) twEl.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 
