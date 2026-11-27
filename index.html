@@ -14,18 +14,18 @@
     <!-- Open Graph / Preview Link WhatsApp, Instagram, Telegram, Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SANVALAS STORY MTsN 14">
-    <meta property="og:url" content="https://sanvalas-story.vercel.app/">
-    <meta property="og:title" content="SANVALAS STORY - Tim Kreatif OSIS MTsN 14">
-    <meta property="og:description" content="Kreatif • Informatif • Positif — Dokumentasi kegiatan, prestasi siswa, dan karya kreatif MTsN 14 Jakarta Timur.">
-    <meta property="og:image" content="https://sanvalas-story.vercel.app/preview-logo.png">
+    <meta property="og:url" id="ogUrlMeta" content="https://sanvalas-story.vercel.app/">
+    <meta property="og:title" id="ogTitleMeta" content="SANVALAS STORY - Tim Kreatif OSIS MTsN 14">
+    <meta property="og:description" id="ogDescMeta" content="Kreatif • Informatif • Positif — Dokumentasi kegiatan, prestasi siswa, dan karya kreatif MTsN 14 Jakarta Timur.">
+    <meta property="og:image" id="ogImageMeta" content="https://sanvalas-story.vercel.app/preview-logo.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
     <!-- Preview Link Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SANVALAS STORY - Tim Kreatif OSIS MTsN 14">
-    <meta name="twitter:description" content="Kreatif • Informatif • Positif — Dokumentasi kegiatan, prestasi siswa, dan karya kreatif MTsN 14 Jakarta Timur.">
-    <meta name="twitter:image" content="https://sanvalas-story.vercel.app/preview-logo.png">
+    <meta name="twitter:title" id="twTitleMeta" content="SANVALAS STORY - Tim Kreatif OSIS MTsN 14">
+    <meta name="twitter:description" id="twDescMeta" content="Kreatif • Informatif • Positif — Dokumentasi kegiatan, prestasi siswa, dan karya kreatif MTsN 14 Jakarta Timur.">
+    <meta name="twitter:image" id="twImageMeta" content="https://sanvalas-story.vercel.app/preview-logo.png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -3559,318 +3559,283 @@
         }
 
         function copyUrlFromInput(inputId, msg) {
-            const input = document.getElementById(inputId);
-            if (!input) return;
-            input.select();
+            const el = document.getElementById(inputId);
+            el.select();
             document.execCommand('copy');
             showToast(msg);
         }
 
-        // ==========================================
-        // CARD GRID & MULTI-MEDIA SLIDE RENDERING
-        // ==========================================
-        function setCardSizeMode(sizeMode) {
-            cardSizeMode = sizeMode;
+        function toggleMobileSearchBar() {
+            const bar = document.getElementById('mobileSearchBar');
+            bar.classList.toggle('hidden');
+            if (!bar.classList.contains('hidden')) {
+                document.getElementById('mobileSearchInput').focus();
+            }
+        }
+
+        function setCardSizeMode(mode) {
+            cardSizeMode = mode;
             const largeBtn = document.getElementById('viewSizeLargeBtn');
             const compactBtn = document.getElementById('viewSizeCompactBtn');
-            const grid = document.getElementById('articlesGrid');
-
-            if (sizeMode === 'large') {
-                largeBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1';
-                compactBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1';
-                grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-5';
-            } else {
-                compactBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1';
-                largeBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1';
-                grid.className = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4';
+            if (largeBtn && compactBtn) {
+                if (mode === 'compact') {
+                    compactBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1';
+                    largeBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1';
+                } else {
+                    largeBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition bg-[#285444] text-white shadow-xs flex items-center gap-1';
+                    compactBtn.className = 'px-2.5 sm:px-3 py-1 rounded-full transition text-slate-700 hover:text-slate-950 flex items-center gap-1';
+                }
             }
             renderArticles();
         }
 
-        function buildCardMediaHtml(art, mediaUrl, slideIdx) {
-            const ytThumb = getYouTubeThumbnailUrl(mediaUrl);
-            const sInfo = getSocialEmbedInfo(mediaUrl);
-            const isDirectVid = isDirectVideoUrl(mediaUrl);
-            const focusPos = getArticleImagePosition(art);
-
-            if (ytThumb) {
-                return `
-                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full cursor-pointer group/vid">
-                        <img src="${ytThumb}" alt="${art.title}" style="object-position: ${focusPos};" class="w-full h-full object-cover group-hover:scale-[1.03] transition duration-500">
-                        <div class="absolute inset-0 bg-black/25 flex items-center justify-center">
-                            <div class="w-12 h-12 rounded-full bg-red-600/95 text-white flex items-center justify-center shadow-xl ring-4 ring-white/25 group-hover/vid:scale-110 transition">
-                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (sInfo && sInfo.embedUrl) {
-                return `
-                    <div class="relative w-full h-full bg-white overflow-hidden">
-                        <iframe
-                            src="${sInfo.embedUrl}"
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowfullscreen
-                            class="w-full h-full border-0 pointer-events-none"
-                        ></iframe>
-                        <div
-                            onclick="openArticleReader('${art.id}', ${slideIdx})"
-                            class="absolute inset-0 z-10 cursor-pointer bg-transparent hover:bg-black/10 transition flex items-center justify-center"
-                            title="Ketuk untuk memutar video ${sInfo.platform}"
-                        >
-                            <span class="opacity-0 group-hover:opacity-100 transition bg-black/75 backdrop-blur-xs text-white text-xs font-extrabold px-3.5 py-2 rounded-full shadow-lg flex items-center gap-1.5">
-                                <i class="${sInfo.icon}"></i> Putar Video ${sInfo.platform}
-                            </span>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (sInfo && sInfo.externalOnly) {
-                return `
-                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="w-full h-full bg-gradient-to-br ${sInfo.gradient} flex flex-col items-center justify-center text-white p-4 text-center cursor-pointer relative overflow-hidden">
-                        <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 flex items-center justify-center mb-2 shadow-lg">
-                            <i class="${sInfo.icon} text-2xl"></i>
-                        </div>
-                        <div class="text-xs font-extrabold line-clamp-1 max-w-[85%]">${art.title}</div>
-                        <div class="text-[11px] text-white/85 mt-0.5 font-medium truncate max-w-[85%]">${mediaUrl}</div>
-                    </div>
-                `;
-            }
-
-            if (isDirectVid) {
-                return `
-                    <div onclick="openArticleReader('${art.id}', ${slideIdx})" class="relative w-full h-full bg-black cursor-pointer group/vid">
-                        <video
-                            src="${mediaUrl}#t=0.5"
-                            muted
-                            playsinline
-                            preload="metadata"
-                            style="object-position: ${focusPos};"
-                            class="w-full h-full object-cover"
-                        ></video>
-                        <div class="absolute inset-0 bg-black/25 flex items-center justify-center">
-                            <div class="w-12 h-12 rounded-full bg-emerald-800/95 text-white flex items-center justify-center shadow-xl ring-4 ring-white/25 group-hover/vid:scale-110 transition">
-                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            return `
-                <img
-                    onclick="openArticleReader('${art.id}', ${slideIdx})"
-                    src="${mediaUrl}"
-                    alt="${art.title}"
-                    style="object-position: ${focusPos};"
-                    class="w-full h-full object-cover cursor-pointer group-hover:scale-[1.03] transition duration-500"
-                    onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
-                >
-            `;
-        }
-
-        function stepCardSlide(event, articleId, delta) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            const art = appState.articles.find(a => a.id === articleId);
-            if (!art) return;
-            const photos = getArticlePhotos(art);
-            if (photos.length <= 1) return;
-
-            const currentIdx = cardSlideIndices[articleId] || 0;
-            const nextIdx = (currentIdx + delta + photos.length) % photos.length;
-            setCardSlide(event, articleId, nextIdx);
-        }
-
-        function setCardSlide(event, articleId, targetIdx) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            const art = appState.articles.find(a => a.id === articleId);
-            if (!art) return;
-            const photos = getArticlePhotos(art);
-            if (photos.length <= 1) return;
-
-            const safeIdx = ((targetIdx % photos.length) + photos.length) % photos.length;
-            cardSlideIndices[articleId] = safeIdx;
-
-            const mediaSlot = document.getElementById(`cardMediaSlot-${articleId}`);
-            const counterEl = document.getElementById(`cardSlideCounter-${articleId}`);
-            const dotsEl = document.getElementById(`cardSlideDots-${articleId}`);
-
-            if (mediaSlot) {
-                mediaSlot.classList.remove('slide-fade-anim');
-                void mediaSlot.offsetWidth;
-                mediaSlot.innerHTML = buildCardMediaHtml(art, photos[safeIdx], safeIdx);
-                mediaSlot.classList.add('slide-fade-anim');
-            }
-            if (counterEl) {
-                counterEl.innerHTML = `<i class="fa-regular fa-images"></i> ${safeIdx + 1}/${photos.length}`;
-            }
-            if (dotsEl) {
-                dotsEl.innerHTML = photos.map((_, idx) => `
-                    <button
-                        type="button"
-                        onclick="setCardSlide(event, '${articleId}', ${idx})"
-                        class="h-1.5 rounded-full transition-all ${idx === safeIdx ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/55 hover:bg-white/90'}"
-                        title="Slide ${idx + 1}"
-                    ></button>
-                `).join('');
-            }
-        }
-
+        // ==========================================
+        // RENDER ARTICLES GRID (CLEAN COVER THUMBNAIL)
+        // ==========================================
         function renderArticles() {
             const grid = document.getElementById('articlesGrid');
-            if (!grid) return;
+            const isCompact = cardSizeMode === 'compact';
+
+            grid.className = isCompact
+                ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5'
+                : 'grid grid-cols-1 md:grid-cols-2 gap-5';
+
             const filtered = appState.articles.filter(art => {
                 const matchCat = activeCategory === 'Semua' || art.category.toLowerCase() === activeCategory.toLowerCase();
-                const matchSearch = !currentSearchQuery ||
-                    art.title.toLowerCase().includes(currentSearchQuery.toLowerCase()) ||
-                    art.category.toLowerCase().includes(currentSearchQuery.toLowerCase());
+                const q = currentSearchQuery.toLowerCase();
+                const matchSearch = !q ||
+                    art.title.toLowerCase().includes(q) ||
+                    art.category.toLowerCase().includes(q) ||
+                    (art.body && art.body.toLowerCase().includes(q));
                 return matchCat && matchSearch;
             });
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full bg-white rounded-2xl p-8 text-center border border-slate-200/80 space-y-2">
-                        <div class="text-2xl text-slate-400"><i class="fa-regular fa-folder-open"></i></div>
-                        <div class="text-sm font-bold text-slate-700">Belum ada konten pada kategori/pencarian ini.</div>
-                        <button onclick="setActiveCategory('Semua')" class="text-xs font-bold text-emerald-800 underline">Tampilkan Semua Konten</button>
+                    <div class="col-span-full bg-white rounded-2xl p-10 text-center border border-slate-200/80 space-y-2">
+                        <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center mx-auto text-lg">
+                            <i class="fa-regular fa-newspaper"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900">Belum ada konten yang dipublikasikan</h3>
+                        <p class="text-xs text-slate-500">Tim Kreatif OSIS MTsN 14 dapat menambahkan postingan baru atau cek kategori lainnya.</p>
+                        <button onclick="setActiveCategory('Semua'); document.getElementById('searchInput').value=''; handleSearch('');" class="mt-2 bg-emerald-900 text-white text-xs font-bold px-4 py-2 rounded-full">Tampilkan Semua</button>
                     </div>
                 `;
                 return;
             }
 
             grid.innerHTML = filtered.map(art => {
-                const commentCount = Array.isArray(art.commentsList) ? art.commentsList.length : 0;
-                const likedByMe = isArticleLikedByCurrentGoogleUser(art);
                 const photos = getArticlePhotos(art);
-                const photoCount = photos.length;
-                const hasAnyVid = photos.some(u => isAnyVideoMedia(u));
-                const isLarge = cardSizeMode === 'large';
-                const currentSlideIdx = Math.min(cardSlideIndices[art.id] || 0, photoCount - 1);
+                const imgPos = getArticleImagePosition(art);
+                const totalSlides = photos.length;
+                if (typeof cardSlideIndices[art.id] !== 'number' || cardSlideIndices[art.id] >= totalSlides) {
+                    cardSlideIndices[art.id] = 0;
+                }
+                const currentSlide = cardSlideIndices[art.id];
+                const currentMediaUrl = photos[currentSlide];
+
+                const ytThumb = getYouTubeThumbnailUrl(currentMediaUrl);
+                const socialInfo = getSocialEmbedInfo(currentMediaUrl);
+                const isDirectVid = isDirectVideoUrl(currentMediaUrl);
+                const isAnyVid = isDirectVid || Boolean(socialInfo);
+
+                const imgHeightClass = isCompact ? 'h-32 sm:h-36' : 'h-56 sm:h-60';
+                const bodyPaddingClass = isCompact ? 'p-3 space-y-2' : 'p-4 sm:p-5 space-y-3';
+                const titleClass = isCompact
+                    ? 'font-extrabold text-xs sm:text-[13px] text-slate-900 leading-snug line-clamp-2 group-hover:text-emerald-900 transition'
+                    : 'font-extrabold text-[15px] sm:text-base text-slate-900 leading-snug line-clamp-2 group-hover:text-emerald-900 transition';
+                const badgeClass = isCompact
+                    ? 'absolute top-2.5 left-2.5 z-10 bg-[#eaede6]/95 backdrop-blur-xs text-slate-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm'
+                    : 'absolute top-3.5 left-3.5 z-10 bg-[#eaede6]/95 backdrop-blur-xs text-slate-900 text-xs font-bold px-3.5 py-1 rounded-full shadow-sm';
+                const isLikedByMe = isArticleLikedByCurrentGoogleUser(art);
+
+                let coverMediaHtml = '';
+                if (ytThumb) {
+                    coverMediaHtml = `
+                        <img
+                            id="cardImg_${art.id}"
+                            src="${ytThumb}"
+                            alt="${art.title}"
+                            style="object-position: ${imgPos};"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-black/25 flex items-center justify-center pointer-events-none">
+                            <div class="w-12 h-12 rounded-full bg-red-600/95 text-white flex items-center justify-center shadow-lg">
+                                <i class="fa-brands fa-youtube text-xl"></i>
+                            </div>
+                        </div>
+                    `;
+                } else if (socialInfo) {
+                    coverMediaHtml = `
+                        <div class="w-full h-full bg-gradient-to-br ${socialInfo.gradient} flex flex-col items-center justify-center text-white p-4 text-center relative overflow-hidden">
+                            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/25 flex items-center justify-center shadow-lg mb-2">
+                                <i class="${socialInfo.icon} text-2xl"></i>
+                            </div>
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider bg-black/30 px-2.5 py-0.5 rounded-full">Video ${socialInfo.platform}</span>
+                            <span class="text-[10px] text-white/80 mt-1 line-clamp-1 max-w-[85%]">Ketuk untuk memutar video</span>
+                        </div>
+                    `;
+                } else if (isDirectVid) {
+                    coverMediaHtml = `
+                        <video
+                            id="cardImg_${art.id}"
+                            src="${currentMediaUrl}#t=0.5"
+                            muted
+                            playsinline
+                            preload="metadata"
+                            style="object-position: ${imgPos};"
+                            class="w-full h-full object-cover bg-slate-900 group-hover:scale-105 transition-transform duration-500"
+                        ></video>
+                        <div class="absolute inset-0 bg-black/25 flex items-center justify-center pointer-events-none">
+                            <div class="w-11 h-11 rounded-full bg-black/75 border border-white/30 text-white flex items-center justify-center shadow-lg">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    coverMediaHtml = `
+                        <img
+                            id="cardImg_${art.id}"
+                            src="${currentMediaUrl}"
+                            alt="${art.title}"
+                            style="object-position: ${imgPos};"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onerror="this.src='https://placehold.co/800x500/164636/ffffff?text=Sanvalas+Story'"
+                        >
+                    `;
+                }
 
                 return `
-                <article class="content-card bg-white rounded-2xl overflow-hidden border border-slate-200/85 shadow-xs flex flex-col justify-between group relative">
-                    ${currentMode === 'edit' ? `
-                        <div class="absolute top-3 right-3 z-30 flex items-center gap-1.5">
-                            <button type="button" onclick="openEditArticleModal('${art.id}')" class="bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1" title="Edit Postingan">
-                                <i class="fa-solid fa-pen"></i> Edit
-                            </button>
-                            <button type="button" onclick="deleteArticle('${art.id}')" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold w-8 h-8 rounded-xl shadow-md flex items-center justify-center" title="Hapus Postingan">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    ` : ''}
+                    <article onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)" class="content-card bg-white rounded-2xl overflow-hidden border border-slate-200/75 shadow-xs flex flex-col cursor-pointer group">
+                        <div class="relative ${imgHeightClass} overflow-hidden bg-slate-200 select-none">
+                            ${coverMediaHtml}
 
-                    <div>
-                        <div class="relative aspect-[16/10] w-full bg-slate-900 overflow-hidden select-none">
-                            <div id="cardMediaSlot-${art.id}" class="w-full h-full">
-                                ${buildCardMediaHtml(art, photos[currentSlideIdx], currentSlideIdx)}
-                            </div>
+                            <span class="${badgeClass}">
+                                ${art.category}
+                            </span>
 
-                            <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/65 via-black/20 to-transparent pointer-events-none"></div>
-
-                            <div class="absolute bottom-3 left-3.5 z-10 flex items-center gap-1.5">
-                                <span class="bg-white/95 backdrop-blur-xs text-slate-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-sm">
-                                    ${art.category}
+                            ${isAnyVid ? `
+                                <span class="absolute bottom-2.5 left-2.5 z-20 ${socialInfo ? socialInfo.badgeBg : 'bg-amber-400 text-slate-950'} text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow flex items-center gap-1">
+                                    <i class="${socialInfo ? socialInfo.icon : 'fa-solid fa-video'} text-[9px]"></i> ${socialInfo ? socialInfo.platform : 'VIDEO'}
                                 </span>
-                                ${hasAnyVid ? `
-                                    <span onclick="openArticleReader('${art.id}', ${photos.findIndex(u => isAnyVideoMedia(u))})" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1 cursor-pointer">
-                                        <i class="fa-solid fa-video"></i> Video
-                                    </span>
-                                ` : ''}
-                            </div>
+                            ` : ''}
 
-                            ${photoCount > 1 ? `
-                                <span id="cardSlideCounter-${art.id}" class="absolute top-3 left-3.5 z-20 bg-black/65 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-white/15 shadow">
-                                    <i class="fa-regular fa-images"></i> ${currentSlideIdx + 1}/${photoCount}
+                            ${totalSlides > 1 ? `
+                                <span id="cardCounter_${art.id}" class="absolute top-2.5 right-2.5 z-20 bg-black/65 backdrop-blur-xs text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                    <i class="fa-regular fa-images mr-0.5"></i> ${currentSlide + 1}/${totalSlides}
                                 </span>
 
                                 <button
                                     type="button"
                                     onclick="stepCardSlide(event, '${art.id}', -1)"
-                                    class="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-md flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition cursor-pointer"
+                                    class="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition shadow"
                                     title="Slide Sebelumnya"
                                 >
-                                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                                    <i class="fa-solid fa-chevron-left text-[10px]"></i>
                                 </button>
                                 <button
                                     type="button"
                                     onclick="stepCardSlide(event, '${art.id}', 1)"
-                                    class="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-900 shadow-md flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition cursor-pointer"
+                                    class="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition shadow"
                                     title="Slide Berikutnya"
                                 >
-                                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
                                 </button>
 
-                                <div id="cardSlideDots-${art.id}" class="absolute bottom-3.5 right-3.5 z-20 flex items-center gap-1.5 bg-black/40 backdrop-blur-xs px-2 py-1 rounded-full">
+                                <div id="cardDots_${art.id}" class="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-black/45 backdrop-blur-xs px-2 py-1 rounded-full">
                                     ${photos.map((_, idx) => `
-                                        <button
-                                            type="button"
-                                            onclick="setCardSlide(event, '${art.id}', ${idx})"
-                                            class="h-1.5 rounded-full transition-all ${idx === currentSlideIdx ? 'w-5 bg-white shadow' : 'w-1.5 bg-white/55 hover:bg-white/90'}"
-                                            title="Slide ${idx + 1}"
-                                        ></button>
+                                        <span class="w-1.5 h-1.5 rounded-full transition-all ${idx === currentSlide ? 'bg-white w-3' : 'bg-white/50'}"></span>
                                     `).join('')}
                                 </div>
                             ` : ''}
+
+                            <div class="edit-only absolute bottom-2.5 right-2.5 z-20 flex items-center gap-1.5" onclick="event.stopPropagation()">
+                                <button type="button" onclick="openEditArticleModal('${art.id}')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-bold px-2.5 py-1 rounded-lg shadow flex items-center gap-1">
+                                    <i class="fa-solid fa-pen"></i> ${isCompact ? '' : 'Edit'}
+                                </button>
+                                <button type="button" onclick="deleteArticle('${art.id}')" class="bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold px-2 py-1 rounded-lg shadow" title="Hapus">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <div onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)" class="${isLarge ? 'p-5 pb-3.5' : 'p-4 pb-2.5'} cursor-pointer space-y-2">
-                            <div class="flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                                <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-emerald-800"></i> ${art.date}</span>
-                                ${photoCount > 1 ? `<span class="text-emerald-800 font-bold flex items-center gap-1"><i class="fa-solid fa-layer-group text-[10px]"></i> ${photoCount} Media</span>` : ''}
-                            </div>
-                            <h3 class="${isLarge ? 'text-base sm:text-[17px]' : 'text-sm'} font-extrabold text-slate-900 leading-snug line-clamp-2 group-hover:text-emerald-800 transition">
+                        <div class="${bodyPaddingClass} flex-1 flex flex-col justify-between">
+                            <h3 class="${titleClass}">
                                 ${art.title}
                             </h3>
-                            ${isLarge && art.body ? `
-                                <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">${art.body}</p>
-                            ` : ''}
-                        </div>
-                    </div>
 
-                    <div class="${isLarge ? 'px-5 py-3.5' : 'px-4 py-2.5'} border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs text-slate-600 font-semibold">
-                        <div class="flex items-center gap-3.5">
-                            <button type="button" onclick="quickLikeArticle(event, '${art.id}')" class="flex items-center gap-1.5 ${likedByMe ? 'text-rose-600 font-extrabold' : 'hover:text-rose-600'} transition" title="${likedByMe ? 'Kamu menyukai ini (Klik untuk batal)' : 'Login Google & Sukai konten ini'}">
-                                <i class="fa-solid fa-heart ${likedByMe ? 'text-rose-600 heart-pop-anim' : 'text-slate-700'}"></i>
-                                <span>${art.likes || 0}</span>
-                            </button>
-                            <button type="button" onclick="openArticleReader('${art.id}')" class="flex items-center gap-1.5 hover:text-emerald-800 transition" title="Lihat & tulis komentar">
-                                <i class="fa-regular fa-comment text-slate-500"></i>
-                                <span>${commentCount}</span>
-                            </button>
-                            <button type="button" onclick="openShareArticleModal(event, '${art.id}')" class="flex items-center gap-1.5 hover:text-emerald-800 transition" title="Bagikan postingan ini">
-                                <i class="fa-solid fa-share-nodes text-slate-500"></i>
-                                <span class="hidden sm:inline">Share</span>
-                            </button>
+                            <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500">
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <button type="button" onclick="quickLikeArticle(event, '${art.id}')" class="flex items-center gap-1 transition ${isLikedByMe ? 'text-rose-600 font-bold' : 'hover:text-rose-600'}">
+                                        <i class="${isLikedByMe ? 'fa-solid' : 'fa-regular'} fa-heart ${isLikedByMe ? 'text-rose-500' : ''}"></i>
+                                        <span>${art.likes || 0}</span>
+                                    </button>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fa-regular fa-comment"></i>
+                                        <span>${(art.commentsList && art.commentsList.length) || 0}</span>
+                                    </span>
+                                    <button type="button" onclick="openShareArticleModal(event, '${art.id}')" class="flex items-center gap-1 hover:text-emerald-800 transition" title="Bagikan Postingan">
+                                        <i class="fa-solid fa-share-nodes"></i>
+                                        ${isCompact ? '' : '<span class="hidden sm:inline">Share</span>'}
+                                    </button>
+                                </div>
+                                <span class="text-slate-400 font-medium truncate max-w-[90px]">${art.date}</span>
+                            </div>
                         </div>
-                        <button type="button" onclick="openArticleReader('${art.id}', cardSlideIndices['${art.id}'] || 0)" class="text-xs font-extrabold text-emerald-800 hover:text-emerald-950 flex items-center gap-1 transition">
-                            <span>Detail</span>
-                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
-                    </div>
-                </article>
-            `}).join('');
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function stepCardSlide(event, articleId, delta) {
+            event.stopPropagation();
+            const art = appState.articles.find(a => a.id === articleId);
+            if (!art) return;
+            const photos = getArticlePhotos(art);
+            if (photos.length <= 1) return;
+
+            const current = cardSlideIndices[articleId] || 0;
+            const nextIdx = (current + delta + photos.length) % photos.length;
+            cardSlideIndices[articleId] = nextIdx;
+            renderArticles();
         }
 
         // ==========================================
         // ARTICLE READER, FULLSCREEN POPUP, SINGLE-CLICK LIGHTBOX & LIKES/COMMENTS
         // ==========================================
+        function syncDynamicHeadMetaForPost(art) {
+            if (!art) return;
+            const postTitle = `${art.title} - SANVALAS STORY MTsN 14`;
+            const postDesc = (art.body || art.title).replace(/\s+/g, ' ').trim().slice(0, 155);
+            const baseUrl = window.location.href.split('#')[0].split('?')[0];
+            const postUrl = `${baseUrl}?post=${encodeURIComponent(art.id)}`;
+            const postImg = (art.image && art.image.startsWith('http'))
+                ? art.image
+                : `${window.location.origin}/api/og-image?post=${encodeURIComponent(art.id)}`;
+
+            document.title = postTitle;
+            const setMeta = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.setAttribute('content', val);
+            };
+            setMeta('ogUrlMeta', postUrl);
+            setMeta('ogTitleMeta', postTitle);
+            setMeta('ogDescMeta', postDesc);
+            setMeta('ogImageMeta', postImg);
+            setMeta('twTitleMeta', postTitle);
+            setMeta('twDescMeta', postDesc);
+            setMeta('twImageMeta', postImg);
+        }
+
         function openArticleReader(id, initialSlideIdx = 0) {
             const art = appState.articles.find(a => a.id === id);
             if (!art) return;
             activeReadingArticleId = id;
             activeReaderSlideIdx = typeof initialSlideIdx === 'number' ? initialSlideIdx : 0;
             setReaderFullscreenState(false);
+
+            // Sinkronkan <title> & meta tag saat postingan dibuka
+            syncDynamicHeadMetaForPost(art);
 
             document.getElementById('readerCategory').textContent = art.category;
             document.getElementById('readerDate').innerHTML = `<i class="fa-regular fa-calendar"></i> ${art.date}`;
@@ -3889,220 +3854,51 @@
             const modalOverlay = document.getElementById('articleReaderModal');
             const container = document.getElementById('readerModalContainer');
             const stage = document.getElementById('readerMediaStage');
+            const bodyWrap = document.getElementById('readerContentBodyWrap');
             const icon = document.getElementById('readerFullscreenIcon');
             const label = document.getElementById('readerFullscreenLabel');
+
             if (!modalOverlay || !container || !stage) return;
 
             if (fullscreen) {
                 modalOverlay.classList.remove('p-2.5', 'sm:p-5');
                 modalOverlay.classList.add('p-0');
-                container.classList.remove('max-w-4xl', 'max-h-[92vh]', 'rounded-2xl', 'sm:rounded-3xl', 'border');
+                container.classList.remove('max-w-4xl', 'max-h-[92vh]', 'rounded-2xl', 'sm:rounded-3xl');
                 container.classList.add('max-w-none', 'w-screen', 'h-screen', 'max-h-screen', 'rounded-none', 'border-0');
                 stage.classList.remove('h-72', 'sm:h-[480px]');
-                stage.classList.add('h-[62vh]', 'sm:h-[75vh]');
+                stage.classList.add('flex-1', 'min-h-[65vh]');
+                if (bodyWrap) bodyWrap.classList.add('hidden');
                 if (icon) icon.className = 'fa-solid fa-compress text-xs sm:text-sm';
                 if (label) label.textContent = 'Perkecil';
             } else {
                 modalOverlay.classList.add('p-2.5', 'sm:p-5');
                 modalOverlay.classList.remove('p-0');
-                container.classList.add('max-w-4xl', 'max-h-[92vh]', 'rounded-2xl', 'sm:rounded-3xl', 'border');
+                container.classList.add('max-w-4xl', 'max-h-[92vh]', 'rounded-2xl', 'sm:rounded-3xl');
                 container.classList.remove('max-w-none', 'w-screen', 'h-screen', 'max-h-screen', 'rounded-none', 'border-0');
                 stage.classList.add('h-72', 'sm:h-[480px]');
-                stage.classList.remove('h-[62vh]', 'sm:h-[75vh]');
+                stage.classList.remove('flex-1', 'min-h-[65vh]');
+                if (bodyWrap) bodyWrap.classList.remove('hidden');
                 if (icon) icon.className = 'fa-solid fa-expand text-xs sm:text-sm';
                 if (label) label.textContent = 'Perbesar';
             }
         }
 
         function toggleReaderFullscreen(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            if (event) event.stopPropagation();
             setReaderFullscreenState(!isReaderFullscreen);
         }
 
-        function renderReaderGallerySlide(art) {
-            const photos = getArticlePhotos(art);
-            if (activeReaderSlideIdx >= photos.length) activeReaderSlideIdx = 0;
-            if (activeReaderSlideIdx < 0) activeReaderSlideIdx = photos.length - 1;
-
-            const currentUrl = photos[activeReaderSlideIdx];
-            const focusPos = getArticleImagePosition(art);
-            const readerImg = document.getElementById('readerImg');
-            const readerVideo = document.getElementById('readerVideo');
-            const readerIframe = document.getElementById('readerIframe');
-            const ambientBg = document.getElementById('readerAmbientBg');
-            const gradientMask = document.getElementById('readerGradientMask');
-            const extLink = document.getElementById('readerOpenExternalLink');
-
-            const sInfo = getSocialEmbedInfo(currentUrl);
-            const isDirectVid = isDirectVideoUrl(currentUrl);
-
-            if (readerVideo) {
-                readerVideo.pause();
-                readerVideo.src = '';
-                readerVideo.classList.add('hidden');
-            }
-            if (readerIframe) {
-                readerIframe.src = '';
-                readerIframe.classList.add('hidden');
-            }
-            if (readerImg) {
-                readerImg.classList.add('hidden');
-            }
-            if (extLink) {
-                extLink.classList.add('hidden');
-                extLink.classList.remove('inline-flex');
-            }
-
-            if (sInfo) {
-                if (extLink) {
-                    extLink.href = currentUrl;
-                    extLink.classList.remove('hidden');
-                    extLink.classList.add('inline-flex');
-                }
-                if (sInfo.embedUrl && readerIframe) {
-                    readerIframe.src = sInfo.embedUrl;
-                    readerIframe.classList.remove('hidden');
-                } else if (readerImg) {
-                    readerImg.src = getYouTubeThumbnailUrl(currentUrl) || 'https://placehold.co/900x600/0f3529/ffffff?text=Buka+Video+Asli';
-                    readerImg.style.objectPosition = focusPos;
-                    readerImg.classList.remove('hidden');
-                }
-                if (gradientMask) gradientMask.classList.add('hidden');
-            } else if (isDirectVid && readerVideo) {
-                readerVideo.src = currentUrl;
-                readerVideo.classList.remove('hidden');
-                if (gradientMask) gradientMask.classList.add('hidden');
-            } else if (readerImg) {
-                readerImg.classList.remove('hidden', 'slide-fade-anim');
-                void readerImg.offsetWidth;
-                readerImg.src = currentUrl;
-                readerImg.style.objectPosition = focusPos;
-                readerImg.classList.add('slide-fade-anim');
-                readerImg.onclick = () => openPhotoLightbox(currentUrl);
-                if (gradientMask) gradientMask.classList.remove('hidden');
-                if (ambientBg) ambientBg.src = currentUrl;
-            }
-
-            const prevBtn = document.getElementById('readerPrevBtn');
-            const nextBtn = document.getElementById('readerNextBtn');
-            const counterEl = document.getElementById('readerPhotoCounter');
-            const thumbStrip = document.getElementById('readerThumbStrip');
-            const dotsContainer = document.getElementById('readerDotsContainer');
-
-            if (photos.length > 1) {
-                prevBtn.classList.remove('hidden');
-                prevBtn.classList.add('flex');
-                nextBtn.classList.remove('hidden');
-                nextBtn.classList.add('flex');
-                counterEl.classList.remove('hidden');
-                counterEl.innerHTML = `<i class="fa-regular fa-images mr-1"></i> ${activeReaderSlideIdx + 1} / ${photos.length}`;
-
-                if (dotsContainer) {
-                    dotsContainer.classList.remove('hidden');
-                    dotsContainer.innerHTML = photos.map((_, idx) => `
-                        <button
-                            type="button"
-                            onclick="selectReaderGalleryIndex(${idx}, event)"
-                            class="h-2 rounded-full transition-all cursor-pointer ${idx === activeReaderSlideIdx ? 'w-6 bg-amber-400 shadow' : 'w-2 bg-white/60 hover:bg-white'}"
-                            title="Pilih Slide ${idx + 1}"
-                        ></button>
-                    `).join('');
-                }
-
-                thumbStrip.classList.remove('hidden');
-                thumbStrip.innerHTML = photos.map((url, idx) => {
-                    const ytThumb = getYouTubeThumbnailUrl(url);
-                    const si = getSocialEmbedInfo(url);
-                    const isVid = isAnyVideoMedia(url);
-                    const thumbSrc = ytThumb || (!isVid ? url : 'https://placehold.co/240x140/0f3529/fde047?text=VIDEO');
-                    return `
-                        <button
-                            type="button"
-                            onclick="selectReaderGalleryIndex(${idx}, event)"
-                            class="relative w-24 sm:w-32 h-14 sm:h-18 rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-200 cursor-pointer ${idx === activeReaderSlideIdx ? 'border-amber-400 ring-2 ring-amber-400/40 scale-[1.03] opacity-100 shadow-md' : 'border-white/15 opacity-65 hover:opacity-95'}"
-                        >
-                            <img src="${thumbSrc}" style="object-position: ${focusPos};" class="w-full h-full object-cover" alt="Slide ${idx + 1}">
-                            ${isVid ? `<span class="absolute top-1 left-1 bg-amber-400 text-slate-950 text-[9px] font-extrabold px-1.5 py-0.2 rounded">${si ? si.platform : 'Video'}</span>` : ''}
-                            <span class="absolute bottom-1 right-1.5 bg-black/75 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow">${idx + 1}</span>
-                        </button>
-                    `;
-                }).join('');
-            } else {
-                prevBtn.classList.add('hidden');
-                prevBtn.classList.remove('flex');
-                nextBtn.classList.add('hidden');
-                nextBtn.classList.remove('flex');
-                counterEl.classList.add('hidden');
-                if (dotsContainer) dotsContainer.classList.add('hidden');
-                thumbStrip.classList.add('hidden');
-            }
-        }
-
-        function stepReaderGallery(delta, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        // ==========================================
+        // SINGLE-CLICK PHOTO ZOOM LIGHTBOX
+        // ==========================================
+        function openPhotoLightbox(photoUrl) {
             const art = appState.articles.find(a => a.id === activeReadingArticleId);
             if (!art) return;
-            activeReaderSlideIdx += delta;
-            renderReaderGallerySlide(art);
-        }
+            const photosOnly = getArticlePhotos(art).filter(u => !isAnyVideoMedia(u));
+            if (photosOnly.length === 0) return;
 
-        function selectReaderGalleryIndex(idx, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            const art = appState.articles.find(a => a.id === activeReadingArticleId);
-            if (!art) return;
-            activeReaderSlideIdx = idx;
-            renderReaderGallerySlide(art);
-        }
-
-        function setupReaderTouchSwipe() {
-            const stage = document.getElementById('readerMediaStage');
-            const lbStage = document.getElementById('lightboxStage');
-            if (stage) {
-                let startX = 0;
-                stage.addEventListener('touchstart', (e) => {
-                    if (e.touches.length === 1) startX = e.touches[0].clientX;
-                }, { passive: true });
-                stage.addEventListener('touchend', (e) => {
-                    if (e.changedTouches.length === 1) {
-                        const diff = e.changedTouches[0].clientX - startX;
-                        if (Math.abs(diff) > 45) {
-                            stepReaderGallery(diff < 0 ? 1 : -1);
-                        }
-                    }
-                }, { passive: true });
-            }
-            if (lbStage) {
-                let startX = 0;
-                lbStage.addEventListener('touchstart', (e) => {
-                    if (e.touches.length === 1) startX = e.touches[0].clientX;
-                }, { passive: true });
-                lbStage.addEventListener('touchend', (e) => {
-                    if (e.changedTouches.length === 1 && !isLightboxZoomed) {
-                        const diff = e.changedTouches[0].clientX - startX;
-                        if (Math.abs(diff) > 45) {
-                            stepPhotoLightbox(diff < 0 ? 1 : -1);
-                        }
-                    }
-                }, { passive: true });
-            }
-        }
-
-        function openPhotoLightbox(clickedUrl) {
-            const art = activeReadingArticleId ? appState.articles.find(a => a.id === activeReadingArticleId) : null;
-            const photosOnly = art
-                ? getArticlePhotos(art).filter(u => !isAnyVideoMedia(u))
-                : [clickedUrl];
-            activeLightboxPhotos = photosOnly.length > 0 ? photosOnly : [clickedUrl];
-            const foundIdx = activeLightboxPhotos.indexOf(clickedUrl);
+            activeLightboxPhotos = photosOnly;
+            const foundIdx = photosOnly.indexOf(photoUrl);
             activeLightboxIndex = foundIdx >= 0 ? foundIdx : 0;
             isLightboxZoomed = false;
 
@@ -4115,46 +3911,43 @@
         }
 
         function closePhotoLightbox() {
-            isLightboxZoomed = false;
             const modal = document.getElementById('photoLightboxModal');
             if (modal) {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             }
+            isLightboxZoomed = false;
         }
 
         function renderPhotoLightboxSlide() {
-            const total = activeLightboxPhotos.length;
-            if (total === 0) return;
-            if (activeLightboxIndex >= total) activeLightboxIndex = 0;
-            if (activeLightboxIndex < 0) activeLightboxIndex = total - 1;
-
             const img = document.getElementById('lightboxImg');
             const counter = document.getElementById('lightboxCounter');
             const prevBtn = document.getElementById('lightboxPrevBtn');
             const nextBtn = document.getElementById('lightboxNextBtn');
             const zoomIcon = document.getElementById('lightboxZoomIcon');
+            if (!img) return;
 
+            const total = activeLightboxPhotos.length;
+            img.src = activeLightboxPhotos[activeLightboxIndex] || '';
             isLightboxZoomed = false;
-            if (img) {
-                img.src = activeLightboxPhotos[activeLightboxIndex];
-                img.style.transform = 'scale(1)';
-                img.classList.remove('cursor-zoom-out');
-                img.classList.add('cursor-zoom-in');
-            }
+            img.style.transform = 'scale(1)';
+            img.classList.remove('cursor-zoom-out');
+            img.classList.add('cursor-zoom-in');
             if (zoomIcon) zoomIcon.className = 'fa-solid fa-magnifying-glass-plus text-sm';
-            if (counter) counter.textContent = `${activeLightboxIndex + 1} / ${total}`;
 
-            if (total > 1) {
-                prevBtn.classList.remove('hidden');
-                prevBtn.classList.add('flex');
-                nextBtn.classList.remove('hidden');
-                nextBtn.classList.add('flex');
-            } else {
-                prevBtn.classList.add('hidden');
-                prevBtn.classList.remove('flex');
-                nextBtn.classList.add('hidden');
-                nextBtn.classList.remove('flex');
+            if (counter) counter.textContent = `${activeLightboxIndex + 1} / ${total}`;
+            if (prevBtn && nextBtn) {
+                if (total > 1) {
+                    prevBtn.classList.remove('hidden');
+                    prevBtn.classList.add('flex');
+                    nextBtn.classList.remove('hidden');
+                    nextBtn.classList.add('flex');
+                } else {
+                    prevBtn.classList.add('hidden');
+                    prevBtn.classList.remove('flex');
+                    nextBtn.classList.add('hidden');
+                    nextBtn.classList.remove('flex');
+                }
             }
         }
 
@@ -4163,6 +3956,7 @@
             const img = document.getElementById('lightboxImg');
             const zoomIcon = document.getElementById('lightboxZoomIcon');
             if (!img) return;
+
             isLightboxZoomed = !isLightboxZoomed;
             if (isLightboxZoomed) {
                 img.style.transform = 'scale(1.85)';
@@ -4179,316 +3973,516 @@
 
         function stepPhotoLightbox(delta, event) {
             if (event) event.stopPropagation();
-            activeLightboxIndex += delta;
+            if (activeLightboxPhotos.length <= 1) return;
+            activeLightboxIndex = (activeLightboxIndex + delta + activeLightboxPhotos.length) % activeLightboxPhotos.length;
             renderPhotoLightboxSlide();
         }
 
-        document.addEventListener('keydown', (e) => {
-            const lbModal = document.getElementById('photoLightboxModal');
-            if (lbModal && !lbModal.classList.contains('hidden')) {
-                if (e.key === 'ArrowLeft') stepPhotoLightbox(-1);
-                else if (e.key === 'ArrowRight') stepPhotoLightbox(1);
-                else if (e.key === 'Escape') closePhotoLightbox();
+        function renderReaderGallerySlide(art) {
+            const photos = getArticlePhotos(art);
+            const imgPos = getArticleImagePosition(art);
+            const total = photos.length;
+            if (activeReaderSlideIdx >= total) activeReaderSlideIdx = 0;
+
+            const currentUrl = photos[activeReaderSlideIdx];
+            const socialInfo = getSocialEmbedInfo(currentUrl);
+            const isDirectVid = isDirectVideoUrl(currentUrl);
+
+            const stage = document.getElementById('readerMediaStage');
+            const imgEl = document.getElementById('readerImg');
+            const ambientEl = document.getElementById('readerAmbientBg');
+            const gradientMask = document.getElementById('readerGradientMask');
+            const vidEl = document.getElementById('readerVideo');
+            const iframeEl = document.getElementById('readerIframe');
+            const externalLinkEl = document.getElementById('readerOpenExternalLink');
+            const bottomOverlay = document.getElementById('readerBottomOverlay');
+            const prevBtn = document.getElementById('readerPrevBtn');
+            const nextBtn = document.getElementById('readerNextBtn');
+            const counter = document.getElementById('readerPhotoCounter');
+            const dotsBox = document.getElementById('readerDotsContainer');
+            const thumbStrip = document.getElementById('readerThumbStrip');
+
+            if (vidEl) {
+                vidEl.pause();
+                vidEl.removeAttribute('src');
+                vidEl.classList.add('hidden');
+            }
+            if (iframeEl) {
+                iframeEl.src = 'about:blank';
+                iframeEl.classList.add('hidden');
+            }
+            if (externalLinkEl) {
+                externalLinkEl.classList.add('hidden');
+                externalLinkEl.classList.remove('inline-flex');
+            }
+
+            if (socialInfo && socialInfo.embedUrl) {
+                if (imgEl) imgEl.classList.add('hidden');
+                if (ambientEl) ambientEl.classList.add('hidden');
+                if (gradientMask) gradientMask.classList.add('hidden');
+                if (bottomOverlay) bottomOverlay.classList.add('hidden');
+
+                if (!isReaderFullscreen && stage) {
+                    stage.className = socialInfo.isTall
+                        ? 'relative bg-white h-[480px] sm:h-[580px] shrink-0 overflow-hidden select-none group transition-all duration-300'
+                        : 'relative bg-black h-72 sm:h-[440px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                }
+
+                if (iframeEl) {
+                    iframeEl.classList.remove('hidden');
+                    iframeEl.src = socialInfo.embedUrl;
+                }
+                if (externalLinkEl) {
+                    externalLinkEl.href = currentUrl;
+                    externalLinkEl.classList.remove('hidden');
+                    externalLinkEl.classList.add('inline-flex');
+                }
+            } else if (socialInfo && socialInfo.externalOnly) {
+                if (!isReaderFullscreen && stage) {
+                    stage.className = 'relative bg-slate-950 h-72 sm:h-[420px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                }
+                if (imgEl) {
+                    imgEl.classList.remove('hidden');
+                    imgEl.onclick = null;
+                    imgEl.src = 'https://placehold.co/900x600/0f172a/ffffff?text=Video+TikTok+MTsN+14';
+                }
+                if (externalLinkEl) {
+                    externalLinkEl.href = currentUrl;
+                    externalLinkEl.classList.remove('hidden');
+                    externalLinkEl.classList.add('inline-flex');
+                }
+            } else if (isDirectVid) {
+                if (imgEl) imgEl.classList.add('hidden');
+                if (ambientEl) ambientEl.classList.add('hidden');
+                if (gradientMask) gradientMask.classList.add('hidden');
+                if (bottomOverlay) bottomOverlay.classList.add('hidden');
+                if (!isReaderFullscreen && stage) {
+                    stage.className = 'relative bg-black h-72 sm:h-[460px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                }
+                if (vidEl) {
+                    vidEl.classList.remove('hidden');
+                    vidEl.src = currentUrl;
+                    vidEl.load();
+                }
+            } else {
+                // FOTO: Klik 1x langsung membuka Full-Screen Photo Zoom Lightbox
+                if (!isReaderFullscreen && stage) {
+                    stage.className = 'relative bg-slate-950 h-72 sm:h-[480px] shrink-0 overflow-hidden select-none group transition-all duration-300';
+                }
+                if (ambientEl) {
+                    ambientEl.classList.remove('hidden');
+                    ambientEl.src = currentUrl;
+                }
+                if (gradientMask) gradientMask.classList.remove('hidden');
+                if (bottomOverlay) bottomOverlay.classList.remove('hidden');
+                if (imgEl) {
+                    imgEl.classList.remove('hidden');
+                    imgEl.style.objectPosition = imgPos;
+                    imgEl.src = currentUrl;
+                    imgEl.onclick = (e) => {
+                        e.stopPropagation();
+                        openPhotoLightbox(currentUrl);
+                    };
+                }
+            }
+
+            if (total > 1) {
+                prevBtn.classList.remove('hidden');
+                prevBtn.classList.add('flex');
+                nextBtn.classList.remove('hidden');
+                nextBtn.classList.add('flex');
+                counter.classList.remove('hidden');
+                counter.textContent = `${activeReaderSlideIdx + 1} / ${total}`;
+
+                dotsBox.innerHTML = photos.map((_, idx) => `
+                    <button
+                        type="button"
+                        onclick="goToReaderSlide(${idx}, event)"
+                        class="h-2 rounded-full transition-all cursor-pointer ${idx === activeReaderSlideIdx ? 'bg-white w-5' : 'bg-white/50 hover:bg-white/80 w-2'}"
+                        title="Slide ${idx + 1}"
+                    ></button>
+                `).join('');
+
+                thumbStrip.classList.remove('hidden');
+                thumbStrip.innerHTML = photos.map((url, idx) => {
+                    const ytT = getYouTubeThumbnailUrl(url);
+                    const sInf = getSocialEmbedInfo(url);
+                    const dVid = isDirectVideoUrl(url);
+                    const isActiveThumb = idx === activeReaderSlideIdx;
+                    let thumbInner = `<img src="${url}" style="object-position: ${imgPos};" class="w-full h-full object-cover" alt="Slide ${idx + 1}">`;
+                    if (ytT) {
+                        thumbInner = `<img src="${ytT}" style="object-position: ${imgPos};" class="w-full h-full object-cover" alt="YouTube ${idx + 1}"><span class="absolute inset-0 bg-black/35 flex items-center justify-center text-white text-xs"><i class="fa-brands fa-youtube"></i></span>`;
+                    } else if (sInf) {
+                        thumbInner = `<div class="w-full h-full bg-slate-800 flex items-center justify-center text-white text-xs"><i class="${sInf.icon}"></i></div>`;
+                    } else if (dVid) {
+                        thumbInner = `<video src="${url}#t=0.5" muted playsinline style="object-position: ${imgPos};" class="w-full h-full object-cover bg-black"></video><span class="absolute inset-0 bg-black/35 flex items-center justify-center text-white text-xs"><i class="fa-solid fa-play"></i></span>`;
+                    }
+                    return `
+                        <button
+                            type="button"
+                            onclick="goToReaderSlide(${idx}, event)"
+                            class="relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden shrink-0 border-2 transition cursor-pointer ${isActiveThumb ? 'border-amber-400 scale-105 shadow-lg opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}"
+                        >
+                            ${thumbInner}
+                        </button>
+                    `;
+                }).join('');
+            } else {
+                prevBtn.classList.add('hidden');
+                prevBtn.classList.remove('flex');
+                nextBtn.classList.add('hidden');
+                nextBtn.classList.remove('flex');
+                counter.classList.add('hidden');
+                dotsBox.innerHTML = '';
+                thumbStrip.classList.add('hidden');
+                thumbStrip.innerHTML = '';
+            }
+        }
+
+        function stepReaderGallery(delta, event) {
+            if (event) event.stopPropagation();
+            const art = appState.articles.find(a => a.id === activeReadingArticleId);
+            if (!art) return;
+            const photos = getArticlePhotos(art);
+            if (photos.length <= 1) return;
+
+            activeReaderSlideIdx = (activeReaderSlideIdx + delta + photos.length) % photos.length;
+            renderReaderGallerySlide(art);
+        }
+
+        function goToReaderSlide(idx, event) {
+            if (event) event.stopPropagation();
+            const art = appState.articles.find(a => a.id === activeReadingArticleId);
+            if (!art) return;
+            activeReaderSlideIdx = idx;
+            renderReaderGallerySlide(art);
+        }
+
+        function setupReaderTouchSwipe() {
+            const stage = document.getElementById('readerMediaStage');
+            if (!stage) return;
+            let touchStartX = 0;
+            stage.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            stage.addEventListener('touchend', (e) => {
+                const diffX = e.changedTouches[0].screenX - touchStartX;
+                if (Math.abs(diffX) > 45) {
+                    stepReaderGallery(diffX < 0 ? 1 : -1);
+                }
+            }, { passive: true });
+        }
+
+        function renderReaderLikedBySummary(art) {
+            const box = document.getElementById('readerLikedByBox');
+            const avatarsWrap = document.getElementById('readerLikedByAvatars');
+            if (!box || !avatarsWrap) return;
+
+            const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
+            const totalLikes = Math.max(art.likes || 0, likedUsers.length);
+
+            if (totalLikes === 0) {
+                box.classList.add('hidden');
                 return;
             }
-            const modal = document.getElementById('articleReaderModal');
-            if (!modal || modal.classList.contains('hidden')) return;
-            if (e.key === 'ArrowLeft') stepReaderGallery(-1);
-            else if (e.key === 'ArrowRight') stepReaderGallery(1);
-            else if (e.key === 'Escape') {
-                if (isReaderFullscreen) {
-                    setReaderFullscreenState(false);
-                } else {
-                    closeModal('articleReaderModal');
-                }
-            }
-        });
 
-        function updateReaderLikeButtonUI(art) {
-            const btn = document.getElementById('readerLikeBtn');
-            const likedByBox = document.getElementById('readerLikedByBox');
-            const likedByAvatars = document.getElementById('readerLikedByAvatars');
-            if (!btn) return;
+            box.classList.remove('hidden');
 
-            const likedByMe = isArticleLikedByCurrentGoogleUser(art);
-            btn.className = likedByMe
-                ? 'flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition shadow-xs'
-                : 'flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full transition';
-            btn.innerHTML = `
-                <i class="fa-solid fa-heart ${likedByMe ? 'heart-pop-anim' : ''}"></i>
-                <span id="readerLikesCount">${art.likes || 0}</span> ${likedByMe ? 'Disukai' : 'Suka'}
-            `;
+            if (likedUsers.length > 0) {
+                const topUsers = likedUsers.slice(-3).reverse();
+                const latestUser = topUsers[0];
+                const othersCount = totalLikes - 1;
 
-            if (likedByBox && likedByAvatars) {
-                const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
-                if (likedUsers.length > 0) {
-                    likedByBox.classList.remove('hidden');
-                    const previewSlice = likedUsers.slice(0, 3);
-                    const firstPerson = likedUsers[0];
-                    const othersCount = likedUsers.length - 1;
-                    const summaryText = othersCount > 0
-                        ? `Disukai oleh <strong class="text-slate-900">${firstPerson.name}</strong> dan <strong class="text-slate-900">${othersCount} lainnya</strong>`
-                        : `Disukai oleh <strong class="text-slate-900">${firstPerson.name}</strong>`;
+                const avatarsHtml = topUsers.map(u => `
+                    <img src="${u.avatar || 'https://placehold.co/60x60/164636/ffffff?text=U'}" alt="${u.name}" class="w-5 h-5 rounded-full object-cover ring-2 ring-white shrink-0">
+                `).join('');
 
-                    likedByAvatars.innerHTML = `
-                        <div class="flex -space-x-1.5 shrink-0">
-                            ${previewSlice.map(u => `
-                                <img src="${u.avatar}" class="w-5 h-5 rounded-full object-cover ring-2 ring-white bg-slate-200" alt="${u.name}">
-                            `).join('')}
-                        </div>
-                        <span class="text-[11px] text-slate-600 truncate">${summaryText}</span>
-                    `;
-                } else {
-                    likedByBox.classList.add('hidden');
-                }
+                const labelText = othersCount > 0
+                    ? `Disukai oleh <strong class="text-slate-900">${latestUser.name}</strong> dan <strong class="text-slate-900">${othersCount} lainnya</strong>`
+                    : `Disukai oleh <strong class="text-slate-900">${latestUser.name}</strong>`;
+
+                avatarsWrap.innerHTML = `
+                    <div class="flex -space-x-1.5 shrink-0">${avatarsHtml}</div>
+                    <span class="text-[11px] text-slate-600 truncate">${labelText}</span>
+                `;
+            } else {
+                avatarsWrap.innerHTML = `
+                    <div class="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-[10px] shrink-0">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <span class="text-[11px] text-slate-600 truncate">Disukai oleh <strong class="text-slate-900">${totalLikes} pengunjung</strong></span>
+                `;
             }
         }
 
         function openLikedUsersModal() {
-            if (!activeReadingArticleId) return;
             const art = appState.articles.find(a => a.id === activeReadingArticleId);
             if (!art) return;
-            const likedUsers = Array.isArray(art.likedByUsers) ? art.likedByUsers : [];
-            const countEl = document.getElementById('likedUsersModalCount');
+
+            const likedUsers = Array.isArray(art.likedByUsers) ? [...art.likedByUsers].reverse() : [];
+            const totalLikes = Math.max(art.likes || 0, likedUsers.length);
+            document.getElementById('likedUsersModalCount').textContent = totalLikes;
+
             const listEl = document.getElementById('likedUsersModalList');
-            if (countEl) countEl.textContent = likedUsers.length;
-            if (listEl) {
-                listEl.innerHTML = likedUsers.length === 0
-                    ? `<div class="text-center py-6 text-xs text-slate-400">Belum ada yang menyukai postingan ini.</div>`
-                    : likedUsers.map(u => `
-                        <div class="flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition">
-                            <img src="${u.avatar}" alt="${u.name}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0">
-                            <div class="min-w-0 flex-1">
-                                <div class="text-xs font-extrabold text-slate-900 truncate">${u.name}</div>
-                                <div class="text-[11px] text-slate-400 truncate">${u.email || 'Pengguna Google'}</div>
-                            </div>
-                            <i class="fa-solid fa-heart text-rose-500 text-xs"></i>
+            if (likedUsers.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-6 text-xs text-slate-500 space-y-1">
+                        <div class="text-rose-500 text-lg"><i class="fa-solid fa-heart"></i></div>
+                        <p class="font-bold text-slate-700">${totalLikes} orang menyukai postingan ini</p>
+                        <p class="text-[11px] text-slate-400">Nama &amp; foto profil muncul untuk pengguna yang login Google.</p>
+                    </div>
+                `;
+            } else {
+                listEl.innerHTML = likedUsers.map(u => `
+                    <div class="flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-50 transition">
+                        <img src="${u.avatar || 'https://placehold.co/80x80/164636/ffffff?text=U'}" alt="${u.name}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0">
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs font-extrabold text-slate-900 truncate">${u.name || 'Siswa MTsN 14'}</div>
+                            <div class="text-[10px] text-slate-400 truncate">Akun Google Terverifikasi</div>
                         </div>
-                    `).join('');
+                        <span class="w-6 h-6 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center text-[11px] shrink-0">
+                            <i class="fa-solid fa-heart"></i>
+                        </span>
+                    </div>
+                `).join('');
             }
             openModal('likedUsersModal');
         }
 
-        function renderCommentGoogleBanner() {
-            const container = document.getElementById('commentGoogleBanner');
-            if (!container) return;
+        function updateReaderLikeButtonUI(art) {
+            const btn = document.getElementById('readerLikeBtn');
+            const countSpan = document.getElementById('readerLikesCount');
+            if (!btn || !countSpan) return;
 
+            countSpan.textContent = art.likes || 0;
+            const likedByMe = isArticleLikedByCurrentGoogleUser(art);
+            if (likedByMe) {
+                btn.className = 'flex items-center gap-1.5 bg-rose-600 text-white font-bold text-xs px-4 py-2 rounded-full shadow-sm transition';
+            } else {
+                btn.className = 'flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-4 py-2 rounded-full transition';
+            }
+            renderReaderLikedBySummary(art);
+        }
+
+        function renderCommentGoogleBanner() {
+            const box = document.getElementById('commentGoogleBanner');
+            if (!box) return;
             const user = getCurrentGoogleUser();
+
             if (!user) {
-                container.innerHTML = `
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
-                                <i class="fa-brands fa-google text-emerald-800"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs font-extrabold text-slate-900">Ingin ikut berkomentar atau memberi Like?</div>
-                                <p class="text-[11px] text-slate-500">Login dengan akun Google kamu agar nama &amp; email tampil resmi di komentar.</p>
-                            </div>
+                box.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                        <div class="text-xs text-slate-600">
+                            <span class="font-extrabold text-slate-900">Ingin ikut berkomentar &amp; menyukai konten ini?</span>
+                            <span class="block text-[11px] text-slate-500 mt-0.5">Masuk terlebih dahulu menggunakan akun Google agar komentar tercatat resmi.</span>
                         </div>
-                        <button type="button" onclick="openGoogleLoginModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xs flex items-center gap-2 shrink-0">
-                            <i class="fa-brands fa-google text-xs"></i>
-                            <span>Login dengan Google</span>
+                        <button
+                            type="button"
+                            onclick="triggerGoogleSignInFlow()"
+                            class="bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-xs px-3.5 py-2 rounded-xl shadow-2xs flex items-center justify-center gap-2 shrink-0 transition"
+                        >
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                                <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+                                <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+                                <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+                                <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 19.9 7.4 23 12 23z"/>
+                            </svg>
+                            <span>Sign in with Google</span>
                         </button>
                     </div>
                 `;
             } else {
-                container.innerHTML = `
-                    <form id="commentForm" onsubmit="submitComment(event)" class="flex flex-col sm:flex-row gap-2">
-                        <input
-                            id="commentMessageInput"
-                            type="text"
-                            required
-                            maxlength="220"
-                            placeholder="Tulis komentar positif sebagai ${user.name}..."
-                            class="flex-1 bg-white rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs focus:outline-none focus:border-emerald-700"
-                        >
-                        <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs shrink-0">
-                            <i class="fa-solid fa-paper-plane text-[11px]"></i>
-                            <span>Kirim Komentar</span>
-                        </button>
+                box.innerHTML = `
+                    <form onsubmit="submitComment(event)" class="space-y-2.5">
+                        <div class="flex items-center justify-between text-[11px]">
+                            <div class="flex items-center gap-2">
+                                <img src="${user.avatar}" alt="${user.name}" class="w-6 h-6 rounded-full object-cover border border-slate-300">
+                                <div>
+                                    <span class="font-extrabold text-slate-900">${user.name}</span>
+                                    <span class="text-slate-400 ml-1">(${user.email})</span>
+                                </div>
+                            </div>
+                            <button type="button" onclick="triggerGoogleSignInFlow()" class="text-emerald-800 hover:underline font-bold">Ganti Akun</button>
+                        </div>
+                        <div class="flex gap-2">
+                            <input
+                                id="commentTextInput"
+                                type="text"
+                                required
+                                placeholder="Tulis komentar positif sebagai ${user.name}..."
+                                class="flex-1 rounded-xl bg-white border border-slate-300 px-3.5 py-2 text-xs focus:outline-none focus:border-emerald-700"
+                            >
+                            <button type="submit" class="bg-emerald-900 hover:bg-emerald-950 text-white text-xs font-bold px-4 py-2 rounded-xl shrink-0 shadow-2xs">
+                                Kirim
+                            </button>
+                        </div>
                     </form>
                 `;
             }
         }
 
         function renderReaderComments(art) {
-            const listEl = document.getElementById('readerCommentsList');
-            const countEl = document.getElementById('readerCommentsCount');
-            const comments = Array.isArray(art.commentsList) ? art.commentsList : [];
-            if (countEl) countEl.textContent = comments.length;
+            const list = document.getElementById('readerCommentsList');
+            const comments = art.commentsList || [];
+            document.getElementById('readerCommentsCount').textContent = comments.length;
 
             if (comments.length === 0) {
-                listEl.innerHTML = `
-                    <div class="text-center py-5 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-xs text-slate-400">
-                        Belum ada komentar. Jadilah yang pertama memberikan komentar positif!
-                    </div>
-                `;
+                list.innerHTML = `<p class="text-xs text-slate-400 italic">Belum ada komentar. Login Google dan jadilah yang pertama berkomentar!</p>`;
                 return;
             }
-
-            listEl.innerHTML = comments.map(c => `
-                <div class="bg-white border border-slate-200/80 rounded-xl p-3 flex items-start justify-between gap-2.5 shadow-2xs">
-                    <div class="flex items-start gap-2.5 min-w-0 flex-1">
-                        ${c.avatar
-                            ? `<img src="${c.avatar}" class="w-8 h-8 rounded-full object-cover shrink-0 border border-slate-200" alt="${c.author}">`
-                            : `<div class="w-8 h-8 rounded-full bg-emerald-900/10 text-emerald-900 font-extrabold text-xs flex items-center justify-center shrink-0">${(c.author || 'S').charAt(0).toUpperCase()}</div>`
-                        }
-                        <div class="space-y-1 min-w-0 flex-1">
+            list.innerHTML = comments.map((c, idx) => `
+                <div class="bg-slate-50 rounded-xl p-3 border border-slate-200/70 text-xs flex items-start justify-between gap-2.5">
+                    <div class="flex items-start gap-2.5 min-w-0">
+                        <img src="${c.avatar || 'https://placehold.co/80x80/164636/ffffff?text=' + encodeURIComponent((c.name || 'S').charAt(0))}" alt="${c.name}" class="w-7 h-7 rounded-full object-cover shrink-0 mt-0.5 border border-slate-200">
+                        <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-1.5">
-                                <span class="text-xs font-extrabold text-slate-900 truncate max-w-[160px] sm:max-w-none">${c.author}</span>
-                                <span class="text-[10px] text-slate-400">&bull; ${c.time || 'Baru saja'}</span>
+                                <span class="font-extrabold text-slate-900">${c.name}</span>
+                                <span class="text-[10px] bg-emerald-100 text-emerald-900 font-bold px-1.5 py-0.5 rounded">Google</span>
+                                <span class="text-[10px] text-slate-400">&bull; ${c.time}</span>
                             </div>
-                            ${c.email ? `<div class="inline-flex items-center gap-1 max-w-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/60 px-2 py-0.5 rounded-full"><i class="fa-brands fa-google text-[9px] shrink-0"></i><span class="truncate">${c.email}</span></div>` : ''}
-                            <p class="text-xs text-slate-700 leading-relaxed break-words pt-0.5">${c.text}</p>
+                            <p class="text-slate-700 mt-1 break-words leading-relaxed">${c.text}</p>
                         </div>
                     </div>
-                    ${currentMode === 'edit' ? `
-                        <button type="button" onclick="deleteComment('${art.id}', '${c.id}')" class="text-rose-500 hover:text-rose-700 text-xs px-2 py-1 rounded hover:bg-rose-50 transition shrink-0" title="Hapus Komentar">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    ` : ''}
+                    <button type="button" onclick="deleteComment(${idx})" class="edit-only text-rose-500 hover:text-rose-700 text-[11px] font-bold shrink-0" title="Hapus Komentar">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
             `).join('');
         }
 
-        const BAD_WORDS = ['bodoh', 'tolol', 'goblok', 'anjing', 'babi', 'bangsat', 'kasar'];
-
-        async function submitComment(e) {
-            e.preventDefault();
-            if (!activeReadingArticleId) return;
-            const art = appState.articles.find(a => a.id === activeReadingArticleId);
+        async function toggleArticleLikeWithGoogle(articleId, clickX = null, clickY = null, btnEl = null) {
+            const user = getCurrentGoogleUser();
+            if (!user) {
+                triggerGoogleSignInFlow(() => toggleArticleLikeWithGoogle(articleId, clickX, clickY, btnEl));
+                return;
+            }
+            const art = appState.articles.find(a => a.id === articleId);
             if (!art) return;
 
-            const user = getCurrentGoogleUser();
-            if (!user) {
-                openGoogleLoginModal();
-                return;
-            }
+            if (!Array.isArray(art.likedByUsers)) art.likedByUsers = [];
+            const existingIdx = art.likedByUsers.findIndex(u => u.email === user.email);
+            let newLikes = art.likes || 0;
 
-            const msgInput = document.getElementById('commentMessageInput');
-            const text = msgInput ? msgInput.value.trim() : '';
-            if (!text) return;
-
-            const lower = text.toLowerCase();
-            if (BAD_WORDS.some(w => lower.includes(w))) {
-                showToast('Mohon gunakan bahasa yang sopan dan positif ya!');
-                return;
-            }
-
-            const updatedComments = [
-                {
-                    id: 'c-' + Date.now(),
-                    author: user.name,
-                    email: user.email,
-                    avatar: user.avatar,
-                    text,
-                    time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
-                },
-                ...(Array.isArray(art.commentsList) ? art.commentsList : [])
-            ];
-
-            msgInput.value = '';
-            try {
-                await db.collection('sanvalas_articles').doc(art.id).update({
-                    commentsList: updatedComments
-                });
-                showToast(`Komentar dikirim sebagai ${user.name}!`);
-            } catch (err) {
-                showToast('Gagal mengirim komentar: ' + err.message);
-            }
-        }
-
-        async function deleteComment(articleId, commentId) {
-            const art = appState.articles.find(a => a.id === articleId);
-            if (!art || !Array.isArray(art.commentsList)) return;
-            const updatedComments = art.commentsList.filter(c => c.id !== commentId);
-            try {
-                await db.collection('sanvalas_articles').doc(articleId).update({
-                    commentsList: updatedComments
-                });
-                showToast('Komentar dihapus oleh Tim Kreatif');
-            } catch (err) {
-                showToast('Gagal menghapus komentar: ' + err.message);
-            }
-        }
-
-        function quickLikeArticle(event, id) {
-            event.stopPropagation();
-            const user = getCurrentGoogleUser();
-            if (!user) {
-                showToast('Silakan login Google terlebih dahulu untuk menyukai konten');
-                openGoogleLoginModal(() => {
-                    toggleArticleLikeByGoogleUser(id, event.clientX, event.clientY);
-                });
-                return;
-            }
-            toggleArticleLikeByGoogleUser(id, event.clientX, event.clientY);
-        }
-
-        function likeCurrentArticle(event) {
-            if (!activeReadingArticleId) return;
-            const x = event ? event.clientX : window.innerWidth / 2;
-            const y = event ? event.clientY : window.innerHeight / 2;
-            const user = getCurrentGoogleUser();
-            if (!user) {
-                showToast('Silakan login Google terlebih dahulu untuk menyukai konten');
-                openGoogleLoginModal(() => {
-                    toggleArticleLikeByGoogleUser(activeReadingArticleId, x, y);
-                });
-                return;
-            }
-            toggleArticleLikeByGoogleUser(activeReadingArticleId, x, y);
-        }
-
-        async function toggleArticleLikeByGoogleUser(id, clientX, clientY) {
-            const art = appState.articles.find(a => a.id === id);
-            const user = getCurrentGoogleUser();
-            if (!art || !user) return;
-
-            const likedUsers = Array.isArray(art.likedByUsers) ? [...art.likedByUsers] : [];
-            const existingIdx = likedUsers.findIndex(u => u.email === user.email);
-            let newLikesCount = art.likes || 0;
-
-            if (existingIdx > -1) {
-                likedUsers.splice(existingIdx, 1);
-                newLikesCount = Math.max(0, newLikesCount - 1);
-                showToast(`Batal menyukai (${user.email})`);
+            if (existingIdx >= 0) {
+                art.likedByUsers.splice(existingIdx, 1);
+                newLikes = Math.max(0, newLikes - 1);
+                showToast('Tanda suka dibatalkan');
             } else {
-                likedUsers.unshift({
+                art.likedByUsers.push({
                     name: user.name,
                     email: user.email,
                     avatar: user.avatar
                 });
-                newLikesCount++;
-                if (clientX && clientY) {
-                    spawnHeartBurst(clientX, clientY);
+                newLikes = newLikes + 1;
+                if (typeof clickX === 'number' && typeof clickY === 'number') {
+                    spawnHeartBurst(clickX, clickY);
                 }
-                showToast(`Disukai sebagai ${user.name}!`);
+                showToast(`Menyukai konten sebagai ${user.name}`);
             }
 
+            if (btnEl) {
+                btnEl.classList.remove('heart-pop-anim');
+                void btnEl.offsetWidth;
+                btnEl.classList.add('heart-pop-anim');
+            }
+
+            art.likes = newLikes;
+            updateReaderLikeButtonUI(art);
+            renderArticles();
+
             try {
-                await db.collection('sanvalas_articles').doc(id).update({
-                    likes: newLikesCount,
-                    likedByUsers: likedUsers
+                await db.collection('sanvalas_articles').doc(articleId).update({
+                    likes: newLikes,
+                    likedByUsers: art.likedByUsers
                 });
             } catch (err) {
-                showToast('Gagal memperbarui Like: ' + err.message);
+                console.error('Update like error:', err);
             }
+        }
+
+        function likeCurrentArticle(e) {
+            if (!activeReadingArticleId) return;
+            toggleArticleLikeWithGoogle(activeReadingArticleId, e ? e.clientX : null, e ? e.clientY : null, e ? e.currentTarget : null);
+        }
+
+        function quickLikeArticle(e, id) {
+            e.stopPropagation();
+            toggleArticleLikeWithGoogle(id, e.clientX, e.clientY, e.currentTarget);
+        }
+
+        async function submitComment(e) {
+            e.preventDefault();
+            const user = getCurrentGoogleUser();
+            if (!user) {
+                triggerGoogleSignInFlow();
+                return;
+            }
+            const art = appState.articles.find(a => a.id === activeReadingArticleId);
+            if (!art) return;
+            const inputEl = document.getElementById('commentTextInput');
+            const text = inputEl ? inputEl.value.trim() : '';
+            if (!text) return;
+
+            if (!Array.isArray(art.commentsList)) art.commentsList = [];
+            art.commentsList.push({
+                name: user.name,
+                email: user.email,
+                avatar: user.avatar,
+                text,
+                time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+            });
+            inputEl.value = '';
+            renderReaderComments(art);
+            renderArticles();
+
+            try {
+                await db.collection('sanvalas_articles').doc(art.id).update({
+                    commentsList: art.commentsList
+                });
+                showToast('Komentar berhasil dikirim secara online!');
+            } catch (err) {
+                showToast('Gagal menyimpan komentar: ' + err.message);
+            }
+        }
+
+        async function deleteComment(idx) {
+            const art = appState.articles.find(a => a.id === activeReadingArticleId);
+            if (!art || !art.commentsList) return;
+            art.commentsList.splice(idx, 1);
+            await db.collection('sanvalas_articles').doc(art.id).update({
+                commentsList: art.commentsList
+            });
+            showToast('Komentar dihapus');
+        }
+
+        async function handleMultiFileUploadToEditor(event) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+            showToast('Memproses foto / video...');
+            try {
+                for (const file of files) {
+                    const mediaUrl = await uploadMediaFileToCloud(file, 'articles');
+                    editorPhotosDraft.push(mediaUrl);
+                }
+                renderEditorPhotosPreview();
+                showToast(`${files.length} media siap diterbitkan!`);
+            } catch (err) {
+                showToast(err.message);
+            }
+            event.target.value = '';
         }
 
         function addPhotoUrlToEditorList() {
             const input = document.getElementById('editArticleImage');
-            const url = input.value.trim();
-            if (!url) {
-                showToast('Tempel link URL foto atau video terlebih dahulu');
+            const val = input.value.trim();
+            if (!val) {
+                showToast('Masukkan link Instagram, TikTok, YouTube, atau gambar terlebih dahulu');
                 return;
             }
-            editorPhotosDraft.push(url);
+            editorPhotosDraft.push(val);
             input.value = '';
             renderEditorPhotosPreview();
-            const sInfo = getSocialEmbedInfo(url);
-            showToast(sInfo ? `Video ${sInfo.platform} ditambahkan!` : `Media ditambahkan!`);
+            showToast('Link media ditambahkan ke slide!');
         }
 
         function removeEditorPhotoAt(idx) {
@@ -4496,78 +4490,64 @@
             renderEditorPhotosPreview();
         }
 
-        async function handleMultiFileUploadToEditor(event) {
-            const files = Array.from(event.target.files || []);
-            if (files.length === 0) return;
-            const submitBtn = document.getElementById('saveArticleSubmitBtn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Mengunggah Media...';
-            }
-            try {
-                for (const file of files) {
-                    if (file.type.startsWith('video/')) {
-                        showToast(`Mengunggah video ${file.name}...`);
-                    }
-                    const uploadedUrl = await uploadMediaFileToCloud(file, 'articles');
-                    editorPhotosDraft.push(uploadedUrl);
-                    renderEditorPhotosPreview();
-                }
-                showToast(`${files.length} file foto/video berhasil ditambahkan!`);
-            } catch (err) {
-                showToast(err.message || 'Gagal mengunggah file');
-            } finally {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Simpan & Terbitkan';
-                }
-                event.target.value = '';
-            }
-        }
-
         async function saveArticleFromModal(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('saveArticleSubmitBtn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Menyimpan ke Cloud...';
-            }
-
             const id = document.getElementById('editArticleId').value;
-            const existing = id ? appState.articles.find(a => a.id === id) : null;
-
+            const title = document.getElementById('editArticleTitle').value.trim();
+            const category = document.getElementById('editArticleCategory').value;
+            const date = document.getElementById('editArticleDate').value.trim();
             const pendingUrl = document.getElementById('editArticleImage').value.trim();
+            const body = document.getElementById('editArticleBody').value.trim();
+
             if (pendingUrl) {
                 editorPhotosDraft.push(pendingUrl);
-            }
-            editorPhotosDraft = sortDraftMediaCoverFirst(editorPhotosDraft);
-
-            if (editorPhotosDraft.length === 0) {
-                editorPhotosDraft.push('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80');
+                document.getElementById('editArticleImage').value = '';
             }
 
-            const docId = id || ('art-' + Date.now());
-            const payload = {
-                id: docId,
-                title: document.getElementById('editArticleTitle').value.trim(),
-                category: document.getElementById('editArticleCategory').value,
-                date: document.getElementById('editArticleDate').value.trim(),
-                createdAt: existing && existing.createdAt ? existing.createdAt : Date.now(),
-                image: editorPhotosDraft[0],
-                images: [...editorPhotosDraft],
-                imagePosition: editorImagePosition || 'center center',
-                likes: existing ? (existing.likes || 0) : 0,
-                likedByUsers: existing && Array.isArray(existing.likedByUsers) ? existing.likedByUsers : [],
-                commentsList: existing && Array.isArray(existing.commentsList) ? existing.commentsList : [],
-                body: document.getElementById('editArticleBody').value.trim()
-            };
+            const finalPhotos = sortDraftMediaCoverFirst(
+                editorPhotosDraft.length > 0
+                    ? [...editorPhotosDraft]
+                    : ['https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80']
+            );
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Menyimpan...';
+            }
 
             try {
-                await db.collection('sanvalas_articles').doc(docId).set(payload);
+                if (id) {
+                    await db.collection('sanvalas_articles').doc(id).update({
+                        title,
+                        category,
+                        date,
+                        image: finalPhotos[0],
+                        images: finalPhotos,
+                        imagePosition: 'center center',
+                        body
+                    });
+                    showToast('Perubahan konten berhasil disimpan online!');
+                } else {
+                    const newId = 'art-' + Date.now();
+                    await db.collection('sanvalas_articles').doc(newId).set({
+                        title,
+                        category,
+                        date,
+                        image: finalPhotos[0],
+                        images: finalPhotos,
+                        imagePosition: 'center center',
+                        likes: 0,
+                        likedByUsers: [],
+                        body,
+                        commentsList: [],
+                        createdAt: Date.now()
+                    });
+                    showToast('Konten baru berhasil diterbitkan online!');
+                }
                 closeModal('articleEditorModal');
-                showToast(id ? `Postingan (${payload.images.length} media) diperbarui online!` : `Postingan baru (${payload.images.length} media) diterbitkan online!`);
             } catch (err) {
-                showToast('Gagal menyimpan postingan: ' + err.message);
+                showToast('Gagal menyimpan konten: ' + err.message);
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -4577,170 +4557,214 @@
         }
 
         // ==========================================
-        // STUDENT WORK SUBMISSION (PHOTO & VIDEO)
+        // STUDENT WORK SUBMISSION & INBOX
         // ==========================================
         function openSubmitWorkModal(e) {
-            if (e) e.stopPropagation();
-            const user = getCurrentGoogleUser();
-            const nameInput = document.getElementById('subName');
-            if (user && nameInput && !nameInput.value) {
-                nameInput.value = `${user.name} (${user.email})`;
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
             }
+            syncCategoryDropdowns();
             studentSubPhotosDraft = [];
-            const previewEl = document.getElementById('subPhotosPreview');
-            if (previewEl) {
-                previewEl.innerHTML = '';
-                previewEl.classList.add('hidden');
-            }
+            renderStudentSubPhotosPreview();
+            const nameEl = document.getElementById('subName');
+            const titleEl = document.getElementById('subTitle');
+            const imgEl = document.getElementById('subImage');
+            const descEl = document.getElementById('subDesc');
+            if (nameEl) nameEl.value = '';
+            if (titleEl) titleEl.value = '';
+            if (imgEl) imgEl.value = '';
+            if (descEl) descEl.value = '';
             openModal('submitWorkModal');
+        }
+
+        function renderStudentSubPhotosPreview() {
+            const box = document.getElementById('subPhotosPreview');
+            if (!box) return;
+            studentSubPhotosDraft = sortDraftMediaCoverFirst(studentSubPhotosDraft);
+            if (studentSubPhotosDraft.length === 0) {
+                box.classList.add('hidden');
+                box.innerHTML = '';
+                return;
+            }
+            box.classList.remove('hidden');
+            box.innerHTML = studentSubPhotosDraft.map((url, idx) => renderMediaPreviewItemHtml(url, idx, 'removeStudentSubPhotoAt')).join('');
         }
 
         async function handleStudentMultiFileUpload(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
-            const previewEl = document.getElementById('subPhotosPreview');
-            const submitBtn = document.getElementById('submitWorkBtn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Mengunggah...';
-            }
+            showToast('Mengunggah foto/video karya...');
             try {
                 for (const file of files) {
-                    if (file.type.startsWith('video/')) {
-                        showToast(`Mengunggah video karya ${file.name}...`);
-                    }
-                    const uploadedUrl = await uploadMediaFileToCloud(file, 'submissions');
-                    studentSubPhotosDraft.push(uploadedUrl);
-                    studentSubPhotosDraft = sortDraftMediaCoverFirst(studentSubPhotosDraft);
-                    if (previewEl) {
-                        previewEl.classList.remove('hidden');
-                        previewEl.innerHTML = studentSubPhotosDraft.map((itemUrl, i) => renderMediaPreviewItemHtml(itemUrl, i, null)).join('');
-                    }
+                    const mediaUrl = await uploadMediaFileToCloud(file, 'student_works');
+                    studentSubPhotosDraft.push(mediaUrl);
                 }
-                showToast(`${files.length} file karya (foto/video) siap dikirim!`);
+                renderStudentSubPhotosPreview();
+                showToast(`${files.length} file karya siap dikirim!`);
             } catch (err) {
-                showToast(err.message || 'Gagal mengunggah file');
+                showToast(err.message);
+            }
+            event.target.value = '';
+        }
+
+        function removeStudentSubPhotoAt(idx) {
+            studentSubPhotosDraft.splice(idx, 1);
+            renderStudentSubPhotosPreview();
+        }
+
+        async function submitStudentWork(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitWorkBtn');
+            const name = document.getElementById('subName').value.trim();
+            const category = document.getElementById('subCat').value;
+            const title = document.getElementById('subTitle').value.trim();
+            const imageInputVal = document.getElementById('subImage').value.trim();
+            const desc = document.getElementById('subDesc').value.trim();
+
+            if (imageInputVal) {
+                studentSubPhotosDraft.push(imageInputVal);
+            }
+
+            const finalPhotos = sortDraftMediaCoverFirst(
+                studentSubPhotosDraft.length > 0
+                    ? [...studentSubPhotosDraft]
+                    : ['https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80']
+            );
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Mengirim...';
+            }
+
+            try {
+                const subId = 'sub-' + Date.now();
+                await db.collection('sanvalas_inbox').doc(subId).set({
+                    name,
+                    category,
+                    title,
+                    image: finalPhotos[0],
+                    images: finalPhotos,
+                    desc,
+                    time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    createdAt: Date.now()
+                });
+                studentSubPhotosDraft = [];
+                renderStudentSubPhotosPreview();
+                closeModal('submitWorkModal');
+                showToast('Karyamu berhasil dikirim ke Tim Kreatif OSIS MTsN 14!');
+            } catch (err) {
+                showToast('Gagal mengirim karya: ' + err.message);
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Kirim Sekarang';
                 }
-                event.target.value = '';
-            }
-        }
-
-        async function submitStudentWork(e) {
-            e.preventDefault();
-            const customImg = document.getElementById('subImage') ? document.getElementById('subImage').value.trim() : '';
-            if (customImg) studentSubPhotosDraft.push(customImg);
-            studentSubPhotosDraft = sortDraftMediaCoverFirst(studentSubPhotosDraft);
-            if (studentSubPhotosDraft.length === 0) {
-                studentSubPhotosDraft.push('https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80');
-            }
-            const subId = 'sub-' + Date.now();
-            const newSub = {
-                id: subId,
-                author: document.getElementById('subName').value.trim(),
-                title: document.getElementById('subTitle').value.trim(),
-                category: document.getElementById('subCat').value,
-                image: studentSubPhotosDraft[0],
-                images: [...studentSubPhotosDraft],
-                desc: document.getElementById('subDesc').value.trim(),
-                createdAt: Date.now()
-            };
-
-            try {
-                await db.collection('sanvalas_inbox').doc(subId).set(newSub);
-                e.target.reset();
-                studentSubPhotosDraft = [];
-                closeModal('submitWorkModal');
-                showToast('Karyamu berhasil dikirim ke Tim Kreatif SANVALAS STORY!');
-            } catch (err) {
-                showToast('Gagal mengirim karya: ' + err.message);
             }
         }
 
         // ==========================================
-        // STUDENT PRESTASI SUBMISSION (PHOTO & VIDEO)
+        // STUDENT PRESTASI SUBMISSION (AUTO CATEGORY: PRESTASI)
         // ==========================================
         function openSubmitPrestasiModal(e) {
-            if (e) e.stopPropagation();
-            const user = getCurrentGoogleUser();
-            const nameInput = document.getElementById('presName');
-            if (user && nameInput && !nameInput.value) {
-                nameInput.value = `${user.name} (${user.email})`;
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
             }
             studentPrestasiPhotosDraft = [];
-            const previewEl = document.getElementById('presPhotosPreview');
-            if (previewEl) {
-                previewEl.innerHTML = '';
-                previewEl.classList.add('hidden');
-            }
+            renderStudentPrestasiPhotosPreview();
+            const nameEl = document.getElementById('presName');
+            const titleEl = document.getElementById('presTitle');
+            const imgEl = document.getElementById('presImage');
+            const descEl = document.getElementById('presDesc');
+            if (nameEl) nameEl.value = '';
+            if (titleEl) titleEl.value = '';
+            if (imgEl) imgEl.value = '';
+            if (descEl) descEl.value = '';
             openModal('submitPrestasiModal');
+        }
+
+        function renderStudentPrestasiPhotosPreview() {
+            const box = document.getElementById('presPhotosPreview');
+            if (!box) return;
+            studentPrestasiPhotosDraft = sortDraftMediaCoverFirst(studentPrestasiPhotosDraft);
+            if (studentPrestasiPhotosDraft.length === 0) {
+                box.classList.add('hidden');
+                box.innerHTML = '';
+                return;
+            }
+            box.classList.remove('hidden');
+            box.innerHTML = studentPrestasiPhotosDraft.map((url, idx) => renderMediaPreviewItemHtml(url, idx, 'removeStudentPrestasiPhotoAt')).join('');
         }
 
         async function handlePrestasiMultiFileUpload(event) {
             const files = Array.from(event.target.files || []);
             if (files.length === 0) return;
-            const previewEl = document.getElementById('presPhotosPreview');
-            const submitBtn = document.getElementById('submitPrestasiBtn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Mengunggah...';
-            }
+            showToast('Mengunggah dokumentasi prestasi...');
             try {
                 for (const file of files) {
-                    if (file.type.startsWith('video/')) {
-                        showToast(`Mengunggah video prestasi ${file.name}...`);
-                    }
-                    const uploadedUrl = await uploadMediaFileToCloud(file, 'prestasi');
-                    studentPrestasiPhotosDraft.push(uploadedUrl);
-                    studentPrestasiPhotosDraft = sortDraftMediaCoverFirst(studentPrestasiPhotosDraft);
-                    if (previewEl) {
-                        previewEl.classList.remove('hidden');
-                        previewEl.innerHTML = studentPrestasiPhotosDraft.map((itemUrl, i) => renderMediaPreviewItemHtml(itemUrl, i, null)).join('');
-                    }
+                    const mediaUrl = await uploadMediaFileToCloud(file, 'student_prestasi');
+                    studentPrestasiPhotosDraft.push(mediaUrl);
                 }
-                showToast(`${files.length} file prestasi (foto/video) siap dikirim!`);
+                renderStudentPrestasiPhotosPreview();
+                showToast(`${files.length} file prestasi siap dikirim!`);
             } catch (err) {
-                showToast(err.message || 'Gagal mengunggah file');
-            } finally {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fa-solid fa-trophy"></i><span>Kirim Prestasi</span>';
-                }
-                event.target.value = '';
+                showToast(err.message);
             }
+            event.target.value = '';
+        }
+
+        function removeStudentPrestasiPhotoAt(idx) {
+            studentPrestasiPhotosDraft.splice(idx, 1);
+            renderStudentPrestasiPhotosPreview();
         }
 
         async function submitStudentPrestasi(e) {
             e.preventDefault();
-            const customImg = document.getElementById('presImage') ? document.getElementById('presImage').value.trim() : '';
-            if (customImg) studentPrestasiPhotosDraft.push(customImg);
-            studentPrestasiPhotosDraft = sortDraftMediaCoverFirst(studentPrestasiPhotosDraft);
-            if (studentPrestasiPhotosDraft.length === 0) {
-                studentPrestasiPhotosDraft.push('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=900&q=80');
+            const submitBtn = document.getElementById('submitPrestasiBtn');
+            const name = document.getElementById('presName').value.trim();
+            const title = document.getElementById('presTitle').value.trim();
+            const imageInputVal = document.getElementById('presImage').value.trim();
+            const desc = document.getElementById('presDesc').value.trim();
+
+            if (imageInputVal) {
+                studentPrestasiPhotosDraft.push(imageInputVal);
             }
-            const subId = 'sub-' + Date.now();
-            const newSub = {
-                id: subId,
-                author: document.getElementById('presName').value.trim(),
-                title: document.getElementById('presTitle').value.trim(),
-                category: 'Prestasi',
-                image: studentPrestasiPhotosDraft[0],
-                images: [...studentPrestasiPhotosDraft],
-                desc: document.getElementById('presDesc').value.trim(),
-                createdAt: Date.now()
-            };
+
+            const finalPhotos = sortDraftMediaCoverFirst(
+                studentPrestasiPhotosDraft.length > 0
+                    ? [...studentPrestasiPhotosDraft]
+                    : ['https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=900&q=80']
+            );
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Mengirim...</span>';
+            }
 
             try {
-                await db.collection('sanvalas_inbox').doc(subId).set(newSub);
-                e.target.reset();
+                const presId = 'pres-' + Date.now();
+                await db.collection('sanvalas_inbox').doc(presId).set({
+                    name,
+                    category: 'Prestasi',
+                    title,
+                    image: finalPhotos[0],
+                    images: finalPhotos,
+                    desc,
+                    time: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                    createdAt: Date.now()
+                });
                 studentPrestasiPhotosDraft = [];
+                renderStudentPrestasiPhotosPreview();
                 closeModal('submitPrestasiModal');
-                showToast('Data prestasimu berhasil dikirim ke Tim Kreatif SANVALAS STORY!');
+                showToast('Laporan prestasimu berhasil dikirim ke Tim Kreatif OSIS MTsN 14!');
             } catch (err) {
                 showToast('Gagal mengirim prestasi: ' + err.message);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-trophy"></i> <span>Kirim Prestasi</span>';
+                }
             }
         }
 
@@ -4749,154 +4773,161 @@
             if (badge) badge.textContent = appState.inbox.length;
         }
 
+        function openInboxModal() {
+            renderInboxListUI();
+            openModal('inboxModal');
+        }
+
         function renderInboxListUI() {
             const container = document.getElementById('inboxListContainer');
             if (!container) return;
             if (appState.inbox.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-slate-400">Belum ada kiriman karya/prestasi siswa baru.</div>`;
+                container.innerHTML = `<p class="text-slate-500 text-center py-6">Belum ada kiriman karya/prestasi baru dari siswa.</p>`;
             } else {
-                container.innerHTML = appState.inbox.map(item => {
-                    const mediaList = Array.isArray(item.images) ? item.images : [item.image];
-                    const hasVid = mediaList.some(u => isAnyVideoMedia(u));
+                container.innerHTML = appState.inbox.map((item, idx) => {
+                    const countPhotos = Array.isArray(item.images) ? item.images.length : 1;
+                    const isPrestasi = (item.category || '').toLowerCase() === 'prestasi';
                     return `
-                        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                            <div class="space-y-1">
-                                <div class="flex flex-wrap items-center gap-1.5">
-                                    <span class="text-xs font-extrabold text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-full">${item.category}</span>
-                                    ${hasVid ? `<span class="text-[10px] font-extrabold text-amber-950 bg-amber-300 px-2 py-0.5 rounded-full"><i class="fa-solid fa-video mr-0.5"></i> Video</span>` : ''}
-                                    <span class="text-xs font-bold text-slate-600">${item.author}</span>
-                                </div>
-                                <div class="font-extrabold text-slate-900">${item.title}</div>
-                                <p class="text-xs text-slate-600">${item.desc}</p>
+                        <div class="p-3.5 rounded-xl border ${isPrestasi ? 'border-amber-300 bg-amber-50/40' : 'border-slate-200 bg-slate-50'} space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-slate-900">${item.title}</span>
+                                <span class="text-[11px] font-bold ${isPrestasi ? 'text-amber-900 bg-amber-200' : 'text-emerald-900 bg-emerald-100'} px-2 py-0.5 rounded-full flex items-center gap-1">
+                                    ${isPrestasi ? '<i class="fa-solid fa-trophy text-[9px]"></i>' : ''} ${item.category} (${countPhotos} Media)
+                                </span>
                             </div>
-                            <button onclick="approveSubmission('${item.id}')" class="shrink-0 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs">
-                                Terbitkan
-                            </button>
+                            <div class="text-[11px] text-slate-500">Pengirim: <strong>${item.name}</strong> &bull; ${item.time}</div>
+                            <p class="text-slate-600">${item.desc}</p>
+                            <div class="flex justify-end gap-2 pt-1">
+                                <button type="button" onclick="deleteInboxItem(${idx})" class="px-3 py-1 rounded-lg text-rose-600 hover:bg-rose-50 font-bold">Hapus</button>
+                                <button type="button" onclick="publishInboxItem(${idx})" class="bg-emerald-900 hover:bg-emerald-950 text-white font-bold px-3.5 py-1.5 rounded-lg">Terbitkan ke Beranda</button>
+                            </div>
                         </div>
                     `;
                 }).join('');
             }
         }
 
-        function openInboxModal() {
-            renderInboxListUI();
-            openModal('inboxModal');
-        }
-
-        async function approveSubmission(subId) {
-            const item = appState.inbox.find(s => s.id === subId);
+        async function publishInboxItem(idx) {
+            const item = appState.inbox[idx];
             if (!item) return;
-            const rawImgs = Array.isArray(item.images) && item.images.length > 0
-                ? item.images
-                : [item.image || 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=80'];
-            const imgs = sortDraftMediaCoverFirst(rawImgs);
-            const artId = 'art-' + Date.now();
-
+            const mediaList = sortDraftMediaCoverFirst(
+                Array.isArray(item.images) && item.images.length > 0 ? item.images : [item.image]
+            );
             try {
-                await db.collection('sanvalas_articles').doc(artId).set({
-                    id: artId,
+                const newId = 'art-' + Date.now();
+                await db.collection('sanvalas_articles').doc(newId).set({
                     title: item.title,
                     category: item.category,
-                    date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
-                    createdAt: Date.now(),
+                    date: item.time,
+                    image: mediaList[0],
+                    images: mediaList,
+                    imagePosition: 'center center',
                     likes: 0,
                     likedByUsers: [],
+                    body: `${item.desc}\n\n(Karya dikirim oleh: ${item.name})`,
                     commentsList: [],
-                    image: imgs[0],
-                    images: imgs,
-                    body: `Kiriman dari: ${item.author}\n\n${item.desc}`
+                    createdAt: Date.now()
                 });
-                await db.collection('sanvalas_inbox').doc(subId).delete();
-                showToast('Kiriman siswa berhasil diterbitkan secara online!');
+                await db.collection('sanvalas_inbox').doc(item.id).delete();
+                showToast('Karya siswa berhasil diterbitkan online ke beranda!');
             } catch (err) {
-                showToast('Gagal menerbitkan kiriman: ' + err.message);
+                showToast('Gagal menerbitkan karya: ' + err.message);
             }
         }
 
-        async function resetToDefaultData() {
-            if (!confirm('Reset tampilan Teks Banner, Tentang Kami & Kategori ke bawaan awal?')) return;
-            appState.heroBadge = defaultState.heroBadge;
-            appState.heroTitle1 = defaultState.heroTitle1;
-            appState.heroTitle2 = defaultState.heroTitle2;
-            appState.heroDesc = defaultState.heroDesc;
-            appState.heroTagline = defaultState.heroTagline;
-            appState.heroSideQuote = defaultState.heroSideQuote;
-            appState.heroBg = defaultState.heroBg;
-            appState.logoMtsUrl = '';
-            appState.logoOsisUrl = '';
-            appState.polaroids = [...defaultState.polaroids];
-            appState.polaroidCaption = defaultState.polaroidCaption;
-            appState.aboutData = { ...defaultState.aboutData };
-            appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
-            await saveCloudSettings();
-            renderHeroTextUI();
-            renderBrandLogosUI();
-            renderHeroPolaroids(true);
-            showToast('Pengaturan tampilan berhasil dikembalikan ke awal');
+        async function deleteInboxItem(idx) {
+            const item = appState.inbox[idx];
+            if (!item) return;
+            await db.collection('sanvalas_inbox').doc(item.id).delete();
+            showToast('Kiriman dihapus');
         }
 
         function openAboutModal(e) {
-            if (e) e.stopPropagation();
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            renderAboutSectionUI();
             openModal('aboutModal');
         }
 
         function openModal(id) {
             const el = document.getElementById(id);
-            if (!el) return;
-            el.classList.remove('hidden');
-            el.classList.add('flex');
+            if (el) {
+                el.classList.remove('hidden');
+                el.classList.add('flex');
+            }
         }
 
         function closeModal(id) {
             const el = document.getElementById(id);
-            if (!el) return;
-            if (id === 'articleReaderModal') {
-                closePhotoLightbox();
-                setReaderFullscreenState(false);
-                const vid = document.getElementById('readerVideo');
-                const ifr = document.getElementById('readerIframe');
-                if (vid) {
-                    vid.pause();
-                    vid.src = '';
-                }
-                if (ifr) {
-                    ifr.src = '';
-                }
+            if (el) {
+                el.classList.add('hidden');
+                el.classList.remove('flex');
             }
-            el.classList.add('hidden');
-            el.classList.remove('flex');
-        }
-
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-            document.getElementById('mobileSearchBar').classList.add('hidden');
-        }
-
-        function toggleMobileSearchBar() {
-            const bar = document.getElementById('mobileSearchBar');
-            bar.classList.toggle('hidden');
-            document.getElementById('mobileMenu').classList.add('hidden');
-            if (!bar.classList.contains('hidden')) {
-                setTimeout(() => document.getElementById('mobileSearchInput').focus(), 60);
+            if (id === 'articleReaderModal') {
+                setReaderFullscreenState(false);
+                closePhotoLightbox();
+                const vidEl = document.getElementById('readerVideo');
+                if (vidEl) {
+                    vidEl.pause();
+                    vidEl.removeAttribute('src');
+                }
+                const iframeEl = document.getElementById('readerIframe');
+                if (iframeEl) {
+                    iframeEl.src = 'about:blank';
+                }
+                activeReadingArticleId = null;
             }
         }
 
         function scrollToSection(id) {
             const el = document.getElementById(id);
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
         }
 
         let toastTimer = null;
         function showToast(msg) {
             const box = document.getElementById('toastBox');
-            const msgEl = document.getElementById('toastMessage');
-            if (!box || !msgEl) return;
-            msgEl.textContent = msg;
+            document.getElementById('toastMessage').textContent = msg;
             box.classList.remove('hidden');
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 box.classList.add('hidden');
             }, 3200);
+        }
+
+        async function resetToDefaultData() {
+            if (confirm('Kembalikan pengaturan banner, foto atas & kategori ke bawaan?')) {
+                appState.heroBadge = defaultState.heroBadge;
+                appState.heroTitle1 = defaultState.heroTitle1;
+                appState.heroTitle2 = defaultState.heroTitle2;
+                appState.heroDesc = defaultState.heroDesc;
+                appState.heroTagline = defaultState.heroTagline;
+                appState.heroSideQuote = defaultState.heroSideQuote;
+                appState.heroBg = defaultState.heroBg;
+                appState.logoMtsUrl = '';
+                appState.logoOsisUrl = '';
+                appState.polaroids = [...defaultState.polaroids];
+                appState.polaroidCaption = defaultState.polaroidCaption;
+                appState.aboutData = { ...defaultState.aboutData };
+                appState.categories = JSON.parse(JSON.stringify(defaultState.categories));
+                await saveCloudSettings();
+                renderHeroTextUI();
+                renderBrandLogosUI();
+                renderHeroPolaroids(true);
+                renderAboutSectionUI();
+                renderCategoriesBar();
+                syncCategoryDropdowns();
+                showToast('Pengaturan banner & kategori dikembalikan ke default');
+            }
         }
     </script>
 </body>
